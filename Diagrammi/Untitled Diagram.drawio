@@ -1,1 +1,46 @@
-<mxfile host="app.diagrams.net" modified="2020-12-23T08:50:00.000Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36" version="14.1.1" etag="d7ZWrKzHS_qnrEzMUWU3" type="github"><diagram id="AfY26NeNKKnpfJGDGDFY">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2020-12-23T09:06:05.788Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36" etag="JLbaIAbTRPvDl0mHgoOm" version="14.1.1" type="github">
+  <diagram id="AfY26NeNKKnpfJGDGDFY" name="Page-1">
+    <mxGraphModel dx="1182" dy="732" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="9K69wm-9-MHkOMZKR88a-1" value="NormalUser" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="220" y="70" width="300" height="366" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-2" value="- username: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="26" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-3" value="- password: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="52" width="300" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-6" value="- name: String&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="78" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-5" value="- surname: String&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="110" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-4" value="- age: int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="142" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-7" value="- gender: char&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="174" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-8" value="- email: String&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="206" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-9" value="- country: String&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="238" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-10" value="- followedUsers: int&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="270" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-11" value="- followedCompanies: int&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="302" width="300" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="9K69wm-9-MHkOMZKR88a-13" value="/*Possibile gestione dei campi followed con GDB*/" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="9K69wm-9-MHkOMZKR88a-1">
+          <mxGeometry y="334" width="300" height="32" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
