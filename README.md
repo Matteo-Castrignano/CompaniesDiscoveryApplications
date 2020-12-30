@@ -1,2 +1,2 @@
 # CompaniesDiscoveryApplications
-Progeto di Large scale and multistucture database
+Large scale and multistucture database Project
