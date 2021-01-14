@@ -5,7 +5,7 @@ import java.util.Date;
 public class Companies {
 
     private String name;
-    private String simbol;
+    private String symbol;
     private String stockExchange;
     private String sector;
     private String website;
@@ -17,9 +17,9 @@ public class Companies {
     private String state;
     private Date ipoDate;
 
-    public Companies(String name, String simbol, String stockExchange, String sector, String website, String ceo, int fullTimeEmployees, String phone, String address, String city, String state, Date ipoDate) {
+    public Companies(String name, String symbol, String stockExchange, String sector, String website, String ceo, int fullTimeEmployees, String phone, String address, String city, String state, Date ipoDate) {
         this.name = name;
-        this.simbol = simbol;
+        this.symbol = symbol;
         this.stockExchange = stockExchange;
         this.sector = sector;
         this.website = website;
@@ -40,12 +40,12 @@ public class Companies {
         this.name = name;
     }
 
-    public String getSimbol() {
-        return simbol;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setSimbol(String simbol) {
-        this.simbol = simbol;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public String getStockExchange() {
@@ -132,7 +132,7 @@ public class Companies {
     public String toString() {
         return "Companies{" +
                 "name='" + name + '\'' +
-                ", simbol='" + simbol + '\'' +
+                ", simbol='" + symbol + '\'' +
                 ", stockExchange='" + stockExchange + '\'' +
                 ", sector='" + sector + '\'' +
                 ", website='" + website + '\'' +
