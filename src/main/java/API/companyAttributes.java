@@ -20,7 +20,7 @@ public class companyAttributes {
 
         FileWriter file = new FileWriter("C:/Users/matte/Desktop/Companies.json");
 
-        for(int i=0; i<ListSymbols.size(); i++){
+        for(int i=153; i<ListSymbols.size(); i++){
 
             String json = "";
             URL url = new URL(urlCompany + ListSymbols.get(i) + "?apikey=" + key);
@@ -37,7 +37,10 @@ public class companyAttributes {
 
             JSONArray arr = new JSONArray(json);
 
-            if(!arr.isEmpty()) {
+            if(!arr.isEmpty() && !arr.getJSONObject(0).isNull("companyName") && !arr.getJSONObject(0).isNull("symbol") && !arr.getJSONObject(0).isNull("exchangeShortName")
+                    && !arr.getJSONObject(0).isNull("sector") && !arr.getJSONObject(0).isNull("website") && !arr.getJSONObject(0).isNull("ceo")
+                    && !arr.getJSONObject(0).isNull("fullTimeEmployees") && !arr.getJSONObject(0).isNull("phone") && !arr.getJSONObject(0).isNull("address")
+                    && !arr.getJSONObject(0).isNull("city") && !arr.getJSONObject(0).isNull("state") && !arr.getJSONObject(0).isNull("ipoDate")) {
                 String companyName = arr.getJSONObject(0).getString("companyName");
                 String symbol = arr.getJSONObject(0).getString("symbol");
                 String exchangeShortName = arr.getJSONObject(0).getString("exchangeShortName");
@@ -72,7 +75,7 @@ public class companyAttributes {
                     file.write(",\r\n");
 
                 file.flush();
-                System.out.println(i);
+                System.out.println(i + symbol);
             }
 
         }
@@ -94,7 +97,6 @@ public class companyAttributes {
     }
 
     public static void main(String[] args) throws IOException {
-
        companyInformations(readFileSimbol());
     }
 
