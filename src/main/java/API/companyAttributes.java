@@ -80,18 +80,22 @@ public class companyAttributes {
 
     }
 
-    public static List<String> readFileSimbol() {
+    public static List<String> readFileSimbol() throws IOException {
 
         List<String> listSymbols = new ArrayList<>();
+        BufferedReader reader = new BufferedReader(new FileReader("C:/Users/matte/Desktop/ListaSimboli.txt"));
 
-        FileReader file;
+        for (String line; (line = reader.readLine()) != null;) {
+           listSymbols.add(line);
+        }
 
+        System.out.println(listSymbols);
         return listSymbols;
     }
 
     public static void main(String[] args) throws IOException {
 
-        companyInformations(readFileSimbol());
+       companyInformations(readFileSimbol());
     }
 
 }
