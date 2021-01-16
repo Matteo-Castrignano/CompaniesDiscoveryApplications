@@ -20,7 +20,7 @@ public class companyAttributes {
 
         FileWriter file = new FileWriter("C:/Users/matte/Desktop/Companies.json");
 
-        for(int i=153; i<ListSymbols.size(); i++){
+        for(int i=0; i<ListSymbols.size(); i++){
 
             String json = "";
             URL url = new URL(urlCompany + ListSymbols.get(i) + "?apikey=" + key);
