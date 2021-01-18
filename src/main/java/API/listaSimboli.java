@@ -25,6 +25,7 @@ public class listaSimboli {
     public static List<String> Dowjones_list() throws MalformedURLException {
         URL url = new URL(urlDowjones+key);
         List<String> listSymbols = new ArrayList<>();
+        String symbol;
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
             String json = "";
@@ -35,8 +36,9 @@ public class listaSimboli {
             JSONArray arr = new JSONArray(json);
 
             for (int i = 0; i < arr.length(); i++) {
-                String symbol = arr.getJSONObject(i).getString("symbol");
-                listSymbols.add(symbol);
+                symbol = arr.getJSONObject(i).getString("symbol");
+                if(!listSymbols.contains(symbol))
+                    listSymbols.add(symbol);
             }
 
         } catch (IOException e) {
@@ -49,6 +51,7 @@ public class listaSimboli {
     public static List<String> Nasdaq_list() throws MalformedURLException {
         URL url = new URL(urlNasdaq+key);
         List<String> listSymbols = new ArrayList<>();
+        String symbol;
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
             String json = "";
@@ -59,8 +62,9 @@ public class listaSimboli {
             JSONArray arr = new JSONArray(json);
 
             for (int i = 0; i < arr.length(); i++) {
-                String symbol = arr.getJSONObject(i).getString("symbol");
-                listSymbols.add(symbol);
+                symbol = arr.getJSONObject(i).getString("symbol");
+                if(!listSymbols.contains(symbol))
+                    listSymbols.add(symbol);
             }
 
         } catch (IOException e) {
@@ -74,7 +78,14 @@ public class listaSimboli {
 
         List<String> ListSymbols = new ArrayList<>();
         ListSymbols.addAll(Dowjones_list());
-        ListSymbols.addAll(Nasdaq_list());
+        List<String> Nasdaq_list = Nasdaq_list();
+        String symbol;
+
+        for (int i =0; i< Nasdaq_list.size(); i++) {
+            symbol = Nasdaq_list.get(i);
+            if(!ListSymbols.contains(symbol))
+                ListSymbols.add(symbol);
+        }
 
         FileWriter file = new FileWriter("C:/Users/matte/Desktop/ListaSimboli.txt");
 
@@ -85,5 +96,4 @@ public class listaSimboli {
         file.close();
 
     }
-
 }
