@@ -8,13 +8,17 @@ public class History {
     private float close;
     private float adjustedClose;
     private int volume;
+    private int high;
+    private int low;
 
-    public History(Date dateHistory, float open, float close, float adjustedClose, int volume) {
+    public History(Date dateHistory, float open, float close, float adjustedClose, int volume, int high, int low) {
         this.dateHistory = dateHistory;
         this.open = open;
         this.close = close;
         this.adjustedClose = adjustedClose;
         this.volume = volume;
+        this.high = high;
+        this.low = low;
     }
 
     public Date getDateHistory() {
@@ -57,14 +61,19 @@ public class History {
         this.volume = volume;
     }
 
-    @Override
-    public String toString() {
-        return "History{" +
-                "dateHistory=" + dateHistory +
-                ", open=" + open +
-                ", close=" + close +
-                ", adjustedClose=" + adjustedClose +
-                ", volume=" + volume +
-                '}';
+    public int getHigh() {
+        return high;
+    }
+
+    public void setHigh(int high) {
+        this.high = high;
+    }
+
+    public int getLow() {
+        return low;
+    }
+
+    public void setLow(int low) {
+        this.low = low;
     }
 }

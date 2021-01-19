@@ -15,7 +15,7 @@ public class Companies {
     private String address;
     private String city;
     private String state;
-    private Date ipoDate;
+    private Date ipoDate; //da togliere
 
     public Companies(String name, String symbol, String stockExchange, String sector, String website, String ceo, int fullTimeEmployees, String phone, String address, String city, String state, Date ipoDate) {
         this.name = name;

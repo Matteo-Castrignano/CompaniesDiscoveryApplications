@@ -31,8 +31,8 @@ public class prova {
        if(listaSymbol != null) {
            int i = 0;
            for (String s : listaSymbol) {
-               //System.out.println(s);
-               if (i > 3)
+               System.out.println(s);
+              /* if (i > 3)
                    break;
                URL url = new URL(urlCompany+s+"?apikey="+key);
                try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
@@ -41,9 +41,10 @@ public class prova {
                    }
                }catch (IOException ex){
                    ex.printStackTrace();
-               }
+               } */
                i++;
            }
+           System.out.println(i);
        }
    }
 
