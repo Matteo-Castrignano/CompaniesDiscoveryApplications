@@ -1,43 +1,40 @@
 package Entities;
 
-import java.util.Date;
-
 public class Companies {
 
-    private String name;
     private String symbol;
+    private String name;
     private String stockExchange;
     private String sector;
-    private String website;
-    private String ceo;
     private int fullTimeEmployees;
-    private String phone;
-    private String address;
+    private String description;
     private String city;
+    private String phone;
     private String state;
-    private Date ipoDate; //da togliere
+    private String country;
+    private String address;
+    private String website;
 
-    public Companies(String name, String symbol, String stockExchange, String sector, String website, String ceo, int fullTimeEmployees, String phone, String address, String city, String state, Date ipoDate) {
-        this.name = name;
+    public Companies(String symbol, String name, String stockExchange, String sector, int fullTimeEmployees, String description, String city, String phone, String state, String country, String address, String website) {
         this.symbol = symbol;
+        this.name = name;
         this.stockExchange = stockExchange;
         this.sector = sector;
-        this.website = website;
-        this.ceo = ceo;
         this.fullTimeEmployees = fullTimeEmployees;
-        this.phone = phone;
-        this.address = address;
+        this.description = description;
         this.city = city;
+        this.phone = phone;
         this.state = state;
-        this.ipoDate = ipoDate;
+        this.country = country;
+        this.address = address;
+        this.website = website;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Companies(String symbol, String name, String stockExchange, String sector) {
+        this.symbol = symbol;
         this.name = name;
+        this.stockExchange = stockExchange;
+        this.sector = sector;
     }
 
     public String getSymbol() {
@@ -46,6 +43,14 @@ public class Companies {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStockExchange() {
@@ -64,22 +69,6 @@ public class Companies {
         this.sector = sector;
     }
 
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getCeo() {
-        return ceo;
-    }
-
-    public void setCeo(String ceo) {
-        this.ceo = ceo;
-    }
-
     public int getFullTimeEmployees() {
         return fullTimeEmployees;
     }
@@ -88,20 +77,12 @@ public class Companies {
         this.fullTimeEmployees = fullTimeEmployees;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getCity() {
@@ -112,6 +93,14 @@ public class Companies {
         this.city = city;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getState() {
         return state;
     }
@@ -120,29 +109,27 @@ public class Companies {
         this.state = state;
     }
 
-    public Date getIpoDate() {
-        return ipoDate;
+    public String getCountry() {
+        return country;
     }
 
-    public void setIpoDate(Date ipoDate) {
-        this.ipoDate = ipoDate;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    @Override
-    public String toString() {
-        return "Companies{" +
-                "name='" + name + '\'' +
-                ", simbol='" + symbol + '\'' +
-                ", stockExchange='" + stockExchange + '\'' +
-                ", sector='" + sector + '\'' +
-                ", website='" + website + '\'' +
-                ", ceo='" + ceo + '\'' +
-                ", fullTimeEmployees=" + fullTimeEmployees +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", ipoDate=" + ipoDate +
-                '}';
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 }

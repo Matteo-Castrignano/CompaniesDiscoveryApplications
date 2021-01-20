@@ -3,6 +3,7 @@ package Entities;
 import java.util.Date;
 
 public class History {
+    private String symbol;
     private Date dateHistory;
     private float open;
     private float close;
@@ -11,7 +12,8 @@ public class History {
     private int high;
     private int low;
 
-    public History(Date dateHistory, float open, float close, float adjustedClose, int volume, int high, int low) {
+    public History(String symbol, Date dateHistory, float open, float close, float adjustedClose, int volume, int high, int low) {
+        this.symbol = symbol;
         this.dateHistory = dateHistory;
         this.open = open;
         this.close = close;
@@ -19,6 +21,14 @@ public class History {
         this.volume = volume;
         this.high = high;
         this.low = low;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public Date getDateHistory() {
