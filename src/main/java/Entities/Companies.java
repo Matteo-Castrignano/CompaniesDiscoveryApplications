@@ -37,6 +37,13 @@ public class Companies {
         this.sector = sector;
     }
 
+    public Companies() {
+        this.symbol = null;
+        this.name = null;
+        this.stockExchange = null;
+        this.sector = null;
+    }
+
     public String getSymbol() {
         return symbol;
     }

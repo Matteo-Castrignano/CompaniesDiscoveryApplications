@@ -4,15 +4,15 @@ import java.util.Date;
 
 public class History {
     private String symbol;
-    private Date dateHistory;
+    private String dateHistory;
     private float open;
     private float close;
     private float adjustedClose;
     private int volume;
-    private int high;
-    private int low;
+    private float high;
+    private float low;
 
-    public History(String symbol, Date dateHistory, float open, float close, float adjustedClose, int volume, int high, int low) {
+    public History(String symbol, String dateHistory, float open, float close, float adjustedClose, int volume, float high, float low) {
         this.symbol = symbol;
         this.dateHistory = dateHistory;
         this.open = open;
@@ -31,11 +31,11 @@ public class History {
         this.symbol = symbol;
     }
 
-    public Date getDateHistory() {
+    public String getDateHistory() {
         return dateHistory;
     }
 
-    public void setDateHistory(Date dateHistory) {
+    public void setDateHistory(String dateHistory) {
         this.dateHistory = dateHistory;
     }
 
@@ -71,19 +71,19 @@ public class History {
         this.volume = volume;
     }
 
-    public int getHigh() {
+    public float getHigh() {
         return high;
     }
 
-    public void setHigh(int high) {
+    public void setHigh(float high) {
         this.high = high;
     }
 
-    public int getLow() {
+    public float getLow() {
         return low;
     }
 
-    public void setLow(int low) {
+    public void setLow(float low) {
         this.low = low;
     }
 }
