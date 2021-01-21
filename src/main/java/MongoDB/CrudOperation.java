@@ -1,8 +1,10 @@
 package MongoDB;
 
 import Entities.*;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import com.mongodb.client.MongoCursor;
 import java.util.ArrayList;
@@ -77,6 +79,43 @@ public class CrudOperation {
         }
 
         return c;
+    }
+
+
+    public long updateCompany_description_bySymbol(MongoDatabase database, String symbol, String description)
+    {
+        MongoCollection<Document> collection = database.getCollection("companies");
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("Symbol", symbol);
+
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.put("Description", description);
+
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", newDocument);
+
+        UpdateResult updateResult = collection.updateOne(query, updateObject);
+
+        return UpdateResult.unacknowledged().getModifiedCount();
+    }
+
+    public long updateCompany_Employees_bySymbol(MongoDatabase database, String symbol, int employees)
+    {
+        MongoCollection<Document> collection = database.getCollection("companies");
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("Symbol", symbol);
+
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.put("Employees", employees);
+
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", newDocument);
+
+        UpdateResult updateResult = collection.updateOne(query, updateObject);
+
+        return UpdateResult.unacknowledged().getModifiedCount();
     }
 
 
