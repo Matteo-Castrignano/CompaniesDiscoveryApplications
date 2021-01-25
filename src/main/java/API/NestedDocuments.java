@@ -42,12 +42,12 @@ public class NestedDocuments {
         //asList.get(0).getSummaryOfWeek().add(asListSummary.get(0));
 
         for(int i = 0; i < asList.size(); i++){
-            if(asList.get(i).getSummaryOfWeek() == null)
-                asList.get(i).setSummaryOfWeek(new ArrayList<>());
+            if(asList.get(i).getSummary() == null)
+                asList.get(i).setSummary(new ArrayList<>());
 
             for(Summary s: asListSummary){
                 if(asList.get(i).getSymbol().equals(s.getSymbol())){
-                    asList.get(i).getSummaryOfWeek().add(s);
+                    asList.get(i).getSummary().add(s);
                     break;
                 }
             }
