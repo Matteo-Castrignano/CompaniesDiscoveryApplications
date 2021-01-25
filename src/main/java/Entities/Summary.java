@@ -1,19 +1,25 @@
 package Entities;
 
+import java.util.Date;
+
 public class Summary {
-    private int capitalization;
-    private float PE_ratio;
+    private String symbol;
+    private Date date;
+    private float marketCap;
+    private float peRatio;
     private float EPS;
-    private float dividend;
+    private String dividend;
     private float targetPrice;
     private float open;
     private float close;
     private float avgVolume;
     private float volume;
 
-    public Summary(int capitalization, float PE_ratio, float EPS, float dividend, float targetPrice, float open, float close, float avgVolume, float volume) {
-        this.capitalization = capitalization;
-        this.PE_ratio = PE_ratio;
+    public Summary(String symbol, Date date, float marketCap, float peRatio, float EPS, String dividend, float targetPrice, float open, float close, float avgVolume, float volume) {
+        this.symbol = symbol;
+        this.date = date;
+        this.marketCap = marketCap;
+        this.peRatio = peRatio;
         this.EPS = EPS;
         this.dividend = dividend;
         this.targetPrice = targetPrice;
@@ -23,72 +29,88 @@ public class Summary {
         this.volume = volume;
     }
 
-    public int getCapitalization() {
-        return capitalization;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setCapitalization(int capitalization) {
-        this.capitalization = capitalization;
+    public Date getDate() {
+        return date;
     }
 
-    public float getPE_ratio() {
-        return PE_ratio;
+    public float getMarketCap() {
+        return marketCap;
     }
 
-    public void setPE_ratio(float PE_ratio) {
-        this.PE_ratio = PE_ratio;
+    public float getPeRatio() {
+        return peRatio;
     }
 
     public float getEPS() {
         return EPS;
     }
 
-    public void setEPS(float EPS) {
-        this.EPS = EPS;
-    }
-
-    public float getDividend() {
+    public String getDividend() {
         return dividend;
-    }
-
-    public void setDividend(float dividend) {
-        this.dividend = dividend;
     }
 
     public float getTargetPrice() {
         return targetPrice;
     }
 
-    public void setTargetPrice(float targetPrice) {
-        this.targetPrice = targetPrice;
-    }
-
     public float getOpen() {
         return open;
-    }
-
-    public void setOpen(float open) {
-        this.open = open;
     }
 
     public float getClose() {
         return close;
     }
 
-    public void setClose(float close) {
-        this.close = close;
-    }
-
     public float getAvgVolume() {
         return avgVolume;
     }
 
-    public void setAvgVolume(float avgVolume) {
-        this.avgVolume = avgVolume;
-    }
-
     public float getVolume() {
         return volume;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setMarketCap(float marketCap) {
+        this.marketCap = marketCap;
+    }
+
+    public void setPeRatio(float peRatio) {
+        this.peRatio = peRatio;
+    }
+
+    public void setEPS(float EPS) {
+        this.EPS = EPS;
+    }
+
+    public void setDividend(String dividend) {
+        this.dividend = dividend;
+    }
+
+    public void setTargetPrice(float targetPrice) {
+        this.targetPrice = targetPrice;
+    }
+
+    public void setOpen(float open) {
+        this.open = open;
+    }
+
+    public void setClose(float close) {
+        this.close = close;
+    }
+
+    public void setAvgVolume(float avgVolume) {
+        this.avgVolume = avgVolume;
     }
 
     public void setVolume(float volume) {

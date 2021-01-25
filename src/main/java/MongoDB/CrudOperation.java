@@ -233,8 +233,8 @@ public class CrudOperation {
     {
         MongoCollection<Document> collection = database.getCollection("summary");
 
-        Document doc = new Document("Capitalization", s.getCapitalization())
-                .append("PE_Ratio", s.getPE_ratio())
+        Document doc = new Document("Capitalization", s.getMarketCap())
+                .append("PE_Ratio", s.getPeRatio())
                 .append("EPS", s.getEPS())
                 .append("Dividend", s.getDividend())
                 .append("Target_Price", s.getTargetPrice())

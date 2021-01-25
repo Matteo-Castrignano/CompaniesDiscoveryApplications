@@ -1,12 +1,14 @@
 package Entities;
 
+import java.util.List;
+
 public class Companies {
 
     private String symbol;
     private String name;
-    private String stockExchange;
+    private String exchange;
     private String sector;
-    private int fullTimeEmployees;
+    private int fullTimesEmployees;
     private String description;
     private String city;
     private String phone;
@@ -14,13 +16,14 @@ public class Companies {
     private String country;
     private String address;
     private String website;
+    private List<Summary> summaryOfWeek;
 
     public Companies(String symbol, String name, String stockExchange, String sector, int fullTimeEmployees, String description, String city, String phone, String state, String country, String address, String website) {
         this.symbol = symbol;
         this.name = name;
-        this.stockExchange = stockExchange;
+        this.exchange = stockExchange;
         this.sector = sector;
-        this.fullTimeEmployees = fullTimeEmployees;
+        this.fullTimesEmployees = fullTimeEmployees;
         this.description = description;
         this.city = city;
         this.phone = phone;
@@ -33,14 +36,14 @@ public class Companies {
     public Companies(String symbol, String name, String stockExchange, String sector) {
         this.symbol = symbol;
         this.name = name;
-        this.stockExchange = stockExchange;
+        this.exchange = stockExchange;
         this.sector = sector;
     }
 
     public Companies() {
         this.symbol = null;
         this.name = null;
-        this.stockExchange = null;
+        this.exchange = null;
         this.sector = null;
     }
 
@@ -61,11 +64,11 @@ public class Companies {
     }
 
     public String getStockExchange() {
-        return stockExchange;
+        return exchange;
     }
 
     public void setStockExchange(String stockExchange) {
-        this.stockExchange = stockExchange;
+        this.exchange = stockExchange;
     }
 
     public String getSector() {
@@ -77,11 +80,11 @@ public class Companies {
     }
 
     public int getFullTimeEmployees() {
-        return fullTimeEmployees;
+        return fullTimesEmployees;
     }
 
     public void setFullTimeEmployees(int fullTimeEmployees) {
-        this.fullTimeEmployees = fullTimeEmployees;
+        this.fullTimesEmployees = fullTimeEmployees;
     }
 
     public String getDescription() {
@@ -138,5 +141,31 @@ public class Companies {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public List<Summary> getSummaryOfWeek() {
+        return summaryOfWeek;
+    }
+
+    public void setSummaryOfWeek(List<Summary> summaryOfWeek) {
+        this.summaryOfWeek = summaryOfWeek;
+    }
+
+    @Override
+    public String toString() {
+        return "Companies{" +
+                "symbol='" + symbol + '\'' +
+                ", name='" + name + '\'' +
+                ", exchange='" + exchange + '\'' +
+                ", sector='" + sector + '\'' +
+                ", fullTimesEmployees=" + fullTimesEmployees +
+                ", description='" + description + '\'' +
+                ", city='" + city + '\'' +
+                ", phone='" + phone + '\'' +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", address='" + address + '\'' +
+                ", website='" + website + '\'' +
+                '}';
     }
 }
