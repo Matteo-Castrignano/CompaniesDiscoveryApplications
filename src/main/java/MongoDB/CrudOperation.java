@@ -257,14 +257,87 @@ public class CrudOperation {
     {
         MongoCollection<Document> collection = database.getCollection("report");
 
-        Document doc = new Document("dateReport", r.getDateReport())
-                .append("typeReport", r.getTypeReport())
-                .append("analizedValues", r.getAnalizedValues())
-                .append("details", r.getDetails());
+        Document doc = new Document("Date", r.getDateReport())
+                .append("Username", r.getUsername())
+                .append("Symbol", r.getSymbol())
+                .append("Title", r.getTitle())
+                .append("Type", r.getTypeReport())
+                .append("AnalizedValue", r.getAnalizedValues())
+                .append("Text", r.getDetails());
 
         collection.insertOne(doc);
         return true;
     }
-    //fare read,update,delete di report
 
+    public List<Report> readReports_bySymbol(MongoDatabase database, String symbol)
+    {
+
+        MongoCollection<Document> collection = database.getCollection("report");
+        MongoCursor cursor = collection.find(eq("Symbol", symbol)).iterator();
+        List<Report> reportsList = new ArrayList<>();
+        Report r;
+
+        try {
+            while (cursor.hasNext()) {
+                JSONObject json = new JSONObject(cursor.next());
+                System.out.println(json.toString());
+                r = new Report(json.getString("Title"),json.getString("Date"),json.getString("Type"),json.getString("AnalizedValue"),
+                        json.getString("Text"),json.getString("Symbol"),json.getString("Username"));
+                reportsList.add(r);
+                }
+
+        } finally {
+            cursor.close();
+        }
+        return reportsList;
+    }
+
+    public List<Report> readReports_byUsername(MongoDatabase database, String username)
+    {
+
+        MongoCollection<Document> collection = database.getCollection("report");
+        MongoCursor cursor = collection.find(eq("Username", username)).iterator();
+        List<Report> reportsList = new ArrayList<>();
+        Report r;
+
+        try {
+            while (cursor.hasNext()) {
+                JSONObject json = new JSONObject(cursor.next());
+                System.out.println(json.toString());
+                r = new Report(json.getString("Title"),json.getString("Date"),json.getString("Type"),json.getString("AnalizedValue"),
+                        json.getString("Text"),json.getString("Symbol"),json.getString("Username"));
+                reportsList.add(r);
+            }
+
+        } finally {
+            cursor.close();
+        }
+        return reportsList;
+    }
+
+    public long updateReport_Employees_byTitle(MongoDatabase database, String title, String text)
+    {
+        MongoCollection<Document> collection = database.getCollection("report");
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("Title", title);
+
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.put("Text", text);
+
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", newDocument);
+
+        UpdateResult updateResult = collection.updateOne(query, updateObject);
+
+        return UpdateResult.unacknowledged().getModifiedCount();
+    }
+
+    public long deleteRepert_byTitle(MongoDatabase database, String title)
+    {
+        MongoCollection<Document> collection = database.getCollection("report");
+
+        DeleteResult deleteResult = collection.deleteMany(eq("Title", title));
+        return deleteResult.getDeletedCount();
+    }
 }

@@ -6,14 +6,16 @@ import java.util.Map;
 
 public class Report {
 
-    private Date dateReport;
+    private String dateReport;
     private String typeReport;
     private String analizedValues;
     private String details;
     private String symbol;
     private String username;
+    private String title;
 
-    public Report(Date dateReport, String typeReport, String analizedValues, String details, String symbol, String username) {
+    public Report(String title, String dateReport, String typeReport, String analizedValues, String details, String symbol, String username) {
+        this.title= title;
         this.dateReport = dateReport;
         this.typeReport = typeReport;
         this.analizedValues = analizedValues;
@@ -22,11 +24,19 @@ public class Report {
         this.username = username;
     }
 
-    public Date getDateReport() {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDateReport() {
         return dateReport;
     }
 
-    public void setDateReport(Date dateReport) {
+    public void setDateReport(String dateReport) {
         this.dateReport = dateReport;
     }
 
