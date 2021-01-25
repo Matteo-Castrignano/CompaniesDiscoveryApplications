@@ -6,39 +6,53 @@ import java.util.Map;
 
 public class Report {
 
-    private Date dateReport;
-    private List<String> typeReport;
-    private Map <String, Integer> analizedValues;
+    private String dateReport;
+    private String typeReport;
+    private String analizedValues;
     private String details;
+    private String symbol;
+    private String username;
+    private String title;
 
-    public Report(Date dateReport, List<String> typeReport, Map<String, Integer> analizedValues, String details) {
+    public Report(String title, String dateReport, String typeReport, String analizedValues, String details, String symbol, String username) {
+        this.title= title;
         this.dateReport = dateReport;
         this.typeReport = typeReport;
         this.analizedValues = analizedValues;
         this.details = details;
+        this.symbol = symbol;
+        this.username = username;
     }
 
-    public Date getDateReport() {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDateReport() {
         return dateReport;
     }
 
-    public void setDateReport(Date dateReport) {
+    public void setDateReport(String dateReport) {
         this.dateReport = dateReport;
     }
 
-    public List<String> getTypeReport() {
+    public String getTypeReport() {
         return typeReport;
     }
 
-    public void setTypeReport(List<String> typeReport) {
+    public void setTypeReport(String typeReport) {
         this.typeReport = typeReport;
     }
 
-    public Map<String, Integer> getAnalizedValues() {
+    public String getAnalizedValues() {
         return analizedValues;
     }
 
-    public void setAnalizedValues(Map<String, Integer> analizedValues) {
+    public void setAnalizedValues(String analizedValues) {
         this.analizedValues = analizedValues;
     }
 
@@ -50,13 +64,19 @@ public class Report {
         this.details = details;
     }
 
-    @Override
-    public String toString() {
-        return "Report{" +
-                "dateReport=" + dateReport +
-                ", typeReport=" + typeReport +
-                ", analizedValues=" + analizedValues +
-                ", details='" + details + '\'' +
-                '}';
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
