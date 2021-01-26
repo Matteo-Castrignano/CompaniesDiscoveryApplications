@@ -8,6 +8,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import com.mongodb.client.MongoCursor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.json.JSONObject;
 import static com.mongodb.client.model.Filters.*;
@@ -30,10 +31,11 @@ public class CrudOperation {
     {
         MongoCollection<Document> collection = database.getCollection("companies");
 
-        Document doc = new Document("Symbol", c.getSymbol() )
+        Document doc = new Document("Symbol", c.getSymbol())
                 .append("Name", c.getName())
-                .append("Exchange", c.getStockExchange() )
-                .append("Sector", c.getSector() );
+                .append("Exchange", c.getExchange())
+                .append("Sector", c.getSector())
+                .append("Summary", Arrays.asList ());
 
         collection.insertOne(doc);
         return true;

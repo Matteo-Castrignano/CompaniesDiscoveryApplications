@@ -4,168 +4,168 @@ import java.util.List;
 
 public class Companies {
 
-    private String Symbol;
-    private String Name;
-    private String Exchange;
-    private String Sector;
-    private int FullTimesEmployees;
-    private String Description;
-    private String City;
-    private String Phone;
-    private String State;
-    private String Country;
-    private String Address;
-    private String Website;
-    private List<Summary> Summary;
+    private String symbol;
+    private String name;
+    private String exchange;
+    private String sector;
+    private int fullTimesemployees;
+    private String description;
+    private String city;
+    private String phone;
+    private String state;
+    private String country;
+    private String address;
+    private String website;
+    private List<Summary> summary;
 
-    public Companies(String Symbol, String Name, String stockExchange, String Sector, int fullTimeEmployees, String Description, String City, String Phone, String State, String Country, String Address, String Website) {
-        this.Symbol = Symbol;
-        this.Name = Name;
-        this.Exchange = stockExchange;
-        this.Sector = Sector;
-        this.FullTimesEmployees = fullTimeEmployees;
-        this.Description = Description;
-        this.City = City;
-        this.Phone = Phone;
-        this.State = State;
-        this.Country = Country;
-        this.Address = Address;
-        this.Website = Website;
+    public Companies(String symbol, String name, String stockexchange, String sector, int fullTimeEmployees, String description, String city, String phone, String state, String country, String address, String website) {
+        this.symbol = symbol;
+        this.name = name;
+        this.exchange = stockexchange;
+        this.sector = sector;
+        this.fullTimesemployees = fullTimeEmployees;
+        this.description = description;
+        this.city = city;
+        this.phone = phone;
+        this.state = state;
+        this.country = country;
+        this.address = address;
+        this.website = website;
     }
 
-    public Companies(String Symbol, String Name, String stockExchange, String Sector) {
-        this.Symbol = Symbol;
-        this.Name = Name;
-        this.Exchange = stockExchange;
-        this.Sector = Sector;
+    public Companies(String symbol, String name, String stockexchange, String sector) {
+        this.symbol = symbol;
+        this.name = name;
+        this.exchange = stockexchange;
+        this.sector = sector;
     }
 
     public Companies() {
-        this.Symbol = null;
-        this.Name = null;
-        this.Exchange = null;
-        this.Sector = null;
+        this.symbol = null;
+        this.name = null;
+        this.exchange = null;
+        this.sector = null;
     }
 
     public String getSymbol() {
-        return Symbol;
+        return symbol;
     }
 
-    public void setSymbol(String Symbol) {
-        this.Symbol = Symbol;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
-    public void setName(String Name) {
-        this.Name = Name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getStockExchange() {
-        return Exchange;
+    public String getExchange() {
+        return exchange;
     }
 
-    public void setStockExchange(String stockExchange) {
-        this.Exchange = stockExchange;
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
     }
 
     public String getSector() {
-        return Sector;
+        return sector;
     }
 
-    public void setSector(String Sector) {
-        this.Sector = Sector;
+    public void setSector(String sector) {
+        this.sector = sector;
     }
 
-    public int getFullTimeEmployees() {
-        return FullTimesEmployees;
+    public int getFullTimesemployees() {
+        return fullTimesemployees;
     }
 
-    public void setFullTimeEmployees(int fullTimeEmployees) {
-        this.FullTimesEmployees = fullTimeEmployees;
+    public void setFullTimesemployees(int fullTimesemployees) {
+        this.fullTimesemployees = fullTimesemployees;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
-    public void setDescription(String Description) {
-        this.Description = Description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getCity() {
-        return City;
+        return city;
     }
 
-    public void setCity(String City) {
-        this.City = City;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getPhone() {
-        return Phone;
+        return phone;
     }
 
-    public void setPhone(String Phone) {
-        this.Phone = Phone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getState() {
-        return State;
+        return state;
     }
 
-    public void setState(String State) {
-        this.State = State;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
-    public void setCountry(String Country) {
-        this.Country = Country;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
-    public void setAddress(String Address) {
-        this.Address = Address;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getWebsite() {
-        return Website;
+        return website;
     }
 
-    public void setWebsite(String Website) {
-        this.Website = Website;
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
     public List<Summary> getSummary() {
-        return Summary;
+        return summary;
     }
 
-    public void setSummary(List<Summary> Summary) {
-        this.Summary = Summary;
+    public void setSummary(List<Summary> summary) {
+        this.summary = summary;
     }
 
     @Override
     public String toString() {
         return "Companies{" +
-                "Symbol='" + Symbol + '\'' +
-                ", Name='" + Name + '\'' +
-                ", Exchange='" + Exchange + '\'' +
-                ", Sector='" + Sector + '\'' +
-                ", FullTimesEmployees=" + FullTimesEmployees +
-                ", Description='" + Description + '\'' +
-                ", City='" + City + '\'' +
-                ", Phone='" + Phone + '\'' +
-                ", State='" + State + '\'' +
-                ", Country='" + Country + '\'' +
-                ", Address='" + Address + '\'' +
-                ", Website='" + Website + '\'' +
+                "symbol='" + symbol + '\'' +
+                ", name='" + name + '\'' +
+                ", exchange='" + exchange + '\'' +
+                ", sector='" + sector + '\'' +
+                ", fullTimesemployees=" + fullTimesemployees +
+                ", description='" + description + '\'' +
+                ", city='" + city + '\'' +
+                ", phone='" + phone + '\'' +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", address='" + address + '\'' +
+                ", website='" + website + '\'' +
                 '}';
     }
 }
