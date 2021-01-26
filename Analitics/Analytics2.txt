@@ -1,0 +1,57 @@
+floadb.companies.aggregate(
+	{ 
+		$match:{
+			AvgVolume:{ $lt: VALORE DA INSERIRE }
+		}  
+	},
+
+	{ 
+		$unwind : "$Summary" 
+	},
+	
+	{
+		$project:{
+			_id: {symbol: '$Symbol' },
+			count: { $cond:[{ $gt: [ "$Close" , "$Open" ] }, 1, 0] }
+		}
+	},
+	
+	{ 
+		$group:{ 
+			_id:{ symbol:"$_id.symbol" },
+			tot: { $sum: "$count" }
+		}
+	},
+	
+	{ $project: {
+        _id:{ symbol:"$_id.symbol" },
+		interesse: { $cond:[{ $gt: [ "$tot" , 5 ] }, 'yes' , 'no'] }
+		}
+	}
+)
+	
+
+db.history.aggregate(
+	{
+		$project:{
+			_id: { symbol: '$Symbol' },
+			count: { $cond:[{ $gt: [ "$Close" , "$Open" ] }, 1, 0] }
+		}
+	},
+	
+	{ 
+		$group:{ 
+			_id:{ symbol:"$_id.symbol" },
+			tot: { $sum: "$count" }
+		}
+	},
+	
+	{ 
+		$match:{tot:{ $gt:5 }}  
+	}
+)
+	
+
+
+	
+	

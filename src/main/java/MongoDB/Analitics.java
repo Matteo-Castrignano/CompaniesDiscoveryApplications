@@ -132,5 +132,4 @@ public class Analitics {
         System.out.println("Per ogni settore, trovare le aziende con capitalizzazione superiore ad un miliardo che hanno il rapporto PE più basso (le aziende più sottovalutate)");
         results.forEach(printFormattedDocuments());
     }
-
 }
