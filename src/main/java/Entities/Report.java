@@ -79,4 +79,17 @@ public class Report {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return "Report{" +
+                "dateReport='" + dateReport + '\'' +
+                ", typeReport='" + typeReport + '\'' +
+                ", analizedValues='" + analizedValues + '\'' +
+                ", details='" + details + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", username='" + username + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

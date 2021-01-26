@@ -1,5 +1,6 @@
 package Entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Companies {
@@ -18,12 +19,14 @@ public class Companies {
     private String website;
     private List<Summary> summary;
 
-    public Companies(String symbol, String name, String stockexchange, String sector, int fullTimeEmployees, String description, String city, String phone, String state, String country, String address, String website) {
+    public Companies(String symbol, String name, String exchange, String sector, int fullTimesemployees,
+                     String description, String city, String phone, String state, String country, String address,
+                     String website, List<Summary> summary) {
         this.symbol = symbol;
         this.name = name;
-        this.exchange = stockexchange;
+        this.exchange = exchange;
         this.sector = sector;
-        this.fullTimesemployees = fullTimeEmployees;
+        this.fullTimesemployees = fullTimesemployees;
         this.description = description;
         this.city = city;
         this.phone = phone;
@@ -31,6 +34,7 @@ public class Companies {
         this.country = country;
         this.address = address;
         this.website = website;
+        this.summary = summary;
     }
 
     public Companies(String symbol, String name, String stockexchange, String sector, List<Summary> summary) {
@@ -39,6 +43,13 @@ public class Companies {
         this.exchange = stockexchange;
         this.sector = sector;
         this.summary = summary;
+    }
+
+    public Companies(String symbol, String name, String stockexchange, String sector) {
+        this.symbol = symbol;
+        this.name = name;
+        this.exchange = stockexchange;
+        this.sector = sector;
     }
 
     public Companies() {
@@ -152,6 +163,7 @@ public class Companies {
         this.summary = summary;
     }
 
+
     @Override
     public String toString() {
         return "Companies{" +
@@ -159,14 +171,7 @@ public class Companies {
                 ", name='" + name + '\'' +
                 ", exchange='" + exchange + '\'' +
                 ", sector='" + sector + '\'' +
-                ", fullTimesemployees=" + fullTimesemployees +
-                ", description='" + description + '\'' +
-                ", city='" + city + '\'' +
-                ", phone='" + phone + '\'' +
-                ", state='" + state + '\'' +
-                ", country='" + country + '\'' +
-                ", address='" + address + '\'' +
-                ", website='" + website + '\'' +
+                ", summary=" + summary.toString() +
                 '}';
     }
 }

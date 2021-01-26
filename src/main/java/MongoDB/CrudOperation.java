@@ -18,18 +18,55 @@ import static com.mongodb.client.model.Filters.*;
 
 public class CrudOperation {
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         MongoClient mongoClient = MongoClients.create("mongodb://172.16.3.150:27020/");
 
         MongoDatabase database = mongoClient.getDatabase("CompaniesApplication");
+
+        //Companies c = new Companies("PROVA","Pippo","NYS","info");
+
+        //System.out.println("Esito inserimento" + createCompany(database,c));
+
+        //Companies c1 = readCompany_bySymbol(database, "PROVA");
+        //System.out.println(c1.toString());
+
+        //System.out.println("Esito delete companies" + deleteCompany_bySymbol(database,"PROVA"));
+
+        //List<History> lh = readHistory_byPeriod(database, "2020-11-11", "2021-01-10");
+        //System.out.println(lh.toString());
+
+        //History h = new History("PROVA","2021-02-12",3, 5, 7, 230,10,10);
+        //System.out.println("Esito inserimento history "+ createHistory(database,h));
+
+        //System.out.println("Esito delete history " + deleteHistory_bySymbol(database,"PROVA"));
+        //System.out.println("Esito delete history " + deleteHistory_byPeriod(database,"2021-02-01","2021-02-27"));
+
+        //Report r1 = new Report("prova","2021-02-01","budello di tu ma", "buo di ulo", "è troppo peloso", "PROVA", "ennio");
+        //System.out.println("Esito inserimento report " + createReport(database, r1) );
+
+        List<Report> r = readReports_bySymbol(database,"PROVA");
+        System.out.println(r.toString());
+
+        //r = readReports_byUsername(database,"ennio");
+        //System.out.println(r.toString());
+
+        //System.out.println("Esisto update report" + updateReport_Text_byTitle(database,"prova","è sempre infiammato"));
+
+        r = readReports_bySymbol(database,"PROVA");
+        System.out.println(r.toString());
+
+        System.out.println("Esisto delete report" + deleteRepert_byTitle(database,"prova"));
+
+        r = readReports_byUsername(database,"ennio");
+        System.out.println(r.toString());
 
     }
 
 
 
     //CRUD Operation Companies
-    public boolean createCompany(MongoDatabase database, Companies c)
+    public static boolean createCompany(MongoDatabase database, Companies c) //OK
     {
         MongoCollection<Document> collection = database.getCollection("companies");
 
@@ -44,40 +81,56 @@ public class CrudOperation {
     }
 
 
-    public Companies readCompany_bySymbol(MongoDatabase database, String symbol)
+    public static Companies readCompany_bySymbol(MongoDatabase database, String symbol) //OK
     {
 
+        /*MongoCollection<Document> collection = database.getCollection("companies");
+        Document doc = collection.find(eq("Symbol", symbol)).first();
+        System.out.println(doc.toJson());
+        Gson gson = new Gson();
+        Companies c = gson.fromJson(doc.toJson(), Companies.class);
+        List<Summary> summ = c.getSummary();
+        for(Summary s : summ){
+            System.out.println(s.toString());
+        }
+        */
+
         MongoCollection<Document> collection = database.getCollection("companies");
-        MongoCursor cursor = collection.find(eq("Symbol", symbol)).iterator();
+        FindIterable<Document> iterable = collection.find(eq("Symbol", symbol));
+        MongoCursor<Document> cursor = iterable.iterator();
+
         Companies c = new Companies();
 
         try {
             while (cursor.hasNext()) {
                 JSONObject json = new JSONObject(cursor.next());
-                System.out.println(json.toString());
 
                 List<Summary> summaries = new ArrayList<>();
-                JSONArray a = new JSONArray(json.getJSONArray("Summary"));
-                Summary s = new Summary();
 
-                for (int j = 0; j < a.length(); j++)
+                if (!json.getJSONArray("Summary").isEmpty())
                 {
-                    s.setDate(a.getJSONObject(j).getString("Date"));
+                    JSONArray a = new JSONArray(json.getJSONArray("Summary"));
 
-                    s.setClose(a.getJSONObject(j).getFloat("Close"));
-                    s.setOpen(a.getJSONObject(j).getFloat("Open"));
-                    s.setVolume(a.getJSONObject(j).getFloat("Volume"));
-                    s.setAvgVolume(a.getJSONObject(j).getFloat("Avg_Volume"));
-                    s.setMarketCap(a.getJSONObject(j).getFloat("Market_cap"));
-                    s.setPeRatio(a.getJSONObject(j).getFloat("PE_Ratio"));
-                    s.setEPS(a.getJSONObject(j).getFloat("EPS"));
-                    s.setDividend(a.getJSONObject(j).getString("Dividend"));
-                    s.setTargetPrice(a.getJSONObject(j).getFloat("Target_prize"));
+                    Summary s = new Summary();
 
-                    summaries.add(s);
+                    for (int j = 0; j < a.length(); j++)
+                    {
+                        s.setDate(a.getJSONObject(j).getString("Date"));
+                        s.setClose(a.getJSONObject(j).getFloat("Close"));
+                        s.setOpen(a.getJSONObject(j).getFloat("Open"));
+                        s.setVolume(a.getJSONObject(j).getFloat("Volume"));
+                        s.setAvgVolume(a.getJSONObject(j).getFloat("Avg_Volume"));
+                        s.setMarketCap(a.getJSONObject(j).getFloat("Market_cap"));
+                        s.setPeRatio(a.getJSONObject(j).getFloat("PE_Ratio"));
+                        s.setEPS(a.getJSONObject(j).getFloat("EPS"));
+                        s.setDividend(a.getJSONObject(j).getString("Dividend"));
+                        s.setTargetPrice(a.getJSONObject(j).getFloat("Target_prize"));
+
+                        summaries.add(s);
+                    }
                 }
 
-                c = new Companies(json.getString("Symbol"), json.getString("Name"), json.getString("StockExchange"),
+                c = new Companies(json.getString("Symbol"), json.getString("Name"), json.getString("Exchange"),
                         json.getString("Sector"), summaries );
             }
 
@@ -86,6 +139,236 @@ public class CrudOperation {
         }
         return c;
     }
+
+
+/*
+    public long updateCompany_Summary(MongoDatabase database, String symbol, String description)
+    {
+        //DA FARE
+
+        MongoCollection<Document> collection = database.getCollection("companies");
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("Symbol", symbol);
+
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.put("Description", description);
+
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", newDocument);
+
+        UpdateResult updateResult = collection.updateOne(query, updateObject);
+
+        return UpdateResult.unacknowledged().getModifiedCount();
+    }*/
+
+
+    public static long deleteCompany_bySymbol(MongoDatabase database, String symbol) //OK
+    {
+        MongoCollection<Document> collection = database.getCollection("companies");
+
+        DeleteResult deleteResult = collection.deleteMany(eq("Symbol", symbol));
+        return deleteResult.getDeletedCount();
+
+    }
+
+
+    //CRUD Operation History
+    public static boolean createHistory(MongoDatabase database, History h)
+    {
+        MongoCollection<Document> collection = database.getCollection("history");
+
+        Document doc = new Document("Date", h.getDateHistory())
+                .append("Open", h.getOpen())
+                .append("Close", h.getClose())
+                .append("High", h.getHigh())
+                .append("Low", h.getLow())
+                .append("AdjClose", h.getAdjustedClose())
+                .append("Volume", h.getVolume())
+                .append("Symbol", h.getSymbol());
+
+        collection.insertOne(doc);
+        return true;
+    }
+
+
+    public static List<History> readHistory_bySymbol(MongoDatabase database, String symbol)//OK
+    {
+        MongoCollection<Document> collection = database.getCollection("history");
+        List<History> historyList = new ArrayList<>();
+        History h;
+        FindIterable<Document> iterable = collection.find(eq("Symbol", symbol));
+        MongoCursor<Document> cursor = iterable.iterator();
+
+        try{
+            while (cursor.hasNext()) {
+                JSONObject json = new JSONObject(cursor.next());
+                //System.out.println(json.toString());
+                h = new History(json.getString("Symbol"), json.getString("Date"), json.getFloat("Open"), json.getFloat("Close"),
+                        json.getFloat("AdjClose"), json.getInt("Volume"), json.getFloat("High"), json.getFloat("Low"));
+                historyList.add(h);
+            }
+
+        } finally {
+            cursor.close();
+        }
+
+        return historyList;
+    }
+
+
+    public static List<History> readHistory_byPeriod(MongoDatabase database, String start_date, String end_date) //OK
+    {
+
+        MongoCollection<Document> collection = database.getCollection("history");
+        List<History> historyList = new ArrayList<>();
+        History h;
+        FindIterable<Document> iterable = collection.find(and(gt("Date", start_date), lt("Date", end_date)));
+        MongoCursor<Document> cursor = iterable.iterator();
+
+        try {
+            while (cursor.hasNext()) {
+                JSONObject json = new JSONObject(cursor.next());
+                //System.out.println(json.toString());
+                h = new History(json.getString("Symbol"), json.getString("Date"), json.getFloat("Open"), json.getFloat("Close"),
+                        json.getFloat("AdjClose"), json.getInt("Volume"), json.getFloat("High"), json.getFloat("Low"));
+                historyList.add(h);
+            }
+
+        } finally {
+            cursor.close();
+        }
+
+        return historyList;
+
+    }
+
+
+    public static long deleteHistory_bySymbol(MongoDatabase database, String symbol)//OK
+    {
+        MongoCollection<Document> collection = database.getCollection("history");
+
+        DeleteResult deleteResult = collection.deleteMany(eq("Symbol", symbol));
+        return deleteResult.getDeletedCount();
+    }
+
+
+    public static long deleteHistory_byPeriod(MongoDatabase database, String start_date, String end_date)//OK
+    {
+        MongoCollection<Document> collection = database.getCollection("history");
+
+        DeleteResult deleteResult = collection.deleteMany(and(gt("Date", start_date), lt("Date", end_date)));
+        return deleteResult.getDeletedCount();
+    }
+
+
+
+    //CRUD Operation Report
+    public static boolean createReport(MongoDatabase database, Report r)//OK
+    {
+        MongoCollection<Document> collection = database.getCollection("report");
+
+        Document doc = new Document("Date", r.getDateReport())
+                .append("Username", r.getUsername())
+                .append("Symbol", r.getSymbol())
+                .append("Title", r.getTitle())
+                .append("Type", r.getTypeReport())
+                .append("AnalizedValue", r.getAnalizedValues())
+                .append("Text", r.getDetails());
+
+        collection.insertOne(doc);
+        return true;
+    }
+
+    public static List<Report> readReports_bySymbol(MongoDatabase database, String symbol)//OK
+    {
+
+        MongoCollection<Document> collection = database.getCollection("report");
+        FindIterable<Document> iterable = collection.find(eq("Symbol", symbol));
+        MongoCursor<Document> cursor = iterable.iterator();
+        List<Report> reportsList = new ArrayList<>();
+        Report r;
+
+        try {
+            while (cursor.hasNext()) {
+                JSONObject json = new JSONObject(cursor.next());
+                //System.out.println(json.toString());
+                r = new Report(json.getString("Title"),json.getString("Date"),json.getString("Type"),json.getString("AnalizedValue"),
+                        json.getString("Text"),json.getString("Symbol"),json.getString("Username"));
+                reportsList.add(r);
+                }
+
+        } finally {
+            cursor.close();
+        }
+        return reportsList;
+    }
+
+    public static List<Report> readReports_byUsername(MongoDatabase database, String username)//OK
+    {
+
+        MongoCollection<Document> collection = database.getCollection("report");
+        FindIterable<Document> iterable = collection.find(eq("Username", username));
+        MongoCursor<Document> cursor = iterable.iterator();
+
+        List<Report> reportsList = new ArrayList<>();
+        Report r;
+
+        try {
+            while (cursor.hasNext()) {
+                JSONObject json = new JSONObject(cursor.next());
+                //System.out.println(json.toString());
+                r = new Report(json.getString("Title"),json.getString("Date"),json.getString("Type"),json.getString("AnalizedValue"),
+                        json.getString("Text"),json.getString("Symbol"),json.getString("Username"));
+                reportsList.add(r);
+            }
+
+        } finally {
+            cursor.close();
+        }
+        return reportsList;
+    }
+
+    public static long updateReport_Text_byTitle(MongoDatabase database, String title, String text)// NO
+    {
+        MongoCollection<Document> collection = database.getCollection("report");
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("Title", title);
+
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.put("Text", text);
+
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", newDocument);
+
+        UpdateResult updateResult = collection.updateOne(query, updateObject);
+
+        return UpdateResult.unacknowledged().getModifiedCount();
+    }
+
+    public static long deleteRepert_byTitle(MongoDatabase database, String title)//OK
+    {
+        MongoCollection<Document> collection = database.getCollection("report");
+
+        DeleteResult deleteResult = collection.deleteMany(eq("Title", title));
+        return deleteResult.getDeletedCount();
+    }
+}
+
+
+
+
+
+/* public long deleteCompany_byName(MongoDatabase database, String name)
+    {
+        MongoCollection<Document> collection = database.getCollection("companies");
+
+        DeleteResult deleteResult = collection.deleteMany(eq("Name", name));
+        return deleteResult.getDeletedCount();
+
+    } */
+
 
 
    /* public Companies readCompany_byName(MongoDatabase database, String name)
@@ -131,136 +414,6 @@ public class CrudOperation {
         return c;
     }*/
 
-
-    public long updateCompany_Summary(MongoDatabase database, String symbol, String description)
-    {
-        //DA FARE
-        /*
-        MongoCollection<Document> collection = database.getCollection("companies");
-
-        BasicDBObject query = new BasicDBObject();
-        query.put("Symbol", symbol);
-
-        BasicDBObject newDocument = new BasicDBObject();
-        newDocument.put("Description", description);
-
-        BasicDBObject updateObject = new BasicDBObject();
-        updateObject.put("$set", newDocument);
-
-        UpdateResult updateResult = collection.updateOne(query, updateObject);
-
-        return UpdateResult.unacknowledged().getModifiedCount();*/
-    }
-
-
-    public long deleteCompany_bySymbol(MongoDatabase database, String symbol)
-    {
-        MongoCollection<Document> collection = database.getCollection("companies");
-
-        DeleteResult deleteResult = collection.deleteMany(eq("Symbol", symbol));
-        return deleteResult.getDeletedCount();
-
-    }
-
-
-    public long deleteCompany_byName(MongoDatabase database, String name)
-    {
-        MongoCollection<Document> collection = database.getCollection("companies");
-
-        DeleteResult deleteResult = collection.deleteMany(eq("Name", name));
-        return deleteResult.getDeletedCount();
-
-    }
-
-
-
-    //CRUD Operation History
-    public boolean createHistory(MongoDatabase database, History h)
-    {
-        MongoCollection<Document> collection = database.getCollection("history");
-
-        Document doc = new Document("Date", h.getDateHistory())
-                .append("Open", h.getOpen())
-                .append("Close", h.getClose())
-                .append("High", h.getHigh())
-                .append("Low", h.getLow())
-                .append("AdjClose", h.getAdjustedClose())
-                .append("Volume", h.getVolume())
-                .append("Symbol", h.getSymbol());
-
-        collection.insertOne(doc);
-        return true;
-    }
-
-
-    public List<History> readHistory_bySymbol(MongoDatabase database, String symbol)
-    {
-        MongoCollection<Document> collection = database.getCollection("history");
-        List<History> historyList = new ArrayList<>();
-        History h;
-        MongoCursor cursor = collection.find(eq("Symbol", symbol)).iterator();
-
-        try {
-            while (cursor.hasNext()) {
-                JSONObject json = new JSONObject(cursor.next());
-                System.out.println(json.toString());
-                h = new History(json.getString("Symbol"), json.getString("Date"), json.getFloat("Open"), json.getFloat("Close"),
-                        json.getFloat("AdjClose"), json.getInt("Volume"), json.getFloat("High"), json.getFloat("Low"));
-                historyList.add(h);
-            }
-
-        } finally {
-            cursor.close();
-        }
-
-        return historyList;
-    }
-
-
-    public List<History> readHistory_byPeriod(MongoDatabase database, String start_date, String end_date)
-    {
-
-        MongoCollection<Document> collection = database.getCollection("history");
-        List<History> historyList = new ArrayList<>();
-        History h;
-        MongoCursor cursor = collection.find(and(gt("Date", start_date), lt("Date", end_date))).iterator();  //find({"Symbol": "BDC","Date" : {$lt:"2016-05-23", $gt:"2016-03-23"}})
-
-        try {
-            while (cursor.hasNext()) {
-                JSONObject json = new JSONObject(cursor.next());
-                System.out.println(json.toString());
-                h = new History(json.getString("Symbol"), json.getString("Date"), json.getFloat("Open"), json.getFloat("Close"),
-                        json.getFloat("AdjClose"), json.getInt("Volume"), json.getFloat("High"), json.getFloat("Low"));
-                historyList.add(h);
-            }
-
-        } finally {
-            cursor.close();
-        }
-
-        return historyList;
-
-    }
-
-
-    public long deleteHistory_bySymbol(MongoDatabase database, String symbol)
-    {
-        MongoCollection<Document> collection = database.getCollection("history");
-
-        DeleteResult deleteResult = collection.deleteMany(eq("Symbol", symbol));
-        return deleteResult.getDeletedCount();
-    }
-
-
-    public long deleteHistory_byPeriod(MongoDatabase database, String start_date, String end_date)
-    {
-        MongoCollection<Document> collection = database.getCollection("history");
-
-        DeleteResult deleteResult = collection.deleteMany(and(gt("Date", start_date), lt("Date", end_date)));
-        return deleteResult.getDeletedCount();
-    }
-
-
 /*
     //CRUD Operation Summary
     public boolean createSummary(MongoDatabase database, Summary s)
@@ -283,94 +436,3 @@ public class CrudOperation {
     //fare delete di summary ATTRAVERSO UNA DATA
 
     */
-
-
-    //CRUD Operation Report
-    public boolean createReport(MongoDatabase database, Report r)
-    {
-        MongoCollection<Document> collection = database.getCollection("report");
-
-        Document doc = new Document("Date", r.getDateReport())
-                .append("Username", r.getUsername())
-                .append("Symbol", r.getSymbol())
-                .append("Title", r.getTitle())
-                .append("Type", r.getTypeReport())
-                .append("AnalizedValue", r.getAnalizedValues())
-                .append("Text", r.getDetails());
-
-        collection.insertOne(doc);
-        return true;
-    }
-
-    public List<Report> readReports_bySymbol(MongoDatabase database, String symbol)
-    {
-
-        MongoCollection<Document> collection = database.getCollection("report");
-        MongoCursor cursor = collection.find(eq("Symbol", symbol)).iterator();
-        List<Report> reportsList = new ArrayList<>();
-        Report r;
-
-        try {
-            while (cursor.hasNext()) {
-                JSONObject json = new JSONObject(cursor.next());
-                System.out.println(json.toString());
-                r = new Report(json.getString("Title"),json.getString("Date"),json.getString("Type"),json.getString("AnalizedValue"),
-                        json.getString("Text"),json.getString("Symbol"),json.getString("Username"));
-                reportsList.add(r);
-                }
-
-        } finally {
-            cursor.close();
-        }
-        return reportsList;
-    }
-
-    public List<Report> readReports_byUsername(MongoDatabase database, String username)
-    {
-
-        MongoCollection<Document> collection = database.getCollection("report");
-        MongoCursor cursor = collection.find(eq("Username", username)).iterator();
-        List<Report> reportsList = new ArrayList<>();
-        Report r;
-
-        try {
-            while (cursor.hasNext()) {
-                JSONObject json = new JSONObject(cursor.next());
-                System.out.println(json.toString());
-                r = new Report(json.getString("Title"),json.getString("Date"),json.getString("Type"),json.getString("AnalizedValue"),
-                        json.getString("Text"),json.getString("Symbol"),json.getString("Username"));
-                reportsList.add(r);
-            }
-
-        } finally {
-            cursor.close();
-        }
-        return reportsList;
-    }
-
-    public long updateReport_Text_byTitle(MongoDatabase database, String title, String text)
-    {
-        MongoCollection<Document> collection = database.getCollection("report");
-
-        BasicDBObject query = new BasicDBObject();
-        query.put("Title", title);
-
-        BasicDBObject newDocument = new BasicDBObject();
-        newDocument.put("Text", text);
-
-        BasicDBObject updateObject = new BasicDBObject();
-        updateObject.put("$set", newDocument);
-
-        UpdateResult updateResult = collection.updateOne(query, updateObject);
-
-        return UpdateResult.unacknowledged().getModifiedCount();
-    }
-
-    public long deleteRepert_byTitle(MongoDatabase database, String title)
-    {
-        MongoCollection<Document> collection = database.getCollection("report");
-
-        DeleteResult deleteResult = collection.deleteMany(eq("Title", title));
-        return deleteResult.getDeletedCount();
-    }
-}

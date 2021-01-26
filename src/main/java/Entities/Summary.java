@@ -119,4 +119,20 @@ public class Summary {
     public void setVolume(float volume) {
         this.volume = volume;
     }
+
+    @Override
+    public String toString() {
+        return "Summary{" +
+                "date='" + date + '\'' +
+                ", marketCap=" + marketCap +
+                ", peRatio=" + peRatio +
+                ", EPS=" + EPS +
+                ", dividend='" + dividend + '\'' +
+                ", targetPrice=" + targetPrice +
+                ", open=" + open +
+                ", close=" + close +
+                ", avgVolume=" + avgVolume +
+                ", volume=" + volume +
+                '}';
+    }
 }

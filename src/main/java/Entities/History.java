@@ -86,4 +86,18 @@ public class History {
     public void setLow(float low) {
         this.low = low;
     }
+
+    @Override
+    public String toString() {
+        return "History{" +
+                "symbol='" + symbol + '\'' +
+                ", dateHistory='" + dateHistory + '\'' +
+                ", open=" + open +
+                ", close=" + close +
+                ", adjustedClose=" + adjustedClose +
+                ", volume=" + volume +
+                ", high=" + high +
+                ", low=" + low +
+                '}';
+    }
 }
