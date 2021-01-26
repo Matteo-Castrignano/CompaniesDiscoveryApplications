@@ -10,6 +10,8 @@ import com.mongodb.client.MongoCursor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import static com.mongodb.client.model.Filters.*;
 
@@ -18,7 +20,7 @@ public class CrudOperation {
 
     public static void main(String args[])
     {
-        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27020/");
+        MongoClient mongoClient = MongoClients.create("mongodb://172.16.3.150:27020/");
 
         MongoDatabase database = mongoClient.getDatabase("CompaniesApplication");
 
@@ -53,7 +55,30 @@ public class CrudOperation {
             while (cursor.hasNext()) {
                 JSONObject json = new JSONObject(cursor.next());
                 System.out.println(json.toString());
-                c = new Companies(json.getString("Symbol"), json.getString("Name"), json.getString("StockExchange"), json.getString("Sector"));
+
+                List<Summary> summaries = new ArrayList<>();
+                JSONArray a = new JSONArray(json.getJSONArray("Summary"));
+                Summary s = new Summary();
+
+                for (int j = 0; j < a.length(); j++)
+                {
+                    s.setDate(a.getJSONObject(j).getString("Date"));
+
+                    s.setClose(a.getJSONObject(j).getFloat("Close"));
+                    s.setOpen(a.getJSONObject(j).getFloat("Open"));
+                    s.setVolume(a.getJSONObject(j).getFloat("Volume"));
+                    s.setAvgVolume(a.getJSONObject(j).getFloat("Avg_Volume"));
+                    s.setMarketCap(a.getJSONObject(j).getFloat("Market_cap"));
+                    s.setPeRatio(a.getJSONObject(j).getFloat("PE_Ratio"));
+                    s.setEPS(a.getJSONObject(j).getFloat("EPS"));
+                    s.setDividend(a.getJSONObject(j).getString("Dividend"));
+                    s.setTargetPrice(a.getJSONObject(j).getFloat("Target_prize"));
+
+                    summaries.add(s);
+                }
+
+                c = new Companies(json.getString("Symbol"), json.getString("Name"), json.getString("StockExchange"),
+                        json.getString("Sector"), summaries );
             }
 
         } finally {
@@ -63,7 +88,7 @@ public class CrudOperation {
     }
 
 
-    public Companies readCompany_byName(MongoDatabase database, String name)
+   /* public Companies readCompany_byName(MongoDatabase database, String name)
     {
         MongoCollection<Document> collection = database.getCollection("companies");
         MongoCursor cursor = collection.find(eq("Name", name)).iterator();
@@ -73,7 +98,30 @@ public class CrudOperation {
             while (cursor.hasNext()) {
                 JSONObject json = new JSONObject(cursor.next());
                 System.out.println(json.toString());
-                c = new Companies(json.getString("Symbol"), json.getString("Name"), json.getString("StockExchange"), json.getString("Sector"));
+
+                List<Summary> summaries = new ArrayList<>();
+                JSONArray a = new JSONArray(json.getJSONArray("Summary"));
+                Summary s = new Summary();
+
+                for (int j = 0; j < a.length(); j++)
+                {
+                    s.setDate(a.getJSONObject(j).getString("Date"));
+
+                    s.setClose(a.getJSONObject(j).getFloat("Close"));
+                    s.setOpen(a.getJSONObject(j).getFloat("Open"));
+                    s.setVolume(a.getJSONObject(j).getFloat("Volume"));
+                    s.setAvgVolume(a.getJSONObject(j).getFloat("Avg_Volume"));
+                    s.setMarketCap(a.getJSONObject(j).getFloat("Market_cap"));
+                    s.setPeRatio(a.getJSONObject(j).getFloat("PE_Ratio"));
+                    s.setEPS(a.getJSONObject(j).getFloat("EPS"));
+                    s.setDividend(a.getJSONObject(j).getString("Dividend"));
+                    s.setTargetPrice(a.getJSONObject(j).getFloat("Target_prize"));
+
+                    summaries.add(s);
+                }
+
+                c = new Companies(json.getString("Symbol"), json.getString("Name"), json.getString("StockExchange"),
+                        json.getString("Sector"), summaries );
             }
 
         } finally {
@@ -81,11 +129,13 @@ public class CrudOperation {
         }
 
         return c;
-    }
+    }*/
 
 
-   /* public long updateCompany_description_bySymbol(MongoDatabase database, String symbol, String description)
+    public long updateCompany_Summary(MongoDatabase database, String symbol, String description)
     {
+        //DA FARE
+        /*
         MongoCollection<Document> collection = database.getCollection("companies");
 
         BasicDBObject query = new BasicDBObject();
@@ -99,26 +149,8 @@ public class CrudOperation {
 
         UpdateResult updateResult = collection.updateOne(query, updateObject);
 
-        return UpdateResult.unacknowledged().getModifiedCount();
+        return UpdateResult.unacknowledged().getModifiedCount();*/
     }
-
-    public long updateCompany_Employees_bySymbol(MongoDatabase database, String symbol, int employees)
-    {
-        MongoCollection<Document> collection = database.getCollection("companies");
-
-        BasicDBObject query = new BasicDBObject();
-        query.put("Symbol", symbol);
-
-        BasicDBObject newDocument = new BasicDBObject();
-        newDocument.put("Employees", employees);
-
-        BasicDBObject updateObject = new BasicDBObject();
-        updateObject.put("$set", newDocument);
-
-        UpdateResult updateResult = collection.updateOne(query, updateObject);
-
-        return UpdateResult.unacknowledged().getModifiedCount();
-    } */
 
 
     public long deleteCompany_bySymbol(MongoDatabase database, String symbol)
@@ -229,7 +261,7 @@ public class CrudOperation {
     }
 
 
-
+/*
     //CRUD Operation Summary
     public boolean createSummary(MongoDatabase database, Summary s)
     {
@@ -248,10 +280,9 @@ public class CrudOperation {
         collection.insertOne(doc);
         return true;
     }
+    //fare delete di summary ATTRAVERSO UNA DATA
 
-    //fare read,update,delete di summary
-
-
+    */
 
 
     //CRUD Operation Report
@@ -317,7 +348,7 @@ public class CrudOperation {
         return reportsList;
     }
 
-    public long updateReport_Employees_byTitle(MongoDatabase database, String title, String text)
+    public long updateReport_Text_byTitle(MongoDatabase database, String title, String text)
     {
         MongoCollection<Document> collection = database.getCollection("report");
 

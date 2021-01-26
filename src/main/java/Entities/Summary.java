@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Summary {
     private String symbol;
-    private Date date;
+    private String date;
     private float marketCap;
     private float peRatio;
     private float EPS;
@@ -18,7 +18,7 @@ public class Summary {
     public Summary(){
 
     }
-    public Summary(String symbol, Date date, float marketCap, float peRatio, float EPS, String dividend, float targetPrice, float open, float close, float avgVolume, float volume) {
+    public Summary(String symbol, String date, float marketCap, float peRatio, float EPS, String dividend, float targetPrice, float open, float close, float avgVolume, float volume) {
         this.symbol = symbol;
         this.date = date;
         this.marketCap = marketCap;
@@ -36,7 +36,7 @@ public class Summary {
         return symbol;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -80,7 +80,7 @@ public class Summary {
         this.symbol = symbol;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

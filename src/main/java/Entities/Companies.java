@@ -33,11 +33,12 @@ public class Companies {
         this.website = website;
     }
 
-    public Companies(String symbol, String name, String stockexchange, String sector) {
+    public Companies(String symbol, String name, String stockexchange, String sector, List<Summary> summary) {
         this.symbol = symbol;
         this.name = name;
         this.exchange = stockexchange;
         this.sector = sector;
+        this.summary = summary;
     }
 
     public Companies() {
