@@ -1,0 +1,91 @@
+db.companies.aggregate(
+	{
+     $lookup:
+       {
+         from: "summary",
+         localField: "Symbol",
+         foreignField: "Symbol",
+         as: "Summary"
+       }
+	},
+	
+	{
+		$project:{ Sector:1, Symbol:1, Summary:{Date:1,PE_Ratio:1}}	
+	},
+	
+	{ 
+		$unwind: { path: "$Summary" } 
+	},
+
+	{ $sort: { Date:-1 } },	
+	
+	{ 
+		$group:{ 
+			_id: {sector:"$Sector", symbol:"$Symbol"},
+			data: {$last: "$Summary.Date"},
+			PE: {$last:"$Summary.PE_Ratio"}
+		}
+	},
+	
+	{
+		$match:{ PE: { $ne:0 } }
+	},
+	
+	{
+		$match:{ "_id.sector": { $ne:"" } }
+	},
+	
+	{ $sort: { "_id.sector":-1, PE:-1 } },
+	
+	{ 
+		$group:{ 
+			_id: {sector:"$_id.sector"},
+			symbol: {$last: "$_id.symbol"},
+			PE: {$last:"$PE"}
+		}
+	}	
+)
+	
+.pretty()
+
+
+
+db.companies.aggregate(
+	{ 
+		$match:{
+			Market_cap:{ $lt: VALORE DA INSERIRE }
+		}  
+	},
+
+	{ 
+		$unwind: { path: "$Summary" } 
+	},
+
+	{ $sort: { Date:-1 } },	
+	
+	{ 
+		$group:{ 
+			_id: {sector: "$Sector", symbol:"$Symbol"},
+			data: {$last: "$Summary.Date"},
+			PE: {$last: "$Summary.PE_Ratio"}
+		}
+	},
+	
+	{
+		$match:{ PE: { $ne:0 } }
+	},
+	
+	{
+		$match:{ "_id.sector": { $ne:"" } }
+	},
+	
+	{ $sort: { "_id.sector":-1, PE:-1 } },
+	
+	{ 
+		$group:{ 
+			_id: {sector:"$_id.sector"},
+			symbol: {$last: "$_id.symbol"},
+			PE: {$last:"$PE"}
+		}
+	}
+)
