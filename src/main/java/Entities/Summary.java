@@ -15,6 +15,9 @@ public class Summary {
     private float avgVolume;
     private float volume;
 
+    public Summary(){
+
+    }
     public Summary(String symbol, Date date, float marketCap, float peRatio, float EPS, String dividend, float targetPrice, float open, float close, float avgVolume, float volume) {
         this.symbol = symbol;
         this.date = date;
