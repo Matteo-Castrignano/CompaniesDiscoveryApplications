@@ -82,7 +82,7 @@ public class CrudOperation {
     }
 
 
-    public long updateCompany_description_bySymbol(MongoDatabase database, String symbol, String description)
+   /* public long updateCompany_description_bySymbol(MongoDatabase database, String symbol, String description)
     {
         MongoCollection<Document> collection = database.getCollection("companies");
 
@@ -116,7 +116,7 @@ public class CrudOperation {
         UpdateResult updateResult = collection.updateOne(query, updateObject);
 
         return UpdateResult.unacknowledged().getModifiedCount();
-    }
+    } */
 
 
     public long deleteCompany_bySymbol(MongoDatabase database, String symbol)
