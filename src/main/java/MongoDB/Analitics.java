@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Aggregates.*;
@@ -26,11 +27,18 @@ public class Analitics {
 
         MongoDatabase database = mongoClient.getDatabase("CompaniesApplication");
 
+        Scanner input = new Scanner(System.in);
+        String s = input.nextLine();
+        System.out.println("Ho letto: " + s);
+        long i = Long.valueOf(s).longValue();
+        System.out.println("Numero: " + i);
+
+
         //Analytics1(database);
 
         //Analytics2(database, 100);
 
-        //Analytics3(database, 100000000000L);
+        //Analytics3(database, i);
 
     }
 
