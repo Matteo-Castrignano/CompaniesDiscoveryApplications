@@ -1,8 +1,8 @@
 package MongoDB;
 
 import Entities.*;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
@@ -14,6 +14,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
 
 
 public class CrudOperation {
@@ -31,6 +32,14 @@ public class CrudOperation {
         //Companies c1 = readCompany_bySymbol(database, "PROVA");
         //System.out.println(c1.toString());
 
+        //Summary s1 = new Summary("PROVA","2021-02-02",100,255,925,"natale",89,8,9,7,10);
+
+        //System.out.println("Esito update summary: "+ updateCompany_Summary(database,s1));
+        //System.out.println("Esito update summary: "+ updateCompany_Summary(database,s1));
+
+        //Companies c2 = readCompany_bySymbol(database, "PROVA");
+        //System.out.println(c2.toString());
+
         //System.out.println("Esito delete companies" + deleteCompany_bySymbol(database,"PROVA"));
 
         //List<History> lh = readHistory_byPeriod(database, "2020-11-11", "2021-01-10");
@@ -45,21 +54,21 @@ public class CrudOperation {
         //Report r1 = new Report("prova","2021-02-01","budello di tu ma", "buo di ulo", "è troppo peloso", "PROVA", "ennio");
         //System.out.println("Esito inserimento report " + createReport(database, r1) );
 
-        List<Report> r = readReports_bySymbol(database,"PROVA");
-        System.out.println(r.toString());
+        //List<Report> r = readReports_bySymbol(database,"PROVA");
+        //System.out.println(r.toString());
 
         //r = readReports_byUsername(database,"ennio");
         //System.out.println(r.toString());
 
         //System.out.println("Esisto update report" + updateReport_Text_byTitle(database,"prova","è sempre infiammato"));
 
-        r = readReports_bySymbol(database,"PROVA");
-        System.out.println(r.toString());
+        //r = readReports_bySymbol(database,"PROVA");
+        //System.out.println(r.toString());
 
-        System.out.println("Esisto delete report" + deleteRepert_byTitle(database,"prova"));
+        //System.out.println("Esisto delete report" + deleteRepert_byTitle(database,"prova"));
 
-        r = readReports_byUsername(database,"ennio");
-        System.out.println(r.toString());
+        //r = readReports_byUsername(database,"ennio");
+        //System.out.println(r.toString());
 
     }
 
@@ -83,8 +92,8 @@ public class CrudOperation {
 
     public static Companies readCompany_bySymbol(MongoDatabase database, String symbol) //OK
     {
-
-        /*MongoCollection<Document> collection = database.getCollection("companies");
+        /*
+        MongoCollection<Document> collection = database.getCollection("companies");
         Document doc = collection.find(eq("Symbol", symbol)).first();
         System.out.println(doc.toJson());
         Gson gson = new Gson();
@@ -141,26 +150,25 @@ public class CrudOperation {
     }
 
 
-/*
-    public long updateCompany_Summary(MongoDatabase database, String symbol, String description)
+    public static long updateCompany_Summary(MongoDatabase database, Summary s)//OK
     {
-        //DA FARE
-
         MongoCollection<Document> collection = database.getCollection("companies");
 
-        BasicDBObject query = new BasicDBObject();
-        query.put("Symbol", symbol);
+        Document newSummary = new Document("Target_prize", s.getTargetPrice())
+                .append("Market_cap", s.getMarketCap())
+                .append("Volume", s.getVolume())
+                .append("PE_Ratio", s.getPeRatio())
+                .append("EPS", s.getEPS())
+                .append("Close", s.getClose())
+                .append("Date", s.getDate())
+                .append("Avg_Volume",s.getAvgVolume())
+                .append("Open", s.getOpen())
+                .append("Dividend", s.getDividend());
 
-        BasicDBObject newDocument = new BasicDBObject();
-        newDocument.put("Description", description);
-
-        BasicDBObject updateObject = new BasicDBObject();
-        updateObject.put("$set", newDocument);
-
-        UpdateResult updateResult = collection.updateOne(query, updateObject);
-
-        return UpdateResult.unacknowledged().getModifiedCount();
-    }*/
+        UpdateResult updateResult = collection.updateOne(eq("Symbol", s.getSymbol()),
+                                                        Updates.push("Summary", newSummary));
+        return updateResult.getModifiedCount();
+    }
 
 
     public static long deleteCompany_bySymbol(MongoDatabase database, String symbol) //OK
@@ -169,7 +177,6 @@ public class CrudOperation {
 
         DeleteResult deleteResult = collection.deleteMany(eq("Symbol", symbol));
         return deleteResult.getDeletedCount();
-
     }
 
 
@@ -329,22 +336,13 @@ public class CrudOperation {
         return reportsList;
     }
 
-    public static long updateReport_Text_byTitle(MongoDatabase database, String title, String text)// NO
+    public static long updateReport_Text_byTitle(MongoDatabase database, String title, String text)//OK
     {
         MongoCollection<Document> collection = database.getCollection("report");
 
-        BasicDBObject query = new BasicDBObject();
-        query.put("Title", title);
+        UpdateResult updateResult =collection.updateMany(eq("Title", title), set("Text", text));
+        return updateResult.getModifiedCount();
 
-        BasicDBObject newDocument = new BasicDBObject();
-        newDocument.put("Text", text);
-
-        BasicDBObject updateObject = new BasicDBObject();
-        updateObject.put("$set", newDocument);
-
-        UpdateResult updateResult = collection.updateOne(query, updateObject);
-
-        return UpdateResult.unacknowledged().getModifiedCount();
     }
 
     public static long deleteRepert_byTitle(MongoDatabase database, String title)//OK
@@ -355,6 +353,8 @@ public class CrudOperation {
         return deleteResult.getDeletedCount();
     }
 }
+
+
 
 
 

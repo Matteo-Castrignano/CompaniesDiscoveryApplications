@@ -1,7 +1,5 @@
 package Entities;
 
-import java.util.Date;
-
 public class Summary {
     private String symbol;
     private String date;
@@ -122,7 +120,7 @@ public class Summary {
 
     @Override
     public String toString() {
-        return "Summary{" +
+        return "{" +
                 "date='" + date + '\'' +
                 ", marketCap=" + marketCap +
                 ", peRatio=" + peRatio +
