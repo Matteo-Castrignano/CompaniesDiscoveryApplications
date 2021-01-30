@@ -128,17 +128,6 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void updateRate_ProfessionalUser(String username, String username_pf, int voto)
-    {
-        try ( Session session = driver.session() )
-        {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username", username, "username_pf", username_pf, "voto", voto ));
-                return null;
-            });
-        }
-    }
-
     public void deleteUser_byUsername(String username)
     {
         try ( Session session = driver.session() )
@@ -181,7 +170,7 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void follow_User_byProfessionlUser(String username1, String username2)
+   /* public void follow_User_byProfessionlUser(String username1, String username2) //da fare
     {
         try ( Session session = driver.session() )
         {
@@ -192,7 +181,7 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void unfollow_User_byProfessionlUser(String username1, String username2)
+    public void unfollow_User_byProfessionlUser(String username1, String username2) //da fare
     {
         try ( Session session = driver.session() )
         {
@@ -201,7 +190,7 @@ public class CrudOperation implements AutoCloseable{
                 return null;
             });
         }
-    }
+    }*/
 
     public void addCompany_toAnalyze(String username_pf, String symbol)
     {
@@ -250,6 +239,17 @@ public class CrudOperation implements AutoCloseable{
                                     "sector", c.getSector(), "fullTimesemployees", c.getFullTimesemployees(), "description", c.getDescription(),
                                     "city", c.getCity(), "phone", c.getPhone(), "state", c.getState(), "country", c.getCountry(),
                                     "address", c.getAddress(), "website", c.getWebsite()) );
+                return null;
+            });
+        }
+    }
+
+    public void readCompany_bySymbol(String symbol)
+    {
+        try ( Session session = driver.session() )
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "", parameters("symbol", symbol ));
                 return null;
             });
         }
