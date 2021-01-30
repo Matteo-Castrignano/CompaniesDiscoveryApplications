@@ -51,89 +51,89 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void addUser_toFollow()
+    public void addUser_toFollow(String username1, String username2)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
     }
 
-    public void unfollow_User()
+    public void unfollow_User(String username1, String username2)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
     }
 
-    public void addCompany_toFollow()
+    public void addCompany_toFollow(String username, String symbol)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username", username, "symbol", symbol));
                 return null;
             });
         }
     }
 
-    public void deleteCompany_toFollow()
+    public void deleteCompany_toFollow(String username, String symbol)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters( "username", username, "symbol", symbol));
                 return null;
             });
         }
     }
 
-    public void addProfessionalUser_toFollow()
+    public void addProfessionalUser_toFollow(String username, String username_pf)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
         }
     }
 
-    public void deleteProfessionalUser_toFollow()
+    public void deleteProfessionalUser_toFollow(String username, String username_pf)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
         }
     }
 
-    public void rate_ProfessionalUser()
+    public void rate_ProfessionalUser(String username, String username_pf, int voto)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username", username, "username_pf", username_pf, "voto", voto ));
                 return null;
             });
         }
     }
 
-    public void updateRate_ProfessionalUser()
+    public void updateRate_ProfessionalUser(String username, String username_pf, int voto)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username", username, "username_pf", username_pf, "voto", voto ));
                 return null;
             });
         }
@@ -170,7 +170,7 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void readProfessionlUser_byUsername()
+    public void readProfessionlUser_byUsername(String username)
     {
         try ( Session session = driver.session() )
         {
@@ -181,67 +181,45 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void addUser_toFollow_byProfessionlUser()
+    public void follow_User_byProfessionlUser(String username1, String username2)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
     }
 
-    public void deleteUser_toFollow_byProfessionlUser()
+    public void unfollow_User_byProfessionlUser(String username1, String username2)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
     }
 
-    public void addCompany_toFollow_byProfessionlUser()
+    public void addCompany_toAnalyze(String username_pf, String symbol)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters("username", username_pf, "symbol", symbol));
                 return null;
             });
         }
     }
 
-    public void deleteCompany_toFollow_byProfessionlUser()
+    public void removeCompany_toAnalyze(String username_pf, String symbol)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
-                return null;
-            });
-        }
-    }
-
-    public void addProfessionalUser_toFollow_byProfessionlUser()
-    {
-        try ( Session session = driver.session() )
-        {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
-                return null;
-            });
-        }
-    }
-
-    public void deleteProfessionalUser_toFollow_byProfessionlUser()
-    {
-        try ( Session session = driver.session() )
-        {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
+                tx.run( "", parameters( "username", username_pf, "symbol", symbol));
                 return null;
             });
         }
@@ -309,3 +287,5 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 }
+
+
