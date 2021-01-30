@@ -1,17 +1,14 @@
 package Neo4j;
 
-import org.neo4j.driver.*;
-import org.neo4j.driver.types.Node;
-import org.neo4j.driver.types.Path;
-import java.util.ArrayList;
-import java.util.List;
-import static org.neo4j.driver.Values.parameters;
+import org.neo4j.driver.AuthTokens;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.GraphDatabase;
 
-public class CrudOperation implements AutoCloseable{
+public class Analytics implements AutoCloseable{
 
     private final Driver driver;
 
-    public CrudOperation( String uri, String user, String password )
+    public Analytics(String uri, String user, String password )
     {
         driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
     }
@@ -21,28 +18,24 @@ public class CrudOperation implements AutoCloseable{
         driver.close();
     }
 
+    //Analytics1
 
 
 
 
-    //CRUD User
+    //Analytics2
 
 
 
 
-    //CRUD Professional user
-
-
-
-
-    //CRUD Company
+    //Analytics3
 
 
 
 
     public static void main(String[] args) throws Exception
     {
-        try ( CrudOperation neo4j = new CrudOperation( "neo4j://localhost:7687", "neo4j", "root" ) )
+        try ( Analytics neo4j = new Analytics( "neo4j://localhost:7687", "neo4j", "root" ) )
         {
             /*System.out.println("---------------------------");
             neo4j.printMovieByPartOfTitle( "the");

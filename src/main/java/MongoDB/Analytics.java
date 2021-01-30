@@ -20,7 +20,7 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Sorts.*;
 
 
-public class Analitics {
+public class Analytics {
 
     public static void main(String[] args) {
         MongoClient mongoClient = MongoClients.create("mongodb://172.16.3.150:27020/");
