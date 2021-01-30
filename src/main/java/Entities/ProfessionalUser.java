@@ -7,14 +7,12 @@ public class ProfessionalUser extends User {
 
     private String profession;
     private List<String> specializationSector;
-    private String curriculumVitae;
     private double averageRating;
 
-    public ProfessionalUser(String username, String password, String name, String surname, Date dateOfBirth, char gender, String email, String country, String profession, List<String> specializationSector, String curriculumVitae) {
+    public ProfessionalUser(String username, String password, String name, String surname, Date dateOfBirth, char gender, String email, String country, String profession, List<String> specializationSector) {
         super(username, password, name, surname, dateOfBirth, gender, email, country);
         this.profession = profession;
         this.specializationSector = specializationSector;
-        this.curriculumVitae = curriculumVitae;
         this.averageRating = 0;
     }
 
@@ -34,14 +32,6 @@ public class ProfessionalUser extends User {
         this.specializationSector = specializationSector;
     }
 
-    public String getCurriculumVitae() {
-        return curriculumVitae;
-    }
-
-    public void setCurriculumVitae(String curriculumVitae) {
-        this.curriculumVitae = curriculumVitae;
-    }
-
     public double getAverageRating() {
         return averageRating;
     }
@@ -55,7 +45,6 @@ public class ProfessionalUser extends User {
         return "ProfessionalUser{" +
                 "profession='" + profession + '\'' +
                 ", specializationSector=" + specializationSector +
-                ", curriculumVitae='" + curriculumVitae + '\'' +
                 ", averageRating=" + averageRating +
                 '}';
     }

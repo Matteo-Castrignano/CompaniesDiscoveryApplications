@@ -12,9 +12,6 @@ public class User {
     private String email;
     private String country;
 
-    private int followedUser;       /*solo numero di utenti seguiti*/
-    private int followedCompanies;  /*solo numero di aziende seguite*/
-
     public User(String username, String password, String name, String surname, Date dateOfBirth, char gender, String email, String country) {
         this.username = username;
         this.password = password;
@@ -24,8 +21,6 @@ public class User {
         this.gender = gender;
         this.email = email;
         this.country = country;
-        this.followedUser = 0;
-        this.followedCompanies = 0;
     }
 
     public String getUsername() {
@@ -92,21 +87,6 @@ public class User {
         this.country = country;
     }
 
-    public int getFollowedUser() {
-        return followedUser;
-    }
-
-    public void setFollowedUser(int followedUser) {
-        this.followedUser = followedUser;
-    }
-
-    public int getFollowedCompanies() {
-        return followedCompanies;
-    }
-
-    public void setFollowedCompanies(int followedCompanies) {
-        this.followedCompanies = followedCompanies;
-    }
 
     @Override
     public String toString() {
@@ -119,8 +99,6 @@ public class User {
                 ", gender=" + gender +
                 ", email='" + email + '\'' +
                 ", country='" + country + '\'' +
-                ", followedUser=" + followedUser +
-                ", followedCompanies=" + followedCompanies +
                 '}';
     }
 }
