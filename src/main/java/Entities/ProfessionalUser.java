@@ -6,10 +6,10 @@ import java.util.List;
 public class ProfessionalUser extends User {
 
     private String profession;
-    private List<String> specializationSector;
+    private String specializationSector;
     private double averageRating;
 
-    public ProfessionalUser(String username, String password, String name, String surname, Date dateOfBirth, char gender, String email, String country, String profession, List<String> specializationSector) {
+    public ProfessionalUser(String username, String password, String name, String surname, Date dateOfBirth, char gender, String email, String country, String profession, String specializationSector) {
         super(username, password, name, surname, dateOfBirth, gender, email, country);
         this.profession = profession;
         this.specializationSector = specializationSector;
@@ -24,11 +24,11 @@ public class ProfessionalUser extends User {
         this.profession = profession;
     }
 
-    public List<String> getSpecializationSector() {
+    public String getSpecializationSector() {
         return specializationSector;
     }
 
-    public void setSpecializationSector(List<String> specializationSector) {
+    public void setSpecializationSector(String specializationSector) {
         this.specializationSector = specializationSector;
     }
 
