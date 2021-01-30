@@ -1,11 +1,10 @@
 package Neo4j;
 
-import Entities.*;
+import Entities.Companies;
+import Entities.ProfessionalUser;
+import Entities.User;
 import org.neo4j.driver.*;
-import org.neo4j.driver.types.Node;
-import org.neo4j.driver.types.Path;
-import java.util.ArrayList;
-import java.util.List;
+
 import static org.neo4j.driver.Values.parameters;
 
 public class CrudOperation implements AutoCloseable{
@@ -30,9 +29,10 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "",
+                tx.run( "CREATE(u:User{ username: $username, password: $password, name:$name, surname: $surname," +
+                                "birth_Date: $date, gender: $gender, email: $email, country: $country })",
                         parameters( "username", u.getUsername(), "password", u.getPassword(), "name", u.getName(),
-                                "surname", u.getSurname(), "dateofBirth", u.getDateOfBirth(), "gender", u.getGender(),
+                                "surname", u.getSurname(), "date", u.getDateOfBirth(), "gender", u.getGender(),
                                 "email", u.getEmail(), "country", u.getCountry()) );
                 return null;
             });
@@ -44,10 +44,12 @@ public class CrudOperation implements AutoCloseable{
     {
         try ( Session session = driver.session() )
         {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
-                return null;
+           User u = session.readTransaction(tx -> {
+                Result result = tx.run( "MATCH(u:User) WHERE u.username = $username RETURN u",
+                        parameters("username", username));
+                return (User) result.single().get(0).asEntity();
             });
+            System.out.println(u.toString());
         }
     }
 
@@ -56,7 +58,8 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username1", username1, "username2", username2 ));
+                tx.run( "MATCH(u1:User) WHERE u1.username1 = $username MATCH(u2:User) WHERE u2.username = $username2" +
+                        "CREATE(u1)-[:FOLLOW]->(u2)", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
@@ -67,51 +70,57 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username1", username1, "username2", username2 ));
+                tx.run( "MATCH(u1:User {username:$username})-[f:FOLLOW]->(u2:User {username:$usernameToUnfollow}) DELETE f",
+                        parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
     }
 
-    public void addCompany_toFollow(String username, String symbol)
+    public void followCompany_byUser(String username, String symbol)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username", username, "symbol", symbol));
+                tx.run( "MATCH(u1:User) WHERE u1.username = $username MATCH(c:Company) WHERE c.symbol = $symbol CREATE(u1)-[:WATCHLIST]->(c)",
+                        parameters("username", username, "symbol", symbol));
                 return null;
             });
         }
     }
 
-    public void deleteCompany_toFollow(String username, String symbol)
+    public void unfollowCompany_byUser(String username, String symbol)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( "username", username, "symbol", symbol));
+                tx.run( "MATCH(u1:User {username:$username})-[w:WATCHLIST]->(c:Company {symbol:$symbol}) DELETE w",
+                        parameters("username", username, "symbol", symbol));
                 return null;
             });
         }
     }
 
-    public void addProfessionalUser_toFollow(String username, String username_pf)
+    public void followProfessionalUser_byUser(String username, String username_pf)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username", username, "username_pf", username_pf ));
+                tx.run( "MATCH(u1:User) WHERE u1.username = $username MATCH(p:Professional_User) WHERE p.username = $username_pf " +
+                                "CREATE(u1)-[:FOLLOW]->(p)",
+                        parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
         }
     }
 
-    public void deleteProfessionalUser_toFollow(String username, String username_pf)
+    public void unfollowProfessionalUser_byUser(String username, String username_pf)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username", username, "username_pf", username_pf ));
+                tx.run( "MATCH(u1:User {username:$username})-[f:FOLLOW]->(p:Professional_User {username:$username_pf}) DELETE f",
+                        parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
         }
@@ -122,7 +131,9 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username", username, "username_pf", username_pf, "voto", voto ));
+                tx.run( "MATCH (u:User {username:$username}) MATCH (p:Professional_User{username:$username_pf})" +
+                                "MATCH (u)-[:FOLLOW]->(p) MERGE (u)-[r:RATE]->(p) ON CREATE SET r.vote = $vote ON MATCH SET r.vote = $vote",
+                        parameters("username", username, "username_pf", username_pf, "voto", voto ));
                 return null;
             });
         }
@@ -133,7 +144,7 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "",
+                tx.run( "MATCH(u:User {username:$username}) DETACH DELETE u",
                         parameters( "username", username));
                 return null;
             });
@@ -149,11 +160,13 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MERGE (p:Person {name: $name, from: $from, age: $age})",
+                tx.run( "CREATE(p:Professiona_User{ username: $username, password: $password, name:$name, surname: $surname, " +
+                                "birth_Date: $date, gender: $gender, email: $email, country: $country, profession: $profession, " +
+                                "specializationSector: $sector, avg_Rating: $rate })",
                         parameters( "username", pu.getUsername(), "password", pu.getPassword(), "name", pu.getName(),
-                                "surname", pu.getSurname(), "dateofBirth", pu.getDateOfBirth(), "gender", pu.getGender(),
+                                "surname", pu.getSurname(), "date", pu.getDateOfBirth(), "gender", pu.getGender(),
                                 "email", pu.getEmail(), "country", pu.getCountry(), "profession", pu.getProfession(),
-                                "specializationSector", pu.getSpecializationSector(), "averageRating", 0) );
+                                "sector", pu.getSpecializationSector(), "rate", 0) );
                 return null;
             });
         }
@@ -163,10 +176,12 @@ public class CrudOperation implements AutoCloseable{
     {
         try ( Session session = driver.session() )
         {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( ));
-                return null;
+            ProfessionalUser pu = session.readTransaction(tx -> {
+                Result result = tx.run( "MATCH(p:Professional_User) WHERE p.username = $username RETURN p",
+                        parameters("username", username ));
+                return (ProfessionalUser) result.single().get(0).asEntity();
             });
+            System.out.println(pu.toString());
         }
     }
 
@@ -190,7 +205,7 @@ public class CrudOperation implements AutoCloseable{
                 return null;
             });
         }
-    }*/
+    }
 
     public void addCompany_toAnalyze(String username_pf, String symbol)
     {
@@ -212,14 +227,14 @@ public class CrudOperation implements AutoCloseable{
                 return null;
             });
         }
-    }
+    }*/
 
     public void deleteProfessionlUser(String username)
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "",
+                tx.run( "MATCH(p:Professional_User {username:$username}) DETACH DELETE p",
                         parameters( "username", username));
                 return null;
             });
@@ -234,9 +249,11 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "",
+                tx.run( "CREATE(c:Company{ symbol: $symbol name: $name, exchange: $exchange, fullTimeEmployees: $fte, " +
+                                "description: $description, city: $city, phone: $phone, state: $state, country: $country, " +
+                                "address: $address, website: $website, sector: $sector })",
                         parameters( "symbol", c.getSymbol(), "name", c.getName(), "exchange", c.getExchange(),
-                                    "sector", c.getSector(), "fullTimesemployees", c.getFullTimesemployees(), "description", c.getDescription(),
+                                    "sector", c.getSector(), "fte", c.getFullTimesemployees(), "description", c.getDescription(),
                                     "city", c.getCity(), "phone", c.getPhone(), "state", c.getState(), "country", c.getCountry(),
                                     "address", c.getAddress(), "website", c.getWebsite()) );
                 return null;
@@ -248,10 +265,12 @@ public class CrudOperation implements AutoCloseable{
     {
         try ( Session session = driver.session() )
         {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("symbol", symbol ));
-                return null;
+            Companies c = session.readTransaction(tx -> {
+                Result result = tx.run( "MATCH(c:Company) WHERE c.symbol = $symbol return c",
+                        parameters("symbol", symbol ));
+                return (Companies) result.single().get(0).asEntity();
             });
+            System.out.println(c.toString());
         }
     }
 
@@ -260,7 +279,7 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "",
+                tx.run( "MATCH(c:Company {symbol:$symbol}) DETACH DELETE c",
                         parameters( "symbol", symbol));
                 return null;
             });
