@@ -33,10 +33,14 @@ public class Analytics implements AutoCloseable{
                                 "WHERE u1.username = $username RETURN count(DISTINCT u2) as NumberFollowerUser, count(DISTINCT c1) as NumberFollowerCompany",
                         parameters( "username", username) );
                 ArrayList<Integer> number = new ArrayList<>();
+                if(result.hasNext()){
+                    Record r = result.next();
+                    System.out.println(r.get("NumberFollowerUser"));
+                    System.out.println(r.get("NumberFollowerCompany"));
+                    number.add(r.get("NumberFollowerUser").asInt());
+                    number.add(r.get("NumberFollowerCompany").asInt());
+                }
 
-                Value v = result.single().get(0);
-                number.add(v.get("NumberFollowerUser").asInt());
-                number.add(v.get("NumberFollowerCompany").asInt());
                 return number;
             });
             System.out.println("NumberFollowerUser: " + n_follower.get(0) + " NumberFollowerCompany:" + n_follower.get(1));
