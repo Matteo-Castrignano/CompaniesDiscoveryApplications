@@ -6,8 +6,6 @@ import Entities.User;
 import org.neo4j.driver.*;
 
 
-import java.util.Date;
-
 import static org.neo4j.driver.Values.parameters;
 
 public class CrudOperation implements AutoCloseable{

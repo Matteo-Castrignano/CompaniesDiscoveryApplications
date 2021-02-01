@@ -1,8 +1,12 @@
 package Neo4j;
 
-import org.neo4j.driver.AuthTokens;
-import org.neo4j.driver.Driver;
-import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.*;
+import org.neo4j.driver.Record;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.neo4j.driver.Values.parameters;
 
 public class Analytics implements AutoCloseable{
 
@@ -20,6 +24,24 @@ public class Analytics implements AutoCloseable{
 
     //Analytics1
 
+    private void userFollowing(String username)
+    {
+        try ( Session session = driver.session() )
+        {
+            List<Integer> n_follower = session.readTransaction((TransactionWork<List<Integer>>) tx -> {
+                Result result = tx.run( "MATCH (u1:User)-[:FOLLOW]->(u2:User),(u1:User)-[:WATCHLIST]-(c1:Company)" +
+                                "WHERE u1.username = $username RETURN count(DISTINCT u2) as NumberFollowerUser, count(DISTINCT c1) as NumberFollowerCompany",
+                        parameters( "username", username) );
+                ArrayList<Integer> number = new ArrayList<>();
+
+                Value v = result.single().get(0);
+                number.add(v.get("NumberFollowerUser").asInt());
+                number.add(v.get("NumberFollowerCompany").asInt());
+                return number;
+            });
+            System.out.println("NumberFollowerUser: " + n_follower.get(0) + " NumberFollowerCompany:" + n_follower.get(1));
+        }
+    }
 
 
 
@@ -28,26 +50,12 @@ public class Analytics implements AutoCloseable{
 
 
 
-    //Analytics3
-
-
-
 
     public static void main(String[] args) throws Exception
     {
         try ( Analytics neo4j = new Analytics( "neo4j://localhost:7687", "neo4j", "root" ) )
         {
-            /*System.out.println("---------------------------");
-            neo4j.printMovieByPartOfTitle( "the");
-            System.out.println("---------------------------");
-            neo4j.printMovieCast( "The Matrix");
-            System.out.println("---------------------------");
-            neo4j.printLeastPopularDirector();
-            System.out.println("---------------------------");
-            neo4j.printTop3MoviesWithHighestActorsProducersRatio();
-            System.out.println("---------------------------");
-            neo4j.printShortestPathFromYoungestToOldest();
-            System.out.println("---------------------------");*/
+            neo4j.userFollowing("cristina23");
         }
     }
 }
