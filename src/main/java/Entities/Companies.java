@@ -53,10 +53,6 @@ public class Companies {
     }
 
     public Companies() {
-        this.symbol = null;
-        this.name = null;
-        this.exchange = null;
-        this.sector = null;
     }
 
     public String getSymbol() {
@@ -163,7 +159,6 @@ public class Companies {
         this.summary = summary;
     }
 
-
     @Override
     public String toString() {
         return "Companies{" +
@@ -172,6 +167,23 @@ public class Companies {
                 ", exchange='" + exchange + '\'' +
                 ", sector='" + sector + '\'' +
                 ", summary=" + summary.toString() +
+                '}';
+    }
+
+    public String toString2() {
+        return "Companies{" +
+                "symbol='" + symbol + '\'' +
+                ", name='" + name + '\'' +
+                ", exchange='" + exchange + '\'' +
+                ", sector='" + sector + '\'' +
+                ", fullTimesemployees=" + fullTimesemployees +
+                ", description='" + description + '\'' +
+                ", city='" + city + '\'' +
+                ", phone='" + phone + '\'' +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", address='" + address + '\'' +
+                ", website='" + website + '\'' +
                 '}';
     }
 }

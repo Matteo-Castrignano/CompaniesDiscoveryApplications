@@ -7,13 +7,13 @@ public class ProfessionalUser extends User {
 
     private String profession;
     private String specializationSector;
-    private double averageRating;
+    private double averageRating = 0;
 
-    public ProfessionalUser(String username, String password, String name, String surname, String dateOfBirth, char gender, String email, String country, String profession, String specializationSector) {
+    public ProfessionalUser(String username, String password, String name, String surname, String dateOfBirth, char gender, String email, String country, String profession, String specializationSector, double averageRating) {
         super(username, password, name, surname, dateOfBirth, gender, email, country);
         this.profession = profession;
         this.specializationSector = specializationSector;
-        this.averageRating = 0;
+        this.averageRating = averageRating;
     }
 
     public String getProfession() {
@@ -42,7 +42,7 @@ public class ProfessionalUser extends User {
 
     @Override
     public String toString() {
-        return "ProfessionalUser{" +
+        return "ProfessionalUser{" + super.toString() +
                 "profession='" + profession + '\'' +
                 ", specializationSector=" + specializationSector +
                 ", averageRating=" + averageRating +

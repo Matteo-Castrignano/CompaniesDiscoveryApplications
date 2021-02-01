@@ -27,7 +27,7 @@ public class CrudOperation implements AutoCloseable{
 
     //CRUD User
 
-    public void addUser(User u)
+    public void addUser(User u)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -43,7 +43,7 @@ public class CrudOperation implements AutoCloseable{
 
     }
 
-    public void readUser_byUsername(String username)
+    public void readUser_byUsername(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -61,31 +61,31 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void addUser_toFollow(String username1, String username2)
+    public void addUser_toFollow(String username1, String username2)//OK
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH(u1:User) WHERE u1.username = $username MATCH(u2:User) WHERE u2.username = $username2 " +
+                tx.run( "MATCH(u1:User) WHERE u1.username = $username1 MATCH(u2:User) WHERE u2.username = $username2 " +
                         "CREATE(u1)-[:FOLLOW]->(u2)", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
     }
 
-    public void unfollow_User(String username1, String username2)
+    public void unfollow_User(String username1, String username2)//OK
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH(u1:User {username:$username})-[f:FOLLOW]->(u2:User {username:$usernameToUnfollow}) DELETE f",
+                tx.run( "MATCH(u1:User {username:$username1})-[f:FOLLOW]->(u2:User {username:$username2}) DELETE f",
                         parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
     }
 
-    public void followCompany_byUser(String username, String symbol)
+    public void followCompany_byUser(String username, String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -97,7 +97,7 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void unfollowCompany_byUser(String username, String symbol)
+    public void unfollowCompany_byUser(String username, String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -109,7 +109,7 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void followProfessionalUser_byUser(String username, String username_pf)
+    public void followProfessionalUser_byUser(String username, String username_pf)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -122,32 +122,33 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void unfollowProfessionalUser_byUser(String username, String username_pf)
+    public void unfollowProfessionalUser_byUser(String username, String username_pf)//OK
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH(u1:User {username:$username})-[f:FOLLOW]->(p:Professional_User {username:$username_pf}) DELETE f",
+                tx.run( "MATCH(u1:User {username:$username})-[f:FOLLOW]->(p:Professional_User {username:$username_pf})" +
+                                "MATCH(u1:User {username:$username})-[r:RATE]->(p:Professional_User {username:$username_pf}) DELETE f,r",
                         parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
         }
     }
 
-    public void rate_ProfessionalUser(String username, String username_pf, int voto)
+    public void rate_ProfessionalUser(String username, String username_pf, int vote)//OK
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run( "MATCH (u:User {username:$username}) MATCH (p:Professional_User{username:$username_pf})" +
-                                "MATCH (u)-[:FOLLOW]->(p) MERGE (u)-[r:RATE]->(p) ON CREATE SET r.vote = $vote ON MATCH SET r.vote = $vote",
-                        parameters("username", username, "username_pf", username_pf, "voto", voto ));
+                                "MERGE (u)-[:FOLLOW]->(p) MERGE (u)-[r:RATE]->(p) ON CREATE SET r.vote = $vote ON MATCH SET r.vote = $vote",
+                        parameters("username", username, "username_pf", username_pf, "vote", vote ));
                 return null;
             });
         }
     }
 
-    public void deleteUser_byUsername(String username)
+    public void deleteUser_byUsername(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -163,12 +164,12 @@ public class CrudOperation implements AutoCloseable{
 
     //CRUD Professional user
 
-    public void addProfessionlUser(ProfessionalUser pu)
+    public void addProfessionlUser(ProfessionalUser pu)//OK
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "CREATE(p:Professiona_User{ username: $username, password: $password, name:$name, surname: $surname, " +
+                tx.run( "CREATE(p:Professional_User{ username: $username, password: $password, name:$name, surname: $surname, " +
                                 "birth_Date: $date, gender: $gender, email: $email, country: $country, profession: $profession, " +
                                 "specializationSector: $sector, avg_Rating: $rate })",
                         parameters( "username", pu.getUsername(), "password", pu.getPassword(), "name", pu.getName(),
@@ -180,41 +181,26 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-    public void readProfessionlUser_byUsername(String username)
+    public void readProfessionalUser_byUsername(String username)//OK
     {
         try ( Session session = driver.session() )
         {
-            ProfessionalUser pu = session.readTransaction(tx -> {
+            ProfessionalUser pu = session.readTransaction((TransactionWork<ProfessionalUser>)tx -> {
                 Result result = tx.run( "MATCH(p:Professional_User) WHERE p.username = $username RETURN p",
-                        parameters("username", username ));
-                return (ProfessionalUser) result.single().get(0).asEntity();
+                        parameters("username", username));
+                Value v = result.single().get(0);
+
+                ProfessionalUser pr = new ProfessionalUser(v.get("username").asString(), v.get("password").asString(), v.get("name").asString(),
+                        v.get("surname").asString(), v.get("birth_Date").asString(), v.get("gender").asString().charAt(0),
+                        v.get("email").asString(), v.get("country").asString(), v.get("specialized_sector").asString(),
+                         v.get("profession").asString(), v.get("avg_Rating").asDouble());
+                return pr;
             });
             System.out.println(pu.toString());
         }
     }
 
-   /* public void follow_User_byProfessionlUser(String username1, String username2) //da fare
-    {
-        try ( Session session = driver.session() )
-        {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username1", username1, "username2", username2 ));
-                return null;
-            });
-        }
-    }
-
-    public void unfollow_User_byProfessionlUser(String username1, String username2) //da fare
-    {
-        try ( Session session = driver.session() )
-        {
-            session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username1", username1, "username2", username2 ));
-                return null;
-            });
-        }
-    }
-
+   /*
     public void addCompany_toAnalyze(String username_pf, String symbol)
     {
         try ( Session session = driver.session() )
@@ -237,7 +223,7 @@ public class CrudOperation implements AutoCloseable{
         }
     }*/
 
-    public void deleteProfessionlUser(String username)
+    public void deleteProfessionalUser(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -252,37 +238,43 @@ public class CrudOperation implements AutoCloseable{
 
     //CRUD Company
 
-    public void addCompany(Companies c)
+    public void addCompany(Companies c)//OK
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "CREATE(c:Company{ symbol: $symbol name: $name, exchange: $exchange, fullTimeEmployees: $fte, " +
+                tx.run( "CREATE(c:Company{ symbol: $symbol, name: $name, exchange: $exchange, fullTimeEmployees: $fte, " +
                                 "description: $description, city: $city, phone: $phone, state: $state, country: $country, " +
                                 "address: $address, website: $website, sector: $sector })",
                         parameters( "symbol", c.getSymbol(), "name", c.getName(), "exchange", c.getExchange(),
                                     "sector", c.getSector(), "fte", c.getFullTimesemployees(), "description", c.getDescription(),
                                     "city", c.getCity(), "phone", c.getPhone(), "state", c.getState(), "country", c.getCountry(),
-                                    "address", c.getAddress(), "website", c.getWebsite()) );
+                                    "address", c.getAddress(), "website", c.getWebsite() ));
                 return null;
             });
         }
     }
 
-    public void readCompany_bySymbol(String symbol)
+    public void readCompany_bySymbol(String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
-            Companies c = session.readTransaction(tx -> {
-                Result result = tx.run( "MATCH(c:Company) WHERE c.symbol = $symbol return c",
-                        parameters("symbol", symbol ));
-                return (Companies) result.single().get(0).asEntity();
+            Companies c = session.readTransaction((TransactionWork<Companies>)tx -> {
+                Result result = tx.run( "MATCH(c:Company) WHERE c.symbol = $symbol RETURN c",
+                        parameters("symbol", symbol));
+                Value v = result.single().get(0);
+
+                Companies c1 = new Companies( v.get("symbol").asString(), v.get("name").asString(), v.get("exchange").asString(),
+                        v.get("sector").asString(), v.get("fullTimeEmployees").asInt(), v.get("description").asString(), v.get("city").asString(),
+                        v.get("phone").asString(), v.get("state").asString(), v.get("country").asString(), v.get("address").asString(),
+                        v.get("website").asString(), null );
+                return c1;
             });
-            System.out.println(c.toString());
+            System.out.println(c.toString2());
         }
     }
 
-    public void deleteCompany_bySymbol(String symbol)
+    public void deleteCompany_bySymbol(String symbol)//
     {
         try ( Session session = driver.session() )
         {
@@ -303,11 +295,26 @@ public class CrudOperation implements AutoCloseable{
             System.out.println("---------------------------");
             //User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
             //neo4j.addUser(u);
-            neo4j.readUser_byUsername("prova");
+            //neo4j.readUser_byUsername("prova");
             //neo4j.addUser_toFollow("prova", "cum3");
             //neo4j.followCompany_byUser("prova","AAPL");
             //neo4j.followProfessionalUser_byUser("prova","ad3");
-            //neo4j.rate_ProfessionalUser("prova", "ad3", 3);
+            //neo4j.rate_ProfessionalUser("prova", "ad3", 4);
+            //neo4j.unfollow_User("prova","cum3");
+            //neo4j.unfollowCompany_byUser("prova","AAPL");
+            //neo4j.unfollowProfessionalUser_byUser("prova","ad3");
+            //neo4j.deleteUser_byUsername("prova");
+
+            //ProfessionalUser pu = new ProfessionalUser( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova",
+                   //"p1", "p2", 2.5);
+            //neo4j.addProfessionlUser(pu);
+            //neo4j.readProfessionalUser_byUsername("prova");
+            //neo4j.deleteProfessionalUser("prova");
+
+            //Companies c = new Companies("PROVA","Pippo","NYS","info", 2, "livorno", "123", "ita", "toscana", "ar", "afsasf", "www", null);
+            //neo4j.addCompany(c);
+            //neo4j.readCompany_bySymbol("PROVA");
+            //neo4j.deleteCompany_bySymbol("PROVA");
         }
     }
 }
