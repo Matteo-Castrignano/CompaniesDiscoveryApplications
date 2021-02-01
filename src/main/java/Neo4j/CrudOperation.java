@@ -5,6 +5,9 @@ import Entities.ProfessionalUser;
 import Entities.User;
 import org.neo4j.driver.*;
 
+
+import java.util.Date;
+
 import static org.neo4j.driver.Values.parameters;
 
 public class CrudOperation implements AutoCloseable{
@@ -44,12 +47,17 @@ public class CrudOperation implements AutoCloseable{
     {
         try ( Session session = driver.session() )
         {
-           User u = session.readTransaction(tx -> {
+           User u = session.readTransaction((TransactionWork<User>)tx -> {
                 Result result = tx.run( "MATCH(u:User) WHERE u.username = $username RETURN u",
                         parameters("username", username));
-                return (User) result.single().get(0).asEntity();
+               Value v = result.single().get(0);
+
+                User u2 = new User(v.get("username").asString(), v.get("password").asString(), v.get("name").asString(),
+                        v.get("surname").asString(), v.get("birth_Date").asString(), v.get("gender").asString().charAt(0),
+                        v.get("email").asString(), v.get("country").asString());
+                return u2;
             });
-            System.out.println(u.toString());
+           System.out.println(u.toString());
         }
     }
 
@@ -58,7 +66,7 @@ public class CrudOperation implements AutoCloseable{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH(u1:User) WHERE u1.username1 = $username MATCH(u2:User) WHERE u2.username = $username2" +
+                tx.run( "MATCH(u1:User) WHERE u1.username = $username MATCH(u2:User) WHERE u2.username = $username2 " +
                         "CREATE(u1)-[:FOLLOW]->(u2)", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
@@ -292,17 +300,14 @@ public class CrudOperation implements AutoCloseable{
     {
         try ( CrudOperation neo4j = new CrudOperation( "neo4j://localhost:7687", "neo4j", "root" ) )
         {
-            /*System.out.println("---------------------------");
-            neo4j.printMovieByPartOfTitle( "the");
             System.out.println("---------------------------");
-            neo4j.printMovieCast( "The Matrix");
-            System.out.println("---------------------------");
-            neo4j.printLeastPopularDirector();
-            System.out.println("---------------------------");
-            neo4j.printTop3MoviesWithHighestActorsProducersRatio();
-            System.out.println("---------------------------");
-            neo4j.printShortestPathFromYoungestToOldest();
-            System.out.println("---------------------------");*/
+            //User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
+            //neo4j.addUser(u);
+            neo4j.readUser_byUsername("prova");
+            //neo4j.addUser_toFollow("prova", "cum3");
+            //neo4j.followCompany_byUser("prova","AAPL");
+            //neo4j.followProfessionalUser_byUser("prova","ad3");
+            //neo4j.rate_ProfessionalUser("prova", "ad3", 3);
         }
     }
 }

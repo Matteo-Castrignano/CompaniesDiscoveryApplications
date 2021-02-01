@@ -9,7 +9,7 @@ public class ProfessionalUser extends User {
     private String specializationSector;
     private double averageRating;
 
-    public ProfessionalUser(String username, String password, String name, String surname, Date dateOfBirth, char gender, String email, String country, String profession, String specializationSector) {
+    public ProfessionalUser(String username, String password, String name, String surname, String dateOfBirth, char gender, String email, String country, String profession, String specializationSector) {
         super(username, password, name, surname, dateOfBirth, gender, email, country);
         this.profession = profession;
         this.specializationSector = specializationSector;

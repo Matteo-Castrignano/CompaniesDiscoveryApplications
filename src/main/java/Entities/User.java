@@ -1,27 +1,27 @@
 package Entities;
 
-import java.util.Date;
-
 public class User {
     private String username;
     private String password;
     private String name;
     private String surname;
-    private Date dateOfBirth;
+    private String StringOfBirth;
     private char gender;
     private String email;
     private String country;
 
-    public User(String username, String password, String name, String surname, Date dateOfBirth, char gender, String email, String country) {
+    public User(String username, String password, String name, String surname, String StringOfBirth, char gender, String email, String country) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
-        this.dateOfBirth = dateOfBirth;
+        this.StringOfBirth = StringOfBirth;
         this.gender = gender;
         this.email = email;
         this.country = country;
     }
+
+    public User(){}
 
     public String getUsername() {
         return username;
@@ -55,12 +55,12 @@ public class User {
         this.surname = surname;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getDateOfBirth() {
+        return StringOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDateOfBirth(String StringOfBirth) {
+        this.StringOfBirth = StringOfBirth;
     }
 
     public char getGender() {
@@ -95,7 +95,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
+                ", StringOfBirth=" + StringOfBirth +
                 ", gender=" + gender +
                 ", email='" + email + '\'' +
                 ", country='" + country + '\'' +
