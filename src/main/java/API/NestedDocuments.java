@@ -21,6 +21,8 @@ public class NestedDocuments {
         listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary1_mc.json")), StandardCharsets.UTF_8)));
         listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary2_mc.json")), StandardCharsets.UTF_8)));
         listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary3_mc.json")), StandardCharsets.UTF_8)));
+        listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary4_mc.json")), StandardCharsets.UTF_8)));
+        listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary5_mc.json")), StandardCharsets.UTF_8)));
 
         FileWriter file = new FileWriter("C:/Users/matte/Desktop/Companies_All.json");
 
@@ -51,7 +53,7 @@ public class NestedDocuments {
                         summary.put("PE_Ratio", objects.getJSONObject(j).getFloat("PE_Ratio"));
                         summary.put("EPS", objects.getJSONObject(j).getFloat("EPS"));
                         summary.put("Dividend", objects.getJSONObject(j).getString("Dividend"));
-                        summary.put("Target_prize", objects.getJSONObject(j).getFloat("Target_prize"));
+                        summary.put("Target_price", objects.getJSONObject(j).getFloat("Target_price"));
 
                         company.append("Summary", summary);
 
