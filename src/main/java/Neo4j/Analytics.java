@@ -23,8 +23,7 @@ public class Analytics implements AutoCloseable{
     }
 
     //Analytics1
-
-    private void userFollowing(String username)
+    private void userFollowing(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -35,22 +34,37 @@ public class Analytics implements AutoCloseable{
                 ArrayList<Integer> number = new ArrayList<>();
                 if(result.hasNext()){
                     Record r = result.next();
-                    System.out.println(r.get("NumberFollowerUser"));
-                    System.out.println(r.get("NumberFollowerCompany"));
                     number.add(r.get("NumberFollowerUser").asInt());
                     number.add(r.get("NumberFollowerCompany").asInt());
                 }
 
                 return number;
             });
-            System.out.println("NumberFollowerUser: " + n_follower.get(0) + " NumberFollowerCompany:" + n_follower.get(1));
+            System.out.println("NumberFollowerUser: " + n_follower.get(0) + " NumberFollowerCompany: " + n_follower.get(1));
         }
     }
 
 
-
     //Analytics2
+    private void suggestedCompany(String username)//OK
+    {
+        try ( Session session = driver.session() )
+        {
+            List<String> symbol_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (u1:User)-[*1..2]-(u2:User)-[w:WATCHLIST]-(c1:Company) WHERE u1.username = $username " +
+                                "AND NOT (u1)-[:WATCHLIST]-(c1) AND NOT u1.username = u2.username RETURN DISTINCT c1.symbol as Company LIMIT 100",
+                        parameters( "username", username) );
+                ArrayList<String> symbol = new ArrayList<>();
+                while(result.hasNext()){
+                    Record r = result.next();
+                    symbol.add(r.get("Company").asString());
+                }
 
+                return symbol;
+            });
+            System.out.println("Suggested Company: " + symbol_list);
+        }
+    }
 
 
 
@@ -59,7 +73,8 @@ public class Analytics implements AutoCloseable{
     {
         try ( Analytics neo4j = new Analytics( "neo4j://localhost:7687", "neo4j", "root" ) )
         {
-            neo4j.userFollowing("cristina23");
+            //neo4j.userFollowing("cristina23");
+            //neo4j.suggestedCompany("aylin32");
         }
     }
 }
