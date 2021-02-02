@@ -31,7 +31,7 @@ public class CrudOperation implements AutoCloseable{
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run( "CREATE(u:User{ username: $username, password: $password, name:$name, surname: $surname," +
-                                "birth_Date: $date, gender: $gender, email: $email, country: $country })",
+                                "birth_Date: $date, gender: $gender, email: $email, country: $country, type_user:2 })",
                         parameters( "username", u.getUsername(), "password", u.getPassword(), "name", u.getName(),
                                 "surname", u.getSurname(), "date", u.getDateOfBirth(), "gender", u.getGender(),
                                 "email", u.getEmail(), "country", u.getCountry()) );
@@ -169,7 +169,7 @@ public class CrudOperation implements AutoCloseable{
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run( "CREATE(p:Professional_User{ username: $username, password: $password, name:$name, surname: $surname, " +
                                 "birth_Date: $date, gender: $gender, email: $email, country: $country, profession: $profession, " +
-                                "specializationSector: $sector, avg_Rating: $rate })",
+                                "specializationSector: $sector, avg_Rating: $rate, type_user:1 })",
                         parameters( "username", pu.getUsername(), "password", pu.getPassword(), "name", pu.getName(),
                                 "surname", pu.getSurname(), "date", pu.getDateOfBirth(), "gender", pu.getGender(),
                                 "email", pu.getEmail(), "country", pu.getCountry(), "profession", pu.getProfession(),
@@ -198,28 +198,29 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
-   /*
-    public void addCompany_toAnalyze(String username_pf, String symbol)
+    public void followCompany_byProfessionalUser(String username, String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters("username", username_pf, "symbol", symbol));
+                tx.run( "MATCH(u1:Professional_User) WHERE u1.username = $username MATCH(c:Company) WHERE c.symbol = $symbol CREATE(u1)-[:WATCHLIST]->(c)",
+                        parameters("username", username, "symbol", symbol));
                 return null;
             });
         }
     }
 
-    public void removeCompany_toAnalyze(String username_pf, String symbol)
+    public void unfollowCompany_byProfessionalUser(String username, String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "", parameters( "username", username_pf, "symbol", symbol));
+                tx.run( "MATCH(u1:Professional_User {username:$username})-[w:WATCHLIST]->(c:Company {symbol:$symbol}) DELETE w",
+                        parameters("username", username, "symbol", symbol));
                 return null;
             });
         }
-    }*/
+    }
 
     public void deleteProfessionalUser(String username)//OK
     {
@@ -284,6 +285,17 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
+    public void addAdmin(String username)//OK
+    {
+        try ( Session session = driver.session() )
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MATCH(u:User) WHERE u.username = $username SET u.type_user=0 ",
+                        parameters("username", username));
+                return null;
+            });
+        }
+    }
 
 
     public static void main(String[] args) throws Exception
@@ -303,16 +315,20 @@ public class CrudOperation implements AutoCloseable{
             //neo4j.unfollowProfessionalUser_byUser("prova","ad3");
             //neo4j.deleteUser_byUsername("prova");
 
-            //ProfessionalUser pu = new ProfessionalUser( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova",
-                   //"p1", "p2", 2.5);
+            //ProfessionalUser pu = new ProfessionalUser( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova", "p1", "p2", 2.5);
             //neo4j.addProfessionlUser(pu);
             //neo4j.readProfessionalUser_byUsername("prova");
+            //neo4j.followCompany_byProfessionalUser("prova","AAPL");
+            //neo4j.unfollowCompany_byProfessionalUser("prova","AAPL");
             //neo4j.deleteProfessionalUser("prova");
 
             //Companies c = new Companies("PROVA","Pippo","NYS","info", 2, "livorno", "123", "ita", "toscana", "ar", "afsasf", "www", null);
             //neo4j.addCompany(c);
             //neo4j.readCompany_bySymbol("PROVA");
             //neo4j.deleteCompany_bySymbol("PROVA");
+
+            //neo4j.addAdmin("prova");
+
         }
     }
 }

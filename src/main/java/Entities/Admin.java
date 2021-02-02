@@ -4,10 +4,8 @@ import java.util.Date;
 
 public class Admin extends User {
 
-    private final boolean superuser;
-
-    public Admin(String username, String password, String name, String surname, String dateOfBirth, char gender, String email, String country) {
-        super(username, password, name, surname, dateOfBirth, gender, email, country);
-        this.superuser=true;
+    public Admin(String username, String password, String name, String surname, String stringOfBirth, char gender, String email, String country) {
+        super(username, password, name, surname, stringOfBirth, gender, email, country);
+        type_user = 0;
     }
 }

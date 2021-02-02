@@ -5,23 +5,40 @@ public class User {
     private String password;
     private String name;
     private String surname;
-    private String StringOfBirth;
+    private String stringOfBirth;
     private char gender;
     private String email;
     private String country;
+    protected int type_user;
 
-    public User(String username, String password, String name, String surname, String StringOfBirth, char gender, String email, String country) {
+    public User(String username, String password, String name, String surname, String stringOfBirth, char gender, String email, String country) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
-        this.StringOfBirth = StringOfBirth;
+        this.stringOfBirth = stringOfBirth;
         this.gender = gender;
         this.email = email;
         this.country = country;
+        type_user = 2;
+    }
+    public User(){}
+
+    public int getType_user() {
+        return type_user;
     }
 
-    public User(){}
+    public void setType_user(int type_user) {
+        this.type_user = type_user;
+    }
+
+    public String getStringOfBirth() {
+        return stringOfBirth;
+    }
+
+    public void setStringOfBirth(String stringOfBirth) {
+        stringOfBirth = stringOfBirth;
+    }
 
     public String getUsername() {
         return username;
@@ -56,11 +73,11 @@ public class User {
     }
 
     public String getDateOfBirth() {
-        return StringOfBirth;
+        return stringOfBirth;
     }
 
     public void setDateOfBirth(String StringOfBirth) {
-        this.StringOfBirth = StringOfBirth;
+        this.stringOfBirth = StringOfBirth;
     }
 
     public char getGender() {
@@ -95,10 +112,11 @@ public class User {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", StringOfBirth=" + StringOfBirth +
+                ", StringOfBirth='" + stringOfBirth + '\'' +
                 ", gender=" + gender +
                 ", email='" + email + '\'' +
                 ", country='" + country + '\'' +
+                ", type_user=" + type_user +
                 '}';
     }
 }

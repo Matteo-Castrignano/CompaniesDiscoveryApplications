@@ -9,11 +9,12 @@ public class ProfessionalUser extends User {
     private String specializationSector;
     private double averageRating = 0;
 
-    public ProfessionalUser(String username, String password, String name, String surname, String dateOfBirth, char gender, String email, String country, String profession, String specializationSector, double averageRating) {
-        super(username, password, name, surname, dateOfBirth, gender, email, country);
+    public ProfessionalUser(String username, String password, String name, String surname, String stringOfBirth, char gender, String email, String country, String profession, String specializationSector, double averageRating) {
+        super(username, password, name, surname, stringOfBirth, gender, email, country);
         this.profession = profession;
         this.specializationSector = specializationSector;
         this.averageRating = averageRating;
+        type_user = 1;
     }
 
     public String getProfession() {

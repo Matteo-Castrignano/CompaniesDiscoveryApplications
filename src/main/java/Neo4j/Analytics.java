@@ -31,6 +31,7 @@ public class Analytics implements AutoCloseable{
                 Result result = tx.run( "MATCH (u1:User)-[:FOLLOW]->(u2:User),(u1:User)-[:WATCHLIST]-(c1:Company)" +
                                 "WHERE u1.username = $username RETURN count(DISTINCT u2) as NumberFollowerUser, count(DISTINCT c1) as NumberFollowerCompany",
                         parameters( "username", username) );
+
                 ArrayList<Integer> number = new ArrayList<>();
                 if(result.hasNext()){
                     Record r = result.next();
@@ -54,6 +55,7 @@ public class Analytics implements AutoCloseable{
                 Result result = tx.run( "MATCH (u1:User)-[*1..2]-(u2:User)-[w:WATCHLIST]-(c1:Company) WHERE u1.username = $username " +
                                 "AND NOT (u1)-[:WATCHLIST]-(c1) AND NOT u1.username = u2.username RETURN DISTINCT c1.symbol as Company LIMIT 100",
                         parameters( "username", username) );
+
                 ArrayList<String> symbol = new ArrayList<>();
                 while(result.hasNext()){
                     Record r = result.next();
@@ -73,8 +75,8 @@ public class Analytics implements AutoCloseable{
     {
         try ( Analytics neo4j = new Analytics( "neo4j://localhost:7687", "neo4j", "root" ) )
         {
-            //neo4j.userFollowing("cristina23");
-            //neo4j.suggestedCompany("aylin32");
+            neo4j.userFollowing("cristina23");
+            neo4j.suggestedCompany("aylin32");
         }
     }
 }
