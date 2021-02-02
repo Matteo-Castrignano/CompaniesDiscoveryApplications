@@ -34,6 +34,7 @@ public class Analytics {
         System.out.println("Numero: " + i);
 
 
+
         //Analytics1(database);
 
         //Analytics2(database, 100);
@@ -54,6 +55,8 @@ public class Analytics {
     public static void Analytics1(MongoDatabase database)
     {
         MongoCollection<Document> collection = database.getCollection("history");
+
+        //aggiungere la match
 
         Bson group1 = new Document("$group",
                         new Document("_id", new Document("symbol", "$Symbol")
@@ -80,7 +83,7 @@ public class Analytics {
                 new Document("_id", new Document("symbol","$_id.symbol").append("year", "$_id.year"))
                         .append("maxValue", new Document("$max", "$differenceMounth" ))
                         .append("Month", new Document("$first", "$_id.mounth")));
-
+        //togliere i valori a zero
         Bson sort4 = sort(ascending("_id"));
 
         List<Document> results = collection.aggregate(Arrays.asList(group1, sort1, group2, sort2, addFields, sort3, group3, sort4)).allowDiskUse(true).into(new ArrayList<>());
