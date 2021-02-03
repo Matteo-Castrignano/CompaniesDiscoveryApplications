@@ -146,6 +146,8 @@ public class CrudOperation implements AutoCloseable{
         }
     }
 
+    //UPDATE VOTO MEDIO
+
     public void deleteUser_byUsername(String username)//OK
     {
         try ( Session session = driver.session() )
@@ -157,8 +159,6 @@ public class CrudOperation implements AutoCloseable{
             });
         }
     }
-
-
 
     //CRUD Professional user
 
