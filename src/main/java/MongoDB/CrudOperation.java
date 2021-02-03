@@ -25,9 +25,9 @@ public class CrudOperation {
 
         MongoDatabase database = mongoClient.getDatabase("CompaniesApplication");
 
-        //Companies c = new Companies("PROVA","Pippo","NYS","info");
+        Companies c = new Companies("PROVA","Pippo","NYS","info");
 
-        //System.out.println("Esito inserimento" + createCompany(database,c));
+        System.out.println("Esito inserimento" + createCompany(database,c));
 
         //Companies c1 = readCompany_bySymbol(database, "PROVA");
         //System.out.println(c1.toString());
