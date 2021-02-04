@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.MergeOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
@@ -27,15 +28,13 @@ public class Analytics {
 
         MongoDatabase database = mongoClient.getDatabase("CompaniesApplication");
 
-        Scanner input = new Scanner(System.in);
+        /*Scanner input = new Scanner(System.in);
         String s = input.nextLine();
         System.out.println("Ho letto: " + s);
         long i = Long.valueOf(s).longValue();
-        System.out.println("Numero: " + i);
+        System.out.println("Numero: " + i);*/
 
-
-
-        //Analytics1(database);
+        Analytics1(database);
 
         //Analytics2(database, 100);
 
@@ -56,8 +55,6 @@ public class Analytics {
     {
         MongoCollection<Document> collection = database.getCollection("history");
 
-        //aggiungere la match
-
         Bson group1 = new Document("$group",
                         new Document("_id", new Document("symbol", "$Symbol")
                                     .append("year", new Document("$year", new Document("$dateFromString", new Document("dateString","$Date").append("format", "%Y-%m-%d"))))
@@ -77,19 +74,24 @@ public class Analytics {
         Bson addFields = new Document("$addFields", new Document("differenceMounth",
                             new Document("$subtract", Arrays.asList("$lastCloseMonth","$firstCloseMonth")))); //"[$lastCloseMonth,$firstCloseMonth]"
 
-        Bson sort3 = sort(orderBy(ascending("_id.year"), descending("differenceMounth")));
+        Bson sort3 = sort(descending("differenceMounth"));
 
         Bson group3 = new Document("$group",
-                new Document("_id", new Document("symbol","$_id.symbol").append("year", "$_id.year"))
+                new Document("_id", new Document("symbol","$_id.symbol"))
                         .append("maxValue", new Document("$max", "$differenceMounth" ))
+                        .append("Year", new Document("$first","$_id.year"))
                         .append("Month", new Document("$first", "$_id.mounth")));
-        //togliere i valori a zero
-        Bson sort4 = sort(ascending("_id"));
 
-        List<Document> results = collection.aggregate(Arrays.asList(group1, sort1, group2, sort2, addFields, sort3, group3, sort4)).allowDiskUse(true).into(new ArrayList<>());
+        Bson project1 = new Document("$project", new Document("_id", 0)
+                .append("Symbol", "$_id.symbol")
+                .append("mostProfitablePeriod", new Document("$concat", Arrays.asList( new Document ("$toString", "$Year"), "-",  new Document ("$toString", "$Month"), "-", new Document ("$toString", "$maxValue")))));
 
-        System.out.println("Nell'arco degli ultimi 5 anni, trovare per ogni azienda quale sia stato il mese dell'anno più redditizio secondo il valore di chiusura");
-        results.forEach(printFormattedDocuments());
+        Bson merge1 = new Document("$merge", new Document( "into", "companies").append( "on", "Symbol").append("whenMatched", "merge").append("whenNotMatched","insert"));
+
+        List<Document> results = collection.aggregate(Arrays.asList(group1, sort1, group2, sort2, addFields, sort3, group3, project1, merge1)).allowDiskUse(true).into(new ArrayList<>());
+
+        System.out.println("Most profitable");
+        //results.forEach(printFormattedDocuments());
     }
 
 
@@ -103,7 +105,7 @@ public class Analytics {
 
         Bson project1 = new Document("$project",
                 new Document("_id", new Document("symbol", "$Symbol"))
-                        .append("count", new Document("$cond", Arrays.asList( new Document("$gt",Arrays.asList("$Summary.Volume" , "$Summary.Avg_Volume")), 1, 0)))); //"$gt: [ \"$Summary.Volume\" , \"$Summary.Avg_Volume\"
+                        .append("count", new Document("$cond", Arrays.asList( new Document("$gt",Arrays.asList("$Summary.Volume" , "$Summary.Avg_Volume")), 1, 0))));
 
         Bson group1 = new Document("$group",
                 new Document("_id", new Document("symbol","$_id.symbol"))

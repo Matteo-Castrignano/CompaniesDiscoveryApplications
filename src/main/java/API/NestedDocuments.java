@@ -18,11 +18,12 @@ public class NestedDocuments {
         String textCompanies = new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Companies.json")), StandardCharsets.UTF_8);
 
         List <JSONArray> listSummary = new ArrayList<>();
+        listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary4_mc.json")), StandardCharsets.UTF_8)));
+        listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary5_mc.json")), StandardCharsets.UTF_8)));
         listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary1_mc.json")), StandardCharsets.UTF_8)));
         listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary2_mc.json")), StandardCharsets.UTF_8)));
         listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary3_mc.json")), StandardCharsets.UTF_8)));
-        listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary4_mc.json")), StandardCharsets.UTF_8)));
-        listSummary.add(new JSONArray(new String(Files.readAllBytes(Paths.get("C:/Users/matte/Desktop/Summary5_mc.json")), StandardCharsets.UTF_8)));
+
 
         FileWriter file = new FileWriter("C:/Users/matte/Desktop/Companies_All.json");
 
