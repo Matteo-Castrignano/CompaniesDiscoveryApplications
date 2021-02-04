@@ -17,84 +17,25 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
 
-public class CrudOperation {
-
-    public static void main(String[] args)
-    {
-        MongoClient mongoClient = MongoClients.create("mongodb://172.16.3.150:27020,172.16.3.121:27020,172.16.3.119:27020/"
-                                                    + "?retryWrites=true&w=majority&readPreference=secondary&timeout=10000");
-
-        MongoDatabase database = mongoClient.getDatabase("CompaniesApplication");
-
-        //Companies c = new Companies("PROVA","Pippo","NYS","info");
-
-        //ystem.out.println("Esito inserimento " + createCompany(database,c));
-
-        //Companies c1 = readCompany_bySymbol(database, "PROVA");
-        //System.out.println(c1.toString());
-
-        //Summary s1 = new Summary("PROVA","2021-02-02",100,255,925,"natale",89,8,9,7,10);
-
-        //System.out.println("Esito update summary: "+ updateCompany_Summary(database,s1));
-        //System.out.println("Esito update summary: "+ updateCompany_Summary(database,s1));
-
-        //Companies c2 = readCompany_bySymbol(database, "PROVA");
-        //System.out.println(c2.toString());
-
-        //System.out.println("Esito delete companies" + deleteCompany_bySymbol(database,"PROVA"));
-
-        //List<History> lh = readHistory_byPeriod(database, "2020-11-11", "2021-01-10");
-        //System.out.println(lh.toString());
-
-        //History h = new History("PROVA","2021-02-12",3, 5, 7, 230,10,10);
-        //System.out.println("Esito inserimento history "+ createHistory(database,h));
-
-        //System.out.println("Esito delete history " + deleteHistory_bySymbol(database,"PROVA"));
-        //System.out.println("Esito delete history " + deleteHistory_byPeriod(database,"2021-02-01","2021-02-27"));
-
-        //Report r1 = new Report("prova","2021-02-01","budello di tu ma", "buo di ulo", "è troppo peloso", "PROVA", "ennio");
-        //System.out.println("Esito inserimento report " + createReport(database, r1) );
-
-        //List<Report> r = readReports_bySymbol(database,"PROVA");
-        //System.out.println(r.toString());
-
-        //r = readReports_byUsername(database,"ennio");
-        //System.out.println(r.toString());
-
-        //System.out.println("Esisto update report" + updateReport_Text_byTitle(database,"prova","è sempre infiammato"));
-
-        //r = readReports_bySymbol(database,"PROVA");
-        //System.out.println(r.toString());
-
-        //System.out.println("Esisto delete report" + deleteRepert_byTitle(database,"prova"));
-
-        //r = readReports_byUsername(database,"ennio");
-        //System.out.println(r.toString());
-
-    }
-
-
+public class CrudOperation extends MongoDatabaseAccess{
 
     //CRUD Operation Companies
-    public static boolean createCompany(MongoDatabase database, Companies c) //OK
+    public static boolean createCompany(Companies c) //OK
     {
-        MongoCollection<Document> collection = database.getCollection("companies");
-
         Document doc = new Document("Symbol", c.getSymbol())
                 .append("Name", c.getName())
                 .append("Exchange", c.getExchange())
                 .append("Sector", c.getSector())
                 .append("Summary", Arrays.asList ());
 
-        collection.insertOne(doc);
+        collectionCompanies.insertOne(doc);
         return true;
     }
 
 
-    public static Companies readCompany_bySymbol(MongoDatabase database, String symbol) //OK
+    public static Companies readCompany_bySymbol(String symbol) //OK
     {
-        MongoCollection<Document> collection = database.getCollection("companies");
-        FindIterable<Document> iterable = collection.find(eq("Symbol", symbol));
+        FindIterable<Document> iterable = collectionCompanies.find(eq("Symbol", symbol));
         MongoCursor<Document> cursor = iterable.iterator();
 
         String profit;
@@ -145,10 +86,8 @@ public class CrudOperation {
     }
 
 
-    public static long updateCompany_Summary(MongoDatabase database, Summary s)//OK
+    public static long updateCompany_Summary(Summary s)//OK
     {
-        MongoCollection<Document> collection = database.getCollection("companies");
-
         Document newSummary = new Document("Target_prize", s.getTargetPrice())
                 .append("Market_cap", s.getMarketCap())
                 .append("Volume", s.getVolume())
@@ -160,26 +99,22 @@ public class CrudOperation {
                 .append("Open", s.getOpen())
                 .append("Dividend", s.getDividend());
 
-        UpdateResult updateResult = collection.updateOne(eq("Symbol", s.getSymbol()),
+        UpdateResult updateResult = collectionCompanies.updateOne(eq("Symbol", s.getSymbol()),
                                                         Updates.push("Summary", newSummary));
         return updateResult.getModifiedCount();
     }
 
 
-    public static long deleteCompany_bySymbol(MongoDatabase database, String symbol) //OK
+    public static long deleteCompany_bySymbol(String symbol) //OK
     {
-        MongoCollection<Document> collection = database.getCollection("companies");
-
-        DeleteResult deleteResult = collection.deleteMany(eq("Symbol", symbol));
+        DeleteResult deleteResult = collectionCompanies.deleteMany(eq("Symbol", symbol));
         return deleteResult.getDeletedCount();
     }
 
 
     //CRUD Operation History
-    public static boolean createHistory(MongoDatabase database, History h)
+    public static boolean createHistory(History h)
     {
-        MongoCollection<Document> collection = database.getCollection("history");
-
         Document doc = new Document("Date", h.getDateHistory())
                 .append("Open", h.getOpen())
                 .append("Close", h.getClose())
@@ -189,17 +124,16 @@ public class CrudOperation {
                 .append("Volume", h.getVolume())
                 .append("Symbol", h.getSymbol());
 
-        collection.insertOne(doc);
+        collectionHistory.insertOne(doc);
         return true;
     }
 
 
-    public static List<History> readHistory_bySymbol(MongoDatabase database, String symbol)//OK
+    public static List<History> readHistory_bySymbol(String symbol)//OK
     {
-        MongoCollection<Document> collection = database.getCollection("history");
         List<History> historyList = new ArrayList<>();
         History h;
-        FindIterable<Document> iterable = collection.find(eq("Symbol", symbol));
+        FindIterable<Document> iterable = collectionHistory.find(eq("Symbol", symbol));
         MongoCursor<Document> cursor = iterable.iterator();
 
         try{
@@ -213,18 +147,15 @@ public class CrudOperation {
         } finally {
             cursor.close();
         }
-
         return historyList;
     }
 
 
-    public static List<History> readHistory_byPeriod(MongoDatabase database, String start_date, String end_date) //OK
+    public static List<History> readHistory_byPeriod(String start_date, String end_date) //OK
     {
-
-        MongoCollection<Document> collection = database.getCollection("history");
         List<History> historyList = new ArrayList<>();
         History h;
-        FindIterable<Document> iterable = collection.find(and(gt("Date", start_date), lt("Date", end_date)));
+        FindIterable<Document> iterable = collectionHistory.find(and(gt("Date", start_date), lt("Date", end_date)));
         MongoCursor<Document> cursor = iterable.iterator();
 
         try {
@@ -244,30 +175,24 @@ public class CrudOperation {
     }
 
 
-    public static long deleteHistory_bySymbol(MongoDatabase database, String symbol)//OK
+    public static long deleteHistory_bySymbol(String symbol)//OK
     {
-        MongoCollection<Document> collection = database.getCollection("history");
-
-        DeleteResult deleteResult = collection.deleteMany(eq("Symbol", symbol));
+        DeleteResult deleteResult = collectionHistory.deleteMany(eq("Symbol", symbol));
         return deleteResult.getDeletedCount();
     }
 
 
-    public static long deleteHistory_byPeriod(MongoDatabase database, String start_date, String end_date)//OK
+    public static long deleteHistory_byPeriod(String start_date, String end_date)//OK
     {
-        MongoCollection<Document> collection = database.getCollection("history");
-
-        DeleteResult deleteResult = collection.deleteMany(and(gt("Date", start_date), lt("Date", end_date)));
+        DeleteResult deleteResult = collectionHistory.deleteMany(and(gt("Date", start_date), lt("Date", end_date)));
         return deleteResult.getDeletedCount();
     }
 
 
 
     //CRUD Operation Report
-    public static boolean createReport(MongoDatabase database, Report r)//OK
+    public static boolean createReport( Report r)//OK
     {
-        MongoCollection<Document> collection = database.getCollection("report");
-
         Document doc = new Document("Date", r.getDateReport())
                 .append("Username", r.getUsername())
                 .append("Symbol", r.getSymbol())
@@ -276,15 +201,13 @@ public class CrudOperation {
                 .append("AnalizedValue", r.getAnalizedValues())
                 .append("Text", r.getDetails());
 
-        collection.insertOne(doc);
+        collectionHistory.insertOne(doc);
         return true;
     }
 
-    public static List<Report> readReports_bySymbol(MongoDatabase database, String symbol)//OK
+    public static List<Report> readReports_bySymbol(String symbol)//OK
     {
-
-        MongoCollection<Document> collection = database.getCollection("report");
-        FindIterable<Document> iterable = collection.find(eq("Symbol", symbol));
+        FindIterable<Document> iterable = collectionHistory.find(eq("Symbol", symbol));
         MongoCursor<Document> cursor = iterable.iterator();
         List<Report> reportsList = new ArrayList<>();
         Report r;
@@ -303,13 +226,10 @@ public class CrudOperation {
         return reportsList;
     }
 
-    public static List<Report> readReports_byUsername(MongoDatabase database, String username)//OK
+    public static List<Report> readReports_byUsername(String username)//OK
     {
-
-        MongoCollection<Document> collection = database.getCollection("report");
-        FindIterable<Document> iterable = collection.find(eq("Username", username));
+        FindIterable<Document> iterable = collectionHistory.find(eq("Username", username));
         MongoCursor<Document> cursor = iterable.iterator();
-
         List<Report> reportsList = new ArrayList<>();
         Report r;
 
@@ -327,33 +247,67 @@ public class CrudOperation {
         return reportsList;
     }
 
-    public static long updateReport_Text_byTitle(MongoDatabase database, String title, String text)//OK
+    public static long updateReport_Text_byTitle(String title, String text)//OK
     {
-        MongoCollection<Document> collection = database.getCollection("report");
-
-        UpdateResult updateResult =collection.updateMany(eq("Title", title), set("Text", text));
+        UpdateResult updateResult = collectionHistory.updateMany(eq("Title", title), set("Text", text));
         return updateResult.getModifiedCount();
 
     }
 
-    public static long deleteRepert_byTitle(MongoDatabase database, String title)//OK
+    public static long deleteRepert_byTitle(String title)//OK
     {
-        MongoCollection<Document> collection = database.getCollection("report");
-
-        DeleteResult deleteResult = collection.deleteMany(eq("Title", title));
+        DeleteResult deleteResult = collectionHistory.deleteMany(eq("Title", title));
         return deleteResult.getDeletedCount();
     }
+
+
+    public static void main(String[] args)
+    {
+        openConnection();
+
+        //Companies c = new Companies("PROVA","Pippo","NYS","info");
+        //System.out.println("Esito inserimento " + createCompany(c));
+
+        //Companies c1 = readCompany_bySymbol("PROVA");
+        //System.out.println(c1.toString());
+
+        //Summary s1 = new Summary("PROVA","2021-02-02",100,255,925,"natale",89,8,9,7,10);
+        //System.out.println("Esito update summary: "+ updateCompany_Summary(s1));
+        //System.out.println("Esito update summary: "+ updateCompany_Summary(s1));
+
+        //Companies c2 = readCompany_bySymbol("PROVA");
+        //System.out.println(c2.toString());
+
+        //System.out.println("Esito delete companies" + deleteCompany_bySymbol("PROVA"));
+
+
+        //List<History> lh = readHistory_byPeriod("2020-11-11", "2021-01-10");
+        //System.out.println(lh.toString());
+
+        //History h = new History("PROVA","2021-02-12",3, 5, 7, 230,10,10);
+        //System.out.println("Esito inserimento history "+ createHistory(h));
+
+        //System.out.println("Esito delete history " + deleteHistory_bySymbol("PROVA"));
+        //System.out.println("Esito delete history " + deleteHistory_byPeriod("2021-02-01","2021-02-27"));
+
+        //Report r1 = new Report("prova","2021-02-01","budello di tu ma", "buo di ulo", "è troppo peloso", "PROVA", "ennio");
+        //System.out.println("Esito inserimento report " + createReport(r1) );
+
+        //List<Report> r = readReports_bySymbol("PROVA");
+        //System.out.println(r.toString());
+
+        //r = readReports_byUsername("ennio");
+        //System.out.println(r.toString());
+
+        //System.out.println("Esisto update report" + updateReport_Text_byTitle("prova","è sempre infiammato"));
+
+        //r = readReports_bySymbol("PROVA");
+        //System.out.println(r.toString());
+
+        //System.out.println("Esisto delete report" + deleteRepert_byTitle("prova"));
+
+        //r = readReports_byUsername("ennio");
+        //System.out.println(r.toString());
+        closeConnection();
+    }
 }
-
-
-/*
-        MongoCollection<Document> collection = database.getCollection("companies");
-        Document doc = collection.find(eq("Symbol", symbol)).first();
-        System.out.println(doc.toJson());
-        Gson gson = new Gson();
-        Companies c = gson.fromJson(doc.toJson(), Companies.class);
-        List<Summary> summ = c.getSummary();
-        for(Summary s : summ){
-            System.out.println(s.toString());
-        }
-        */

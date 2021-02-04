@@ -1,45 +1,38 @@
 package MongoDB;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.MergeOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.json.JsonWriterSettings;
-
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
-
 import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.ne;
 import static com.mongodb.client.model.Sorts.*;
 
 
-public class Analytics {
+public class Analytics extends MongoDatabaseAccess{
 
     public static void main(String[] args) {
-        MongoClient mongoClient = MongoClients.create("mongodb://172.16.3.150:27020/");
+        openConnection();
 
-        MongoDatabase database = mongoClient.getDatabase("CompaniesApplication");
-
-        /*Scanner input = new Scanner(System.in);
+        System.out.println("Insert cap");
+        Scanner input = new Scanner(System.in);
         String s = input.nextLine();
         System.out.println("Ho letto: " + s);
         long i = Long.valueOf(s).longValue();
-        System.out.println("Numero: " + i);*/
+        System.out.println("Numero: " + i);
 
-        Analytics1(database);
+        Analytics1();
 
-        //Analytics2(database, 100);
+        Analytics2(100);
 
-        //Analytics3(database, i);
+        Analytics3(i);
 
+        closeConnection();
     }
 
     private static Consumer<Document> printDocuments() {
@@ -51,10 +44,8 @@ public class Analytics {
     }
 
 
-    public static void Analytics1(MongoDatabase database)
+    public static void Analytics1()
     {
-        MongoCollection<Document> collection = database.getCollection("history");
-
         Bson group1 = new Document("$group",
                         new Document("_id", new Document("symbol", "$Symbol")
                                     .append("year", new Document("$year", new Document("$dateFromString", new Document("dateString","$Date").append("format", "%Y-%m-%d"))))
@@ -88,17 +79,15 @@ public class Analytics {
 
         Bson merge1 = new Document("$merge", new Document( "into", "companies").append( "on", "Symbol").append("whenMatched", "merge").append("whenNotMatched","insert"));
 
-        List<Document> results = collection.aggregate(Arrays.asList(group1, sort1, group2, sort2, addFields, sort3, group3, project1, merge1)).allowDiskUse(true).into(new ArrayList<>());
+        List<Document> results = collectionHistory.aggregate(Arrays.asList(group1, sort1, group2, sort2, addFields, sort3, group3, project1, merge1)).allowDiskUse(true).into(new ArrayList<>());
 
         System.out.println("Most profitable");
         //results.forEach(printFormattedDocuments());
     }
 
 
-    public static void Analytics2(MongoDatabase database, float AvgVolume)
+    public static void Analytics2(float AvgVolume)
     {
-        MongoCollection<Document> collection = database.getCollection("companies");
-
         Bson match1 = match(lt("Summary.Avg_Volume", AvgVolume));
 
         Bson unwind1 = unwind("$Summary");
@@ -117,16 +106,14 @@ public class Analytics {
 
         Bson sort = sort(descending("interesse"));
 
-        List<Document> results = collection.aggregate(Arrays.asList(match1, unwind1, project1, group1, project2, sort)).into(new ArrayList<>());
+        List<Document> results = collectionCompanies.aggregate(Arrays.asList(match1, unwind1, project1, group1, project2, sort)).into(new ArrayList<>());
 
         System.out.println("Per ogni titolo verificare se nell'ultima settimana l'interesse è cresiuto o diminuito, ovvero se per ogni giorno il volume è maggiore del volume medio");
         results.forEach(printFormattedDocuments());
     }
 
-    public static void Analytics3(MongoDatabase database, long cap)
+    public static void Analytics3(long cap)
     {
-        MongoCollection<Document> collection = database.getCollection("companies");
-
         Bson match1 = match(lt("Summary.Market_cap", cap));
 
         Bson unwind1 = unwind("$Summary");
@@ -149,7 +136,7 @@ public class Analytics {
                         .append("symbol", new Document("$last", "$_id.symbol" ))
                         .append("PE", new Document("$last", "$PE" )));
 
-        List<Document> results = collection.aggregate(Arrays.asList(match1, unwind1, sort1, group1, match2, match3, sort2, group2)).into(new ArrayList<>());
+        List<Document> results = collectionCompanies.aggregate(Arrays.asList(match1, unwind1, sort1, group1, match2, match3, sort2, group2)).into(new ArrayList<>());
 
         System.out.println("Per ogni settore, trovare le aziende con capitalizzazione superiore ad un miliardo che hanno il rapporto PE più basso (le aziende più sottovalutate)");
         results.forEach(printFormattedDocuments());
