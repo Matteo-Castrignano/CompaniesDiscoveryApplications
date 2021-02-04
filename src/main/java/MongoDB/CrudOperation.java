@@ -21,13 +21,14 @@ public class CrudOperation {
 
     public static void main(String[] args)
     {
-        MongoClient mongoClient = MongoClients.create("mongodb://172.16.3.150:27020/");
+        MongoClient mongoClient = MongoClients.create("mongodb://172.16.3.150:27020,172.16.3.121:27020,172.16.3.119:27020/"
+                                                    + "?retryWrites=true&w=majority&readPreference=secondary&timeout=10000");
 
         MongoDatabase database = mongoClient.getDatabase("CompaniesApplication");
 
         //Companies c = new Companies("PROVA","Pippo","NYS","info");
 
-        //System.out.println("Esito inserimento " + createCompany(database,c));
+        //ystem.out.println("Esito inserimento " + createCompany(database,c));
 
         //Companies c1 = readCompany_bySymbol(database, "PROVA");
         //System.out.println(c1.toString());
