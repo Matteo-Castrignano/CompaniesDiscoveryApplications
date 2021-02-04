@@ -68,15 +68,59 @@ public class Analytics implements AutoCloseable{
         }
     }
 
-    //LISTA COMPAGNIE SEGUITE
+
+    //Analytics3
+    private void listFollowedCompany(String username)//OK
+    {
+        try ( Session session = driver.session() )
+        {
+            List<String> symbol_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (u1:User)-[:WATCHLIST]-(c1:Company) WHERE u1.username = $username RETURN c1.symbol AS Company",
+                        parameters( "username", username) );
+
+                ArrayList<String> symbol = new ArrayList<>();
+                while(result.hasNext()){
+                    Record r = result.next();
+                    symbol.add(r.get("Company").asString());
+                }
+
+                return symbol;
+            });
+            System.out.println("List followed company: " + symbol_list);
+        }
+    }
+
+
+    //Analytics4
+    private void listFollowedUser(String username)//OK
+    {
+        try ( Session session = driver.session() )
+        {
+            List<String> user_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (u1:User)-[:FOLLOW]->(u2:User) WHERE u1.username = $username RETURN u2.username AS user",
+                        parameters( "username", username) );
+
+                ArrayList<String> user = new ArrayList<>();
+                while(result.hasNext()){
+                    Record r = result.next();
+                    user.add(r.get("user").asString());
+                }
+
+                return user;
+            });
+            System.out.println("List user followed: " + user_list);
+        }
+    }
 
 
     public static void main(String[] args) throws Exception
     {
         try ( Analytics neo4j = new Analytics( "neo4j://localhost:7687", "neo4j", "root" ) )
         {
-            neo4j.userFollowing("cristina23");
-            neo4j.suggestedCompany("aylin32");
+            //neo4j.userFollowing("cristina23");
+            //neo4j.suggestedCompany("aylin32");
+            //neo4j.listFollowedUser("cristina23");
+            //neo4j.listFollowedCompany("cristina23");
         }
     }
 }
