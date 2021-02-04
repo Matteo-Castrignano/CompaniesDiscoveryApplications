@@ -144,9 +144,21 @@ public class CrudOperation implements AutoCloseable{
                 return null;
             });
         }
+        UpdateRate_ProfessionalUser(username_pf);
     }
 
-    //UPDATE VOTO MEDIO
+    private void UpdateRate_ProfessionalUser(String username_pf)//OK
+    {
+        try ( Session session = driver.session() )
+        {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MATCH()-[r:RATE]->(p:Professional_User) WHERE p.username = $username_pf WITH p, round(avg(r.vote), 1) as value SET p.avg_Rating = value",
+                        parameters( "username_pf", username_pf ));
+                return null;
+            });
+        }
+    }
+
 
     public void deleteUser_byUsername(String username)//OK
     {
@@ -309,18 +321,19 @@ public class CrudOperation implements AutoCloseable{
             //neo4j.addUser_toFollow("prova", "cum3");
             //neo4j.followCompany_byUser("prova","AAPL");
             //neo4j.followProfessionalUser_byUser("prova","ad3");
-            //neo4j.rate_ProfessionalUser("prova", "ad3", 4);
+            //neo4j.rate_ProfessionalUser("cristina23", "Giancarlo", 4);
+            //neo4j.rate_ProfessionalUser("prova", "Giancarlo", 2);
             //neo4j.unfollow_User("prova","cum3");
             //neo4j.unfollowCompany_byUser("prova","AAPL");
             //neo4j.unfollowProfessionalUser_byUser("prova","ad3");
             //neo4j.deleteUser_byUsername("prova");
 
-            //ProfessionalUser pu = new ProfessionalUser( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova", "p1", "p2", 2.5);
+            //ProfessionalUser pu = new ProfessionalUser( "Giancarlo", "prova", "prova", "prova","prova", 'M', "prova", "prova", "p1", "p2", 2.5);
             //neo4j.addProfessionlUser(pu);
-            //neo4j.readProfessionalUser_byUsername("prova");
-            //neo4j.followCompany_byProfessionalUser("prova","AAPL");
-            //neo4j.unfollowCompany_byProfessionalUser("prova","AAPL");
-            //neo4j.deleteProfessionalUser("prova");
+            //neo4j.readProfessionalUser_byUsername("Giancarlo");
+            //neo4j.followCompany_byProfessionalUser("Giancarlo","AAPL");
+            //neo4j.unfollowCompany_byProfessionalUser("Giancarlo","AAPL");
+            //neo4j.deleteProfessionalUser("Giancarlo");
 
             //Companies c = new Companies("PROVA","Pippo","NYS","info", 2, "livorno", "123", "ita", "toscana", "ar", "afsasf", "www", null);
             //neo4j.addCompany(c);
