@@ -1,6 +1,5 @@
 package Entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Companies {
@@ -17,6 +16,7 @@ public class Companies {
     private String country;
     private String address;
     private String website;
+    private String mostProfitablePeriod;
     private List<Summary> summary;
 
     public Companies(String symbol, String name, String exchange, String sector, int fullTimesemployees,
@@ -37,11 +37,12 @@ public class Companies {
         this.summary = summary;
     }
 
-    public Companies(String symbol, String name, String stockexchange, String sector, List<Summary> summary) {
+    public Companies(String symbol, String name, String stockexchange, String sector, String mostProfitablePeriod, List<Summary> summary) {
         this.symbol = symbol;
         this.name = name;
         this.exchange = stockexchange;
         this.sector = sector;
+        this.mostProfitablePeriod = mostProfitablePeriod;
         this.summary = summary;
     }
 
@@ -159,6 +160,14 @@ public class Companies {
         this.summary = summary;
     }
 
+    public String getMostProfitablePeriod() {
+        return mostProfitablePeriod;
+    }
+
+    public void setMostProfitablePeriod(String mostProfitablePeriod) {
+        this.mostProfitablePeriod = mostProfitablePeriod;
+    }
+
     @Override
     public String toString() {
         return "Companies{" +
@@ -166,6 +175,7 @@ public class Companies {
                 ", name='" + name + '\'' +
                 ", exchange='" + exchange + '\'' +
                 ", sector='" + sector + '\'' +
+                ", mostProfitablePeriod='" + mostProfitablePeriod + '\'' +
                 ", summary=" + summary.toString() +
                 '}';
     }
