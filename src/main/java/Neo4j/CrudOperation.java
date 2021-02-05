@@ -50,7 +50,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run( "MATCH(u1:User) WHERE u1.username = $username1 MATCH(u2:User) WHERE u2.username = $username2 " +
-                        "CREATE(u1)-[:FOLLOW]->(u2)", parameters("username1", username1, "username2", username2 ));
+                        "MERGE (u1)-[:FOLLOW]->(u2)", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
         }
@@ -73,7 +73,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH(u1:User) WHERE u1.username = $username MATCH(c:Company) WHERE c.symbol = $symbol CREATE(u1)-[:WATCHLIST]->(c)",
+                tx.run( "MATCH(u1:User) WHERE u1.username = $username MATCH(c:Company) WHERE c.symbol = $symbol MERGE (u1)-[:WATCHLIST]->(c)",
                         parameters("username", username, "symbol", symbol));
                 return null;
             });
@@ -200,7 +200,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH(u1:Professional_User) WHERE u1.username = $username MATCH(c:Company) WHERE c.symbol = $symbol CREATE(u1)-[:WATCHLIST]->(c)",
+                tx.run( "MATCH(u1:Professional_User) WHERE u1.username = $username MATCH(c:Company) WHERE c.symbol = $symbol MERGE (u1)-[:WATCHLIST]->(c)",
                         parameters("username", username, "symbol", symbol));
                 return null;
             });
@@ -297,15 +297,14 @@ public class CrudOperation extends Neo4jDatabaseAccess{
 
     public static void main(String[] args) throws Exception
     {
-        try(Neo4jDatabaseAccess n = new Neo4jDatabaseAccess())
-        {
+        initDriver();
         System.out.println("---------------------------");
 
-        //User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
-        //addUser(u);
+        User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
+        addUser(u);
+        Thread.sleep(800);
         readUser_byUsername("prova");
-        //ProfessionalUser pu = new ProfessionalUser( "Giancarlo", "prova", "prova", "prova","prova", 'M', "prova", "prova", "p1", "p2", 2.5);
-        //addProfessionlUser(pu);
+
         //addUser_toFollow("prova", "cum3");
         //followCompany_byUser("prova","AAPL");
         //followProfessionalUser_byUser("prova","ad3");
@@ -323,12 +322,13 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         //deleteProfessionalUser("Giancarlo");
 
         //Companies c = new Companies("PROVA","Pippo","NYS","info", 2, "livorno", "123", "ita", "toscana", "ar", "afsasf", "www", null);
-        //neo4j.addCompany(c);
-        //neo4j.readCompany_bySymbol("PROVA");
-        //neo4j.deleteCompany_bySymbol("PROVA");
+        //addCompany(c);
+        //readCompany_bySymbol("PROVA");
+        //deleteCompany_bySymbol("PROVA");
 
-        //neo4j.addAdmin("prova");
-        }
+        //addAdmin("prova");
+        close();
+
     }
 }
 

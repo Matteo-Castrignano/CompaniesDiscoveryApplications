@@ -2,25 +2,13 @@ package Neo4j;
 
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.neo4j.driver.Values.parameters;
 
-public class Analytics implements AutoCloseable{
+public class Analytics extends Neo4jDatabaseAccess{
 
-    private final Driver driver;
-
-    public Analytics(String uri, String user, String password )
-    {
-        driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
-    }
-
-    public void close() throws Exception
-    {
-        driver.close();
-    }
 
     //Analytics1
     private void userFollowing(String username)//OK
@@ -115,12 +103,11 @@ public class Analytics implements AutoCloseable{
 
     public static void main(String[] args) throws Exception
     {
-        try ( Analytics neo4j = new Analytics( "neo4j://localhost:7687", "neo4j", "root" ) )
-        {
-            //neo4j.userFollowing("cristina23");
-            //neo4j.suggestedCompany("aylin32");
-            //neo4j.listFollowedUser("cristina23");
-            //neo4j.listFollowedCompany("cristina23");
-        }
+        initDriver();
+        //neo4j.userFollowing("cristina23");
+        //neo4j.suggestedCompany("aylin32");
+        //neo4j.listFollowedUser("cristina23");
+        //neo4j.listFollowedCompany("cristina23");
+        close();
     }
 }
