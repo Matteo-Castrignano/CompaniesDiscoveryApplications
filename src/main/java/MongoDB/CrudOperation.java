@@ -133,7 +133,7 @@ public class CrudOperation extends MongoDatabaseAccess{
     {
         List<History> historyList = new ArrayList<>();
         History h;
-        FindIterable<Document> iterable = collectionHistory.find(eq("Symbol", symbol));
+        FindIterable<Document> iterable = collectionHistory.find(eq("Symbol", symbol)).limit(100);
         MongoCursor<Document> cursor = iterable.iterator();
 
         try{
@@ -151,11 +151,11 @@ public class CrudOperation extends MongoDatabaseAccess{
     }
 
 
-    public static List<History> readHistory_byPeriod(String start_date, String end_date) //OK add simbol
+    public static List<History> readHistory_byPeriod(String start_date, String end_date, String symbol) //OK add simbol
     {
         List<History> historyList = new ArrayList<>();
         History h;
-        FindIterable<Document> iterable = collectionHistory.find(and(gt("Date", start_date), lt("Date", end_date)));
+        FindIterable<Document> iterable = collectionHistory.find(and(eq("Symbol", symbol),gt("Date", start_date), lt("Date", end_date)));
         MongoCursor<Document> cursor = iterable.iterator();
 
         try {
