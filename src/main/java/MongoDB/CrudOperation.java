@@ -129,11 +129,11 @@ public class CrudOperation extends MongoDatabaseAccess{
     }
 
 
-    public static List<History> readHistory_bySymbol(String symbol)//OK add limit
+    public static List<History> readHistory_bySymbol(String symbol)//OK
     {
         List<History> historyList = new ArrayList<>();
         History h;
-        FindIterable<Document> iterable = collectionHistory.find(eq("Symbol", symbol)).limit(100);
+        FindIterable<Document> iterable = collectionHistory.find(eq("Symbol", symbol)).sort(new Document("Date",-1)).limit(100);
         MongoCursor<Document> cursor = iterable.iterator();
 
         try{
@@ -151,7 +151,7 @@ public class CrudOperation extends MongoDatabaseAccess{
     }
 
 
-    public static List<History> readHistory_byPeriod(String start_date, String end_date, String symbol) //OK add simbol
+    public static List<History> readHistory_byPeriod(String start_date, String end_date, String symbol) //OK
     {
         List<History> historyList = new ArrayList<>();
         History h;
@@ -281,8 +281,9 @@ public class CrudOperation extends MongoDatabaseAccess{
         //System.out.println("Esito delete companies" + deleteCompany_bySymbol("PROVA"));
 
 
-        //List<History> lh = readHistory_byPeriod("2020-11-11", "2021-01-10");
-        //System.out.println(lh.toString());
+        //List<History> lh = readHistory_byPeriod("2020-11-11", "2021-01-10","AAPL");
+        //List<History> lh = readHistory_bySymbol("AAPL");
+        //System.out.println(lh.size()+lh.toString());
 
         //History h = new History("PROVA","2021-02-12",3, 5, 7, 230,10,10);
         //System.out.println("Esito inserimento history "+ createHistory(h));
