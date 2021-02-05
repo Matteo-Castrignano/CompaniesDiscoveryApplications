@@ -11,7 +11,7 @@ public class Analytics extends Neo4jDatabaseAccess{
 
 
     //Analytics1
-    private void userFollowing(String username)//OK
+    private static List<Integer> userFollowing(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -29,13 +29,14 @@ public class Analytics extends Neo4jDatabaseAccess{
 
                 return number;
             });
-            System.out.println("NumberFollowerUser: " + n_follower.get(0) + " NumberFollowerCompany: " + n_follower.get(1));
+            //System.out.println("NumberFollowerUser: " + n_follower.get(0) + " NumberFollowerCompany: " + n_follower.get(1));
+            return n_follower;
         }
     }
 
 
     //Analytics2
-    private void suggestedCompany(String username)//OK
+    private static List<String> suggestedCompany(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -52,13 +53,14 @@ public class Analytics extends Neo4jDatabaseAccess{
 
                 return symbol;
             });
-            System.out.println("Suggested Company: " + symbol_list);
+            //System.out.println("Suggested Company: " + symbol_list);
+            return symbol_list;
         }
     }
 
 
     //Analytics3
-    private void listFollowedCompany(String username)//OK
+    private static List<String> listFollowedCompany(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -74,13 +76,14 @@ public class Analytics extends Neo4jDatabaseAccess{
 
                 return symbol;
             });
-            System.out.println("List followed company: " + symbol_list);
+            //System.out.println("List followed company: " + symbol_list);
+            return symbol_list;
         }
     }
 
 
     //Analytics4
-    private void listFollowedUser(String username)//OK
+    private static List<String> listFollowedUser(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -96,7 +99,8 @@ public class Analytics extends Neo4jDatabaseAccess{
 
                 return user;
             });
-            System.out.println("List user followed: " + user_list);
+            //System.out.println("List user followed: " + user_list);
+            return  user_list;
         }
     }
 
@@ -104,10 +108,10 @@ public class Analytics extends Neo4jDatabaseAccess{
     public static void main(String[] args) throws Exception
     {
         initDriver();
-        //neo4j.userFollowing("cristina23");
-        //neo4j.suggestedCompany("aylin32");
-        //neo4j.listFollowedUser("cristina23");
-        //neo4j.listFollowedCompany("cristina23");
+        System.out.println(userFollowing("cristina23").toString());
+        System.out.println(suggestedCompany("aylin32").toString());
+        System.out.println(listFollowedUser("cristina23").toString());
+        System.out.println(listFollowedCompany("cristina23").toString());
         close();
     }
 }

@@ -4,12 +4,14 @@ import Entities.Companies;
 import Entities.ProfessionalUser;
 import Entities.User;
 import org.neo4j.driver.*;
+import org.neo4j.driver.exceptions.NoSuchRecordException;
+
 import static org.neo4j.driver.Values.parameters;
 
 public class CrudOperation extends Neo4jDatabaseAccess{
 
     //CRUD User
-    public static void addUser(User u)//OK
+    public static boolean addUser(User u)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -22,11 +24,12 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                 tx.commit();
                 return null;
             });
+            return true;
         }
 
     }
 
-    public static void readUser_byUsername(String username)//OK
+    public static User readUser_byUsername(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -40,11 +43,12 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         v.get("email").asString(), v.get("country").asString());
                 return u2;
             });
-           System.out.println(u.toString());
+           //System.out.println(u.toString());
+           return u;
         }
     }
 
-    public static void addUser_toFollow(String username1, String username2)//OK
+    public static boolean addUser_toFollow(String username1, String username2)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -53,10 +57,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         "MERGE (u1)-[:FOLLOW]->(u2)", parameters("username1", username1, "username2", username2 ));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void unfollow_User(String username1, String username2)//OK
+    public static boolean unfollow_User(String username1, String username2)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -65,10 +70,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username1", username1, "username2", username2 ));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void followCompany_byUser(String username, String symbol)//OK
+    public static boolean followCompany_byUser(String username, String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -77,10 +83,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username", username, "symbol", symbol));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void unfollowCompany_byUser(String username, String symbol)//OK
+    public static boolean unfollowCompany_byUser(String username, String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -89,10 +96,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username", username, "symbol", symbol));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void followProfessionalUser_byUser(String username, String username_pf)//OK
+    public static boolean followProfessionalUser_byUser(String username, String username_pf)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -102,10 +110,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void unfollowProfessionalUser_byUser(String username, String username_pf)//OK
+    public static boolean unfollowProfessionalUser_byUser(String username, String username_pf)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -115,10 +124,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void rate_ProfessionalUser(String username, String username_pf, int vote)//OK
+    public static boolean rate_ProfessionalUser(String username, String username_pf, int vote)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -129,10 +139,14 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                 return null;
             });
         }
-        UpdateRate_ProfessionalUser(username_pf);
+
+        if(UpdateRate_ProfessionalUser(username_pf))
+            return true;
+        else
+            return false;
     }
 
-    private static void UpdateRate_ProfessionalUser(String username_pf)//OK
+    private static boolean UpdateRate_ProfessionalUser(String username_pf)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -141,11 +155,12 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters( "username_pf", username_pf ));
                 return null;
             });
+            return true;
         }
     }
 
 
-    public static void deleteUser_byUsername(String username)//OK
+    public static boolean deleteUser_byUsername(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -154,12 +169,13 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters( "username", username));
                 return null;
             });
+            return true;
         }
     }
 
     //CRUD Professional user
 
-    public static void addProfessionlUser(ProfessionalUser pu)//OK
+    public static boolean addProfessionlUser(ProfessionalUser pu)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -173,10 +189,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                                 "sector", pu.getSpecializationSector(), "rate", 0) );
                 return null;
             });
+            return true;
         }
     }
 
-    public static void readProfessionalUser_byUsername(String username)//OK
+    public static ProfessionalUser readProfessionalUser_byUsername(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -191,11 +208,12 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                          v.get("profession").asString(), v.get("avg_Rating").asDouble());
                 return pr;
             });
-            System.out.println(pu.toString());
+            //System.out.println(pu.toString());
+            return pu;
         }
     }
 
-    public static void followCompany_byProfessionalUser(String username, String symbol)//OK
+    public static boolean followCompany_byProfessionalUser(String username, String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -204,10 +222,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username", username, "symbol", symbol));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void unfollowCompany_byProfessionalUser(String username, String symbol)//OK
+    public static boolean unfollowCompany_byProfessionalUser(String username, String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -216,10 +235,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username", username, "symbol", symbol));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void deleteProfessionalUser(String username)//OK
+    public static boolean deleteProfessionalUser(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -228,13 +248,14 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters( "username", username));
                 return null;
             });
+            return true;
         }
     }
 
 
     //CRUD Company
 
-    public static void addCompany(Companies c)//OK
+    public static boolean addCompany(Companies c)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -248,10 +269,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                                     "address", c.getAddress(), "website", c.getWebsite() ));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void readCompany_bySymbol(String symbol)//OK
+    public static Companies readCompany_bySymbol(String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -267,10 +289,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                 return c1;
             });
             System.out.println(c.toString2());
+            return c;
         }
     }
 
-    public static void deleteCompany_bySymbol(String symbol)//
+    public static boolean deleteCompany_bySymbol(String symbol)//
     {
         try ( Session session = driver.session() )
         {
@@ -279,10 +302,11 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters( "symbol", symbol));
                 return null;
             });
+            return true;
         }
     }
 
-    public static void addAdmin(String username)//OK
+    public static boolean addAdmin(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -291,6 +315,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username", username));
                 return null;
             });
+            return true;
         }
     }
 
@@ -298,12 +323,18 @@ public class CrudOperation extends Neo4jDatabaseAccess{
     public static void main(String[] args) throws Exception
     {
         initDriver();
-        System.out.println("---------------------------");
 
-        User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
-        addUser(u);
-        Thread.sleep(800);
-        readUser_byUsername("prova");
+        try{
+            User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
+            addUser(u);
+            Thread.sleep(800);
+            User u1 = readUser_byUsername("prova");
+            System.out.println(u1.toString());
+            System.out.println(" Delete user esito: " + deleteUser_byUsername("prova"));
+        } catch (NoSuchRecordException e) {
+            close();
+            e.printStackTrace();
+        }
 
         //addUser_toFollow("prova", "cum3");
         //followCompany_byUser("prova","AAPL");
@@ -313,7 +344,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         //unfollow_User("prova","cum3");
         //unfollowCompany_byUser("prova","AAPL");
         //unfollowProfessionalUser_byUser("prova","ad3");
-        deleteUser_byUsername("prova");
+
 
 
         //readProfessionalUser_byUsername("Giancarlo");
