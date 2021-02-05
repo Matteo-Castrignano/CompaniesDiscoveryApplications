@@ -129,7 +129,7 @@ public class CrudOperation extends MongoDatabaseAccess{
     }
 
 
-    public static List<History> readHistory_bySymbol(String symbol)//OK
+    public static List<History> readHistory_bySymbol(String symbol)//OK add limit
     {
         List<History> historyList = new ArrayList<>();
         History h;
@@ -151,7 +151,7 @@ public class CrudOperation extends MongoDatabaseAccess{
     }
 
 
-    public static List<History> readHistory_byPeriod(String start_date, String end_date) //OK
+    public static List<History> readHistory_byPeriod(String start_date, String end_date) //OK add simbol
     {
         List<History> historyList = new ArrayList<>();
         History h;
