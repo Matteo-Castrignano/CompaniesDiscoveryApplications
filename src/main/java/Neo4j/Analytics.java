@@ -104,6 +104,27 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
+    private static List<String> listFollowedProfessionalUser(String username)//OK
+    {
+        try ( Session session = driver.session() )
+        {
+            List<String> user_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (u1:User)-[:FOLLOW]->(u2:Professional_User) WHERE u1.username = $username RETURN u2.username AS user",
+                        parameters( "username", username) );
+
+                ArrayList<String> user = new ArrayList<>();
+                while(result.hasNext()){
+                    Record r = result.next();
+                    user.add(r.get("user").asString());
+                }
+
+                return user;
+            });
+            //System.out.println("List user followed: " + user_list);
+            return  user_list;
+        }
+    }
+
 
     public static void main(String[] args) throws Exception
     {
@@ -112,6 +133,7 @@ public class Analytics extends Neo4jDatabaseAccess{
         System.out.println(suggestedCompany("aylin32").toString());
         System.out.println(listFollowedUser("cristina23").toString());
         System.out.println(listFollowedCompany("cristina23").toString());
+        System.out.println(listFollowedProfessionalUser("cristina23").toString());
         close();
     }
 }
