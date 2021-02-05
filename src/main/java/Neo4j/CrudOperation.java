@@ -283,7 +283,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                 Value v = result.single().get(0);
 
                 Companies c1 = new Companies( v.get("symbol").asString(), v.get("name").asString(), v.get("exchange").asString(),
-                        v.get("sector").asString(), v.get("fullTimeEmployees").asInt(), v.get("description").asString(), v.get("city").asString(),
+                        v.get("sector").asString(), v.get("fullTimesEmployees").asInt(), v.get("description").asString(), v.get("city").asString(),
                         v.get("phone").asString(), v.get("state").asString(), v.get("country").asString(), v.get("address").asString(),
                         v.get("website").asString(), null );
                 return c1;
@@ -325,12 +325,15 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         initDriver();
 
         try{
-            User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
-            addUser(u);
-            Thread.sleep(800);
-            User u1 = readUser_byUsername("prova");
-            System.out.println(u1.toString());
-            System.out.println(" Delete user esito: " + deleteUser_byUsername("prova"));
+            //User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
+            //addUser(u);
+            //Thread.sleep(800);
+            //User u1 = readUser_byUsername("prova");
+            //System.out.println(u1.toString());
+            //System.out.println(" Delete user esito: " + deleteUser_byUsername("prova"));
+            System.out.println(readCompany_bySymbol("AAPL").toString());
+
+
         } catch (NoSuchRecordException e) {
             close();
             e.printStackTrace();
@@ -354,7 +357,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
 
         //Companies c = new Companies("PROVA","Pippo","NYS","info", 2, "livorno", "123", "ita", "toscana", "ar", "afsasf", "www", null);
         //addCompany(c);
-        //readCompany_bySymbol("PROVA");
+        //readCompany_bySymbol("AAPL");
         //deleteCompany_bySymbol("PROVA");
 
         //addAdmin("prova");

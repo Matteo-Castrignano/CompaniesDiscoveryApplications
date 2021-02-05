@@ -1,5 +1,6 @@
 package Neo4j;
 
+import Entities.Companies;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 import java.util.ArrayList;
@@ -60,20 +61,27 @@ public class Analytics extends Neo4jDatabaseAccess{
 
 
     //Analytics3
-    private static List<String> listFollowedCompany(String username)//OK
+    private static List<Companies> listFollowedCompany(String username)//OK
     {
         try ( Session session = driver.session() )
         {
-            List<String> symbol_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                Result result = tx.run( "MATCH (u1:User)-[:WATCHLIST]-(c1:Company) WHERE u1.username = $username RETURN c1.symbol AS Company",
+            List<Companies> symbol_list = session.readTransaction((TransactionWork<List<Companies>>) tx -> {
+                Result result = tx.run( "MATCH (u1:User)-[:WATCHLIST]-(c1:Company) WHERE u1.username = $username RETURN c1",
                         parameters( "username", username) );
 
-                ArrayList<String> symbol = new ArrayList<>();
+                ArrayList<Companies> symbol = new ArrayList<>();
                 while(result.hasNext()){
                     Record r = result.next();
-                    symbol.add(r.get("Company").asString());
-                }
 
+                    Value v = r.get(0);
+
+                    Companies c1 = new Companies( v.get("symbol").asString(), v.get("name").asString(), v.get("exchange").asString(),
+                            v.get("sector").asString(), v.get("fullTimesEmployees").asInt(),
+                            v.get("description").asString(), v.get("city").asString(),
+                            v.get("phone").asString(), v.get("state").asString(), v.get("country").asString(), v.get("address").asString(),
+                            v.get("website").asString(), null );
+                    symbol.add(c1);
+                }
                 return symbol;
             });
             //System.out.println("List followed company: " + symbol_list);
@@ -129,11 +137,13 @@ public class Analytics extends Neo4jDatabaseAccess{
     public static void main(String[] args) throws Exception
     {
         initDriver();
-        System.out.println(userFollowing("cristina23").toString());
-        System.out.println(suggestedCompany("aylin32").toString());
-        System.out.println(listFollowedUser("cristina23").toString());
-        System.out.println(listFollowedCompany("cristina23").toString());
-        System.out.println(listFollowedProfessionalUser("cristina23").toString());
+        //System.out.println(userFollowing("cristina23").toString());
+        //System.out.println(suggestedCompany("aylin32").toString());
+        //System.out.println(listFollowedUser("cristina23").toString());
+        List<Companies> c = listFollowedCompany("cristina23");
+        for(Companies c1 : c)
+             System.out.println( c1.toString2());
+        //System.out.println(listFollowedProfessionalUser("cristina23").toString());
         close();
     }
 }
