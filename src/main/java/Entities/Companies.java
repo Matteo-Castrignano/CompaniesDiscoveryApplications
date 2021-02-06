@@ -19,9 +19,10 @@ public class Companies {
     private String mostProfitablePeriod;
     private List<Summary> summary;
 
+    //Neo4j
     public Companies(String symbol, String name, String exchange, String sector, int fullTimesemployees,
                      String description, String city, String phone, String state, String country, String address,
-                     String website, List<Summary> summary) {
+                     String website) {
         this.symbol = symbol;
         this.name = name;
         this.exchange = exchange;
@@ -34,9 +35,9 @@ public class Companies {
         this.country = country;
         this.address = address;
         this.website = website;
-        this.summary = summary;
     }
 
+    //Mongo
     public Companies(String symbol, String name, String stockexchange, String sector, String mostProfitablePeriod, List<Summary> summary) {
         this.symbol = symbol;
         this.name = name;
@@ -51,6 +52,23 @@ public class Companies {
         this.name = name;
         this.exchange = stockexchange;
         this.sector = sector;
+    }
+
+    public Companies(Companies c1, Companies c2) {
+        symbol =  c1.symbol;
+        name =  c1.name;
+        exchange =  c1.exchange;
+        sector =  c1.sector;
+        fullTimesemployees =  c1.fullTimesemployees;
+        description =  c1.description;
+        city =  c1.city;
+        phone =  c1.phone;
+        state =  c1.state;
+        country =  c1.country;
+        address =  c1.address;
+        website =  c1.website;
+        mostProfitablePeriod = c2.mostProfitablePeriod;
+        summary = c2.summary;
     }
 
     public Companies() {
@@ -175,9 +193,28 @@ public class Companies {
                 ", name='" + name + '\'' +
                 ", exchange='" + exchange + '\'' +
                 ", sector='" + sector + '\'' +
+                ", fullTimesemployees=" + fullTimesemployees +
+                ", description='" + description + '\'' +
+                ", city='" + city + '\'' +
+                ", phone='" + phone + '\'' +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", address='" + address + '\'' +
+                ", website='" + website + '\'' +
                 ", mostProfitablePeriod='" + mostProfitablePeriod + '\'' +
                 ", summary=" + summary.toString() +
-                '}';
+                "} \n";
+    }
+
+    public String toString3() {
+        return "Companies{" +
+                "symbol='" + symbol + '\'' +
+                ", name='" + name + '\'' +
+                ", exchange='" + exchange + '\'' +
+                ", sector='" + sector + '\'' +
+                ", mostProfitablePeriod='" + mostProfitablePeriod + '\'' +
+                ", summary=" + summary.toString() +
+                "} \n";
     }
 
     public String toString2() {
@@ -194,6 +231,6 @@ public class Companies {
                 ", country='" + country + '\'' +
                 ", address='" + address + '\'' +
                 ", website='" + website + '\'' +
-                '}';
+                "} \n";
     }
 }

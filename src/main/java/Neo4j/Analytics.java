@@ -79,7 +79,7 @@ public class Analytics extends Neo4jDatabaseAccess{
                             v.get("sector").asString(), v.get("fullTimesEmployees").asInt(),
                             v.get("description").asString(), v.get("city").asString(),
                             v.get("phone").asString(), v.get("state").asString(), v.get("country").asString(), v.get("address").asString(),
-                            v.get("website").asString(), null );
+                            v.get("website").asString());
                     symbol.add(c1);
                 }
                 return symbol;

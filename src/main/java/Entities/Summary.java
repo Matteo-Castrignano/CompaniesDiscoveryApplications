@@ -121,16 +121,16 @@ public class Summary {
     @Override
     public String toString() {
         return "{" +
-                "date='" + date + '\'' +
+                "date='" + date +
                 ", marketCap=" + marketCap +
                 ", peRatio=" + peRatio +
                 ", EPS=" + EPS +
-                ", dividend='" + dividend + '\'' +
+                ", dividend='" + dividend +
                 ", targetPrice=" + targetPrice +
                 ", open=" + open +
                 ", close=" + close +
                 ", avgVolume=" + avgVolume +
                 ", volume=" + volume +
-                '}';
+                "} \n";
     }
 }

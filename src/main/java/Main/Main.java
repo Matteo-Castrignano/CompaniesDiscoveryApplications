@@ -1,6 +1,7 @@
 package Main;
 
 import Entities.*;
+import Neo4j.CrudOperation;
 import org.neo4j.driver.exceptions.NoSuchRecordException;
 
 import java.util.List;
@@ -248,7 +249,10 @@ public class Main {
                 case 8:
                 {
                     System.out.println("Insert the symbol of the company to follow");
-                    username = input.nextLine();
+                    symbol = input.nextLine();
+                    Companies c = new Companies(readCompanyInfo_bySymbol(symbol), readCompany_bySymbol(symbol));
+
+                    System.out.println(c.toString());
 
                     break;
                 }

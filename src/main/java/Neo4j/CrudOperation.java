@@ -273,7 +273,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         }
     }
 
-    public static Companies readCompany_bySymbol(String symbol)//OK
+    public static Companies readCompanyInfo_bySymbol(String symbol)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -285,10 +285,9 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                 Companies c1 = new Companies( v.get("symbol").asString(), v.get("name").asString(), v.get("exchange").asString(),
                         v.get("sector").asString(), v.get("fullTimesEmployees").asInt(), v.get("description").asString(), v.get("city").asString(),
                         v.get("phone").asString(), v.get("state").asString(), v.get("country").asString(), v.get("address").asString(),
-                        v.get("website").asString(), null );
+                        v.get("website").asString());
                 return c1;
             });
-            System.out.println(c.toString2());
             return c;
         }
     }
