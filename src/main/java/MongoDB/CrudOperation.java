@@ -263,7 +263,7 @@ public class CrudOperation extends MongoDatabaseAccess{
 
     public static void main(String[] args)
     {
-        openConnection();
+        //openConnection();
 
         //Companies c = new Companies("PROVA","Pippo","NYS","info");
         //System.out.println("Esito inserimento " + createCompany(c));
@@ -309,6 +309,6 @@ public class CrudOperation extends MongoDatabaseAccess{
 
         //r = readReports_byUsername("ennio");
         //System.out.println(r.toString());
-        closeConnection();
+        //closeConnection();
     }
 }

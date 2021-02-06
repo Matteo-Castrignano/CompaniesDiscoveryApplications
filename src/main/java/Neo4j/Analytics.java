@@ -12,7 +12,7 @@ public class Analytics extends Neo4jDatabaseAccess{
 
 
     //Analytics1
-    private static List<Integer> userFollowing(String username)//OK
+    public static List<Integer> userFollowing(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -37,7 +37,7 @@ public class Analytics extends Neo4jDatabaseAccess{
 
 
     //Analytics2
-    private static List<String> suggestedCompany(String username)//OK
+    public static List<String> suggestedCompany(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -61,7 +61,7 @@ public class Analytics extends Neo4jDatabaseAccess{
 
 
     //Analytics3
-    private static List<Companies> listFollowedCompany(String username)//OK
+    public static List<Companies> listFollowedCompany(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -91,7 +91,7 @@ public class Analytics extends Neo4jDatabaseAccess{
 
 
     //Analytics4
-    private static List<String> listFollowedUser(String username)//OK
+    public static List<String> listFollowedUser(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -112,7 +112,7 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
-    private static List<String> listFollowedProfessionalUser(String username)//OK
+    public static List<String> listFollowedProfessionalUser(String username)//OK
     {
         try ( Session session = driver.session() )
         {
@@ -136,6 +136,7 @@ public class Analytics extends Neo4jDatabaseAccess{
 
     public static void main(String[] args) throws Exception
     {
+        /*
         initDriver();
         //System.out.println(userFollowing("cristina23").toString());
         //System.out.println(suggestedCompany("aylin32").toString());
@@ -145,5 +146,6 @@ public class Analytics extends Neo4jDatabaseAccess{
              System.out.println( c1.toString2());
         //System.out.println(listFollowedProfessionalUser("cristina23").toString());
         close();
+       */
     }
 }

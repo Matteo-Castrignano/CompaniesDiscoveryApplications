@@ -17,7 +17,7 @@ import static com.mongodb.client.model.Sorts.*;
 public class Analytics extends MongoDatabaseAccess{
 
     public static void main(String[] args) {
-        openConnection();
+        /*openConnection();
 
         System.out.println("Insert cap");
         Scanner input = new Scanner(System.in);
@@ -32,7 +32,7 @@ public class Analytics extends MongoDatabaseAccess{
 
         Analytics3(i);
 
-        closeConnection();
+        closeConnection();*/
     }
 
     private static Consumer<Document> printDocuments() {

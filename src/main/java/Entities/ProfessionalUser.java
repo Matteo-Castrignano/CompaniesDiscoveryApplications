@@ -17,6 +17,9 @@ public class ProfessionalUser extends User {
         type_user = 1;
     }
 
+    public ProfessionalUser() {
+    }
+
     public String getProfession() {
             return profession;
         }

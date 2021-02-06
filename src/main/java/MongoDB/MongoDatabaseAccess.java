@@ -17,7 +17,7 @@ public class MongoDatabaseAccess {
     public static void openConnection()
     {
         mongoClient = MongoClients.create("mongodb://172.16.3.150:27020,172.16.3.121:27020,172.16.3.119:27020/"
-                + "?retryWrites=true&w=majority&readPreference=secondary&timeout=10000");
+                + "?retryWrites=true&w=majority&readPreference=secondary&wtimeout=10000");
 
         database = mongoClient.getDatabase("CompaniesApplication");
 
