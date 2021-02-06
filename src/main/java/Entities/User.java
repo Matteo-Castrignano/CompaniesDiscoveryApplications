@@ -119,4 +119,11 @@ public class User {
                 ", type_user=" + type_user +
                 '}';
     }
+
+    public String toString1() {
+        return  "username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", country='" + country + '\'';
+    }
 }

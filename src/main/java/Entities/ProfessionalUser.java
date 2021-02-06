@@ -47,10 +47,9 @@ public class ProfessionalUser extends User {
 
     @Override
     public String toString() {
-        return "ProfessionalUser{" + super.toString() +
-                "profession='" + profession + '\'' +
+        return  super.toString1() +
+                ", profession='" + profession + '\'' +
                 ", specializationSector=" + specializationSector +
-                ", averageRating=" + averageRating +
-                '}';
+                ", averageRating=" + averageRating;
     }
 }

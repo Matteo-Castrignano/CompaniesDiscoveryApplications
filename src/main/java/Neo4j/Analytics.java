@@ -30,7 +30,6 @@ public class Analytics extends Neo4jDatabaseAccess{
 
                 return number;
             });
-            //System.out.println("NumberFollowerUser: " + n_follower.get(0) + " NumberFollowerCompany: " + n_follower.get(1));
             return n_follower;
         }
     }
@@ -54,7 +53,6 @@ public class Analytics extends Neo4jDatabaseAccess{
 
                 return symbol;
             });
-            //System.out.println("Suggested Company: " + symbol_list);
             return symbol_list;
         }
     }
@@ -84,7 +82,6 @@ public class Analytics extends Neo4jDatabaseAccess{
                 }
                 return symbol;
             });
-            //System.out.println("List followed company: " + symbol_list);
             return symbol_list;
         }
     }
@@ -107,7 +104,6 @@ public class Analytics extends Neo4jDatabaseAccess{
 
                 return user;
             });
-            //System.out.println("List user followed: " + user_list);
             return  user_list;
         }
     }
@@ -128,7 +124,6 @@ public class Analytics extends Neo4jDatabaseAccess{
 
                 return user;
             });
-            //System.out.println("List user followed: " + user_list);
             return  user_list;
         }
     }

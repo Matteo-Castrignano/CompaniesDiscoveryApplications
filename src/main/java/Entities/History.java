@@ -89,7 +89,7 @@ public class History {
 
     @Override
     public String toString() {
-        return "History{" +
+        return "{" +
                 "symbol='" + symbol + '\'' +
                 ", dateHistory='" + dateHistory + '\'' +
                 ", open=" + open +
@@ -98,6 +98,6 @@ public class History {
                 ", volume=" + volume +
                 ", high=" + high +
                 ", low=" + low +
-                '}';
+                "}\n";
     }
 }

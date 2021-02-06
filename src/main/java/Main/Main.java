@@ -22,28 +22,29 @@ public class Main {
 
         while (result)
         {
-            System.out.print("Insert Username:");
+            System.out.print("Insert Username: ");
             username = input.nextLine();
-            System.out.print("Insert Password:");
+            System.out.print("Insert Password: ");
             password = input.nextLine();
 
-            user = new User();
-            profUser = new ProfessionalUser();
-            
             try{
                 user = readUser_byUsername(username);
             } catch (NoSuchRecordException e) {}
+
+            if (user != null)
+                if(user.getPassword().equals(password))
+                    return;
 
             try{
                 profUser = readProfessionalUser_byUsername(username);
             } catch (NoSuchRecordException e) {}
 
-            if ( user.getUsername() == null && profUser.getUsername() == null)
+            if (profUser != null)
+                if(profUser.getPassword().equals(password))
+                    return;
+
+            if (user  == null && profUser == null)
                 System.out.println("User not find");
-            else if ( user.getUsername().equals(password) )
-                return;
-            else if ( profUser.getUsername().equals(password) )
-                return;
             else
                 System.out.println("Wrong password");
         }
@@ -132,9 +133,9 @@ public class Main {
 
         do {
 
-            System.out.print("Choose operation: \n");
-            System.out.print("1. Login");
-            System.out.print("2. Sing In");
+            System.out.print("\nChoose operation: \n");
+            System.out.print("1. Login\n");
+            System.out.print("2. Sing In\n");
 
             menuItem = in.nextInt();
 
@@ -150,8 +151,11 @@ public class Main {
                     else
                         profUserMenu();
 
+                    break;
+
                 case 2:
                     singIn();
+                    break;
 
                 default:
                     System.out.println("Invalid choice");
@@ -170,10 +174,10 @@ public class Main {
 
         String username, symbol, start, end;
         boolean quit = false;
-        int menuItem;
+        int item;
 
         do {
-            System.out.print("Choose operation: \n");
+            System.out.print("\nChoose operation: \n");
             System.out.println("1. Find a user");
             System.out.println("2. Follow a new user");
             System.out.println("3. Unfollow a user");
@@ -192,9 +196,9 @@ public class Main {
             System.out.println("16. Get suggests companies");
             System.out.println("0. Exit");
 
-            menuItem = in.nextInt();
+            item = in.nextInt();
 
-            switch (menuItem) {
+            switch (item) {
 
                 case 1:
                 {
@@ -206,10 +210,22 @@ public class Main {
                         u1 = readUser_byUsername(username);
                     } catch (NoSuchRecordException e) {}
 
-                    if ( u1.getUsername() == null )
+                    if ( u1.getUsername() == null ) {
                         System.out.println("User not find");
-                    else
-                        System.out.println(u1.toString());
+                        break;
+                    }
+
+                    System.out.println(u1.toString1()+"\n");
+
+                    List <Companies> l2 = listFollowedCompany(username);
+                    System.out.println("\nList followed companies:\n");
+                    for(Companies l: l2)
+                        System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
+
+                    List <String> l3 = listFollowedUser(username);
+                    System.out.println("\nUsername list of followed user:\n");
+                    for(String l: l3)
+                        System.out.println(l);
 
                     break;
                 }
@@ -249,16 +265,21 @@ public class Main {
                     System.out.println("Insert username");
                     username = input.nextLine();
 
-                    User u1 = new User();
+                    ProfessionalUser pu = new ProfessionalUser();
                     try {
-                        u1 = readProfessionalUser_byUsername(username);
+                        pu = readProfessionalUser_byUsername(username);
                     } catch (NoSuchRecordException e) {
                     }
 
-                    if (u1.getUsername() == null)
-                        System.out.println("Professiona user not find");
-                    else
-                        System.out.println(u1.toString());
+                    if (pu.getUsername() == null)
+                        System.out.println("Professional user not find");
+
+                    System.out.println(pu.toString()+"\n");
+
+                    List <Companies> l2 = listFollowedCompany(username);
+                    System.out.println("\nList followed companies:\n");
+                    for(Companies l: l2)
+                        System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
 
                     break;
                 }
@@ -288,7 +309,7 @@ public class Main {
                         System.out.println("Insert the vote from 1 to 5");
                         vote = input.nextInt();
 
-                    } while(vote < 6 && vote > 0);
+                    } while(vote > 5 && vote < 1);
 
                     try{
                         rate_ProfessionalUser(user.getUsername(), username, vote);
@@ -431,24 +452,29 @@ public class Main {
                     for(String l: l4)
                         System.out.println(l);
 
+                    break;
                 }
 
                 case 16:
                 {
                     List <String> s1 = suggestedCompany(user.getUsername());
                     System.out.println( s1.toString());
-                    break;
+                    for(String s:s1)
+                        System.out.println(s);
 
+                    break;
                 }
 
                 case 0:
                 {
+                    user = null;
+                    profUser = null;
                     quit = true;
                     break;
                 }
 
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("Invalid choice");
             }
 
         } while (!quit);

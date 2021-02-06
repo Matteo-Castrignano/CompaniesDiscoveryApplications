@@ -119,8 +119,9 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH(u1:User {username:$username})-[f:FOLLOW]->(p:Professional_User {username:$username_pf})" +
-                                "MATCH(u1:User {username:$username})-[r:RATE]->(p:Professional_User {username:$username_pf}) DELETE f,r",
+                tx.run( "MATCH(u1:User {username:$username})-[f:FOLLOW]->(p:Professional_User {username:$username_pf}) DELETE f",
+                        parameters("username", username, "username_pf", username_pf ));
+                tx.run( "MATCH(u1:User {username:$username})-[r:RATE]->(p:Professional_User {username:$username_pf}) DELETE r",
                         parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
@@ -321,8 +322,8 @@ public class CrudOperation extends Neo4jDatabaseAccess{
 
     public static void main(String[] args) throws Exception
     {
-        /*initDriver();
-        User u1 = new User();
+        initDriver();
+        /*User u1 = new User();
         try{
             //User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
             //addUser(u);
@@ -340,16 +341,18 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         }
         if ( u1.getPassword() == null )
             System.out.println("ciao");
-        System.out.println("fatto");
+        System.out.println("fatto");*/
 
+        //ProfessionalUser p = new ProfessionalUser("Giancarlo","Giancarlo","Giancarlo","Giancarlo","Giancarlo", 'M',"Giancarlo","Giancarlo","Giancarlo","Giancarlo",0);
+        //addProfessionlUser(p);
         //addUser_toFollow("prova", "cum3");
         //followCompany_byUser("prova","AAPL");
-        //followProfessionalUser_byUser("prova","ad3");
+        //followProfessionalUser_byUser("jordy39","Giancarlo");
         //rate_ProfessionalUser("cristina23", "Giancarlo", 4);
         //rate_ProfessionalUser("prova", "Giancarlo", 2);
         //unfollow_User("prova","cum3");
         //unfollowCompany_byUser("prova","AAPL");
-        //unfollowProfessionalUser_byUser("prova","ad3");
+        //unfollowProfessionalUser_byUser("jordy39","Giancarlo");
 
 
 
@@ -364,7 +367,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         //deleteCompany_bySymbol("PROVA");
 
         //addAdmin("prova");
-        close();*/
+        close();
 
     }
 }
