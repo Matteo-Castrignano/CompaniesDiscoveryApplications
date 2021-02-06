@@ -1,15 +1,13 @@
 package Main;
 
 import Entities.*;
-import Neo4j.CrudOperation;
-import org.neo4j.driver.exceptions.NoSuchRecordException;
-
-import java.util.List;
-import java.util.Scanner;
 import static MongoDB.CrudOperation.*;
 import static Neo4j.Analytics.*;
 import static Neo4j.CrudOperation.*;
 
+import org.neo4j.driver.exceptions.NoSuchRecordException;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     
@@ -53,6 +51,77 @@ public class Main {
 
     private void singIn()
     {
+        String username, password, name, surname, date, email, country, profession, specializationSector;
+        char gender;
+        int type_user;
+        User u;
+        ProfessionalUser pu;
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Insert Name:");
+        name = input.nextLine();
+        System.out.print("Insert Surname:");
+        surname = input.nextLine();
+        System.out.print("Insert date of birth:");
+        date = input.nextLine();
+        System.out.print("Insert gender M or F:");
+        gender = input.next().charAt(0);
+        System.out.print("Insert Email:");
+        email = input.nextLine();
+        System.out.print("Insert Country:");
+        country = input.nextLine();
+
+        do {
+            System.out.print("Insert Username:");
+            username = input.nextLine();
+
+            try{
+                user = readUser_byUsername(username);
+            } catch (NoSuchRecordException e) {}
+
+            try{
+                profUser = readProfessionalUser_byUsername(username);
+            } catch (NoSuchRecordException e) {}
+
+            if ( user.getUsername() == null && profUser.getUsername() == null)
+                break;
+
+            System.out.println("Username already exist");
+
+        } while(true);
+
+
+        System.out.print("Insert Password:");
+        password = input.nextLine();
+
+        do {
+            System.out.print("Insert type of user:");
+            System.out.print("1. Professional User");
+            System.out.print("2. User");
+            type_user = input.nextInt();
+
+            if(type_user == 2 )
+            {
+                u = new User(username, password, name, surname, date, gender, email, country);
+                addUser(u);
+                break;
+            }
+            else if (type_user == 2)
+            {
+                System.out.print("Insert Profession:");
+                profession = input.nextLine();
+                System.out.print("Insert specialization sector:");
+                specializationSector = input.nextLine();
+
+                pu = new ProfessionalUser(username, password, name, surname, date, gender, email, country, profession, specializationSector, 0);
+                addProfessionlUser(pu);
+                break;
+            }
+            else
+                System.out.print("Error insert");
+
+        } while(true);
+
         return;
     }
 
