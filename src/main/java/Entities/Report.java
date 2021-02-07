@@ -82,14 +82,14 @@ public class Report {
 
     @Override
     public String toString() {
-        return "Report{" +
-                "dateReport='" + dateReport + '\'' +
-                ", typeReport='" + typeReport + '\'' +
-                ", analizedValues='" + analizedValues + '\'' +
-                ", details='" + details + '\'' +
+        return  "\n" + "title='" + title + '\'' +
                 ", symbol='" + symbol + '\'' +
                 ", username='" + username + '\'' +
-                ", title='" + title + '\'' +
-                '}';
+                ", dateReport='" + dateReport + '\'' +
+                ", typeReport='" + typeReport + '\'' +
+                ", analizedValues='" + analizedValues + '\'' +
+                ", details='" + details + '\'';
+
+
     }
 }

@@ -120,8 +120,7 @@ public class Summary {
 
     @Override
     public String toString() {
-        return "{" +
-                "date='" + date +
+        return  "\ndate=" + date +
                 ", marketCap=" + marketCap +
                 ", peRatio=" + peRatio +
                 ", EPS=" + EPS +
@@ -130,7 +129,6 @@ public class Summary {
                 ", open=" + open +
                 ", close=" + close +
                 ", avgVolume=" + avgVolume +
-                ", volume=" + volume +
-                "} \n";
+                ", volume=" + volume;
     }
 }

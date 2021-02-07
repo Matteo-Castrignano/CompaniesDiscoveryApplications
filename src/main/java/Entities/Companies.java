@@ -188,8 +188,7 @@ public class Companies {
 
     @Override
     public String toString() {
-        return "Companies{" +
-                "symbol='" + symbol + '\'' +
+        return  "symbol='" + symbol + '\'' +
                 ", name='" + name + '\'' +
                 ", exchange='" + exchange + '\'' +
                 ", sector='" + sector + '\'' +
@@ -202,8 +201,7 @@ public class Companies {
                 ", address='" + address + '\'' +
                 ", website='" + website + '\'' +
                 ", mostProfitablePeriod='" + mostProfitablePeriod + '\'' +
-                ", summary=" + summary.toString() +
-                "} \n";
+                ",\nsummary=" + summary.toString();
     }
 
     public String toString3() {

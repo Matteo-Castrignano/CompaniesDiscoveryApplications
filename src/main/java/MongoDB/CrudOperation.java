@@ -64,7 +64,7 @@ public class CrudOperation extends MongoDatabaseAccess{
                         s.setPeRatio(a.getJSONObject(j).getFloat("PE_Ratio"));
                         s.setEPS(a.getJSONObject(j).getFloat("EPS"));
                         s.setDividend(a.getJSONObject(j).getString("Dividend"));
-                        s.setTargetPrice(a.getJSONObject(j).getFloat("Target_prize"));
+                        s.setTargetPrice(a.getJSONObject(j).getFloat("Target_price"));
 
                         summaries.add(s);
                     }
@@ -201,13 +201,13 @@ public class CrudOperation extends MongoDatabaseAccess{
                 .append("AnalizedValue", r.getAnalizedValues())
                 .append("Text", r.getDetails());
 
-        collectionHistory.insertOne(doc);
+        collectionReport.insertOne(doc);
         return true;
     }
 
     public static List<Report> readReports_bySymbol(String symbol)//OK
     {
-        FindIterable<Document> iterable = collectionHistory.find(eq("Symbol", symbol));
+        FindIterable<Document> iterable = collectionReport.find(eq("Symbol", symbol));
         MongoCursor<Document> cursor = iterable.iterator();
         List<Report> reportsList = new ArrayList<>();
         Report r;
@@ -228,7 +228,7 @@ public class CrudOperation extends MongoDatabaseAccess{
 
     public static List<Report> readReports_byUsername(String username)//OK
     {
-        FindIterable<Document> iterable = collectionHistory.find(eq("Username", username));
+        FindIterable<Document> iterable = collectionReport.find(eq("Username", username));
         MongoCursor<Document> cursor = iterable.iterator();
         List<Report> reportsList = new ArrayList<>();
         Report r;
@@ -249,14 +249,14 @@ public class CrudOperation extends MongoDatabaseAccess{
 
     public static long updateReport_Text_byTitle(String title, String text)//OK
     {
-        UpdateResult updateResult = collectionHistory.updateMany(eq("Title", title), set("Text", text));
+        UpdateResult updateResult = collectionReport.updateMany(eq("Title", title), set("Text", text));
         return updateResult.getModifiedCount();
 
     }
 
     public static long deleteRepert_byTitle(String title)//OK
     {
-        DeleteResult deleteResult = collectionHistory.deleteMany(eq("Title", title));
+        DeleteResult deleteResult = collectionReport.deleteMany(eq("Title", title));
         return deleteResult.getDeletedCount();
     }
 
@@ -302,7 +302,7 @@ public class CrudOperation extends MongoDatabaseAccess{
 
         //System.out.println("Esisto update report" + updateReport_Text_byTitle("prova","è sempre infiammato"));
 
-        //r = readReports_bySymbol("PROVA");
+        //List<Report> r = readReports_bySymbol("AZN");
         //System.out.println(r.toString());
 
         //System.out.println("Esisto delete report" + deleteRepert_byTitle("prova"));

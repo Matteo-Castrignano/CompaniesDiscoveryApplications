@@ -338,7 +338,7 @@ public class Main {
 
                 case 8:
                 {
-                    System.out.println("Insert the symbol of the company to follow");
+                    System.out.println("Insert the symbol of the company");
                     symbol = input.nextLine();
                     Companies c = new Companies(readCompanyInfo_bySymbol(symbol), readCompany_bySymbol(symbol));
 
@@ -416,7 +416,11 @@ public class Main {
                     symbol = input.nextLine();
 
                     List<Report> r = readReports_bySymbol(symbol);
-                    System.out.println(r.toString());
+
+                    if(r.isEmpty())
+                        System.out.println("Company don't find");
+                    else
+                        System.out.println(r.toString());
 
                     break;
                 }
@@ -427,7 +431,11 @@ public class Main {
                     username = input.nextLine();
 
                     List<Report> r = readReports_byUsername(username);
-                    System.out.println(r.toString());
+
+                    if(r.isEmpty())
+                        System.out.println("Professional user don't find");
+                    else
+                        System.out.println(r.toString());
 
                     break;
                 }
