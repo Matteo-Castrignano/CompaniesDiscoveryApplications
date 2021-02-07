@@ -247,9 +247,9 @@ public class CrudOperation extends MongoDatabaseAccess{
         return reportsList;
     }
 
-    public static long updateReport_Text_byTitle(String title, String text)//OK
+    public static long updateReport_Text_byTitle(String username, String title, String text)//OK
     {
-        UpdateResult updateResult = collectionReport.updateMany(eq("Title", title), set("Text", text));
+        UpdateResult updateResult = collectionReport.updateMany(and(eq("Title", title),eq("Username", username)), set("Text", text));
         return updateResult.getModifiedCount();
 
     }

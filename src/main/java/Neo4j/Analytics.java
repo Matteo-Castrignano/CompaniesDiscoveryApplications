@@ -34,6 +34,28 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
+    public static List<Integer> professiaonalUserFollow(String username)//OK
+    {
+        try ( Session session = driver.session() )
+        {
+            List<Integer> n_follower = session.readTransaction((TransactionWork<List<Integer>>) tx -> {
+                Result result = tx.run( "MATCH (u1:User)-[:FOLLOW]->(u2:Professional_User),(u2:Professional_User)-[:WATCHLIST]-(c1:Company)" +
+                                "WHERE u2.username = $username RETURN count(DISTINCT u2) as NumberFollower, count(DISTINCT c1) as NumberFollowerCompany",
+                        parameters( "username", username) );
+
+                ArrayList<Integer> number = new ArrayList<>();
+                if(result.hasNext()){
+                    Record r = result.next();
+                    number.add(r.get("NumberFollower").asInt());
+                    number.add(r.get("NumberFollowerCompany").asInt());
+                }
+
+                return number;
+            });
+            return n_follower;
+        }
+    }
+
 
     //Analytics2
     public static List<String> suggestedCompany(String username)//OK
@@ -65,6 +87,33 @@ public class Analytics extends Neo4jDatabaseAccess{
         {
             List<Companies> symbol_list = session.readTransaction((TransactionWork<List<Companies>>) tx -> {
                 Result result = tx.run( "MATCH (u1:User)-[:WATCHLIST]-(c1:Company) WHERE u1.username = $username RETURN c1",
+                        parameters( "username", username) );
+
+                ArrayList<Companies> symbol = new ArrayList<>();
+                while(result.hasNext()){
+                    Record r = result.next();
+
+                    Value v = r.get(0);
+
+                    Companies c1 = new Companies( v.get("symbol").asString(), v.get("name").asString(), v.get("exchange").asString(),
+                            v.get("sector").asString(), v.get("fullTimesEmployees").asInt(),
+                            v.get("description").asString(), v.get("city").asString(),
+                            v.get("phone").asString(), v.get("state").asString(), v.get("country").asString(), v.get("address").asString(),
+                            v.get("website").asString());
+                    symbol.add(c1);
+                }
+                return symbol;
+            });
+            return symbol_list;
+        }
+    }
+
+    public static List<Companies> listFollowedCompany_byProfessionalUser(String username)//OK
+    {
+        try ( Session session = driver.session() )
+        {
+            List<Companies> symbol_list = session.readTransaction((TransactionWork<List<Companies>>) tx -> {
+                Result result = tx.run( "MATCH (u1:Professional_User)-[:WATCHLIST]-(c1:Company) WHERE u1.username = $username RETURN c1",
                         parameters( "username", username) );
 
                 ArrayList<Companies> symbol = new ArrayList<>();
