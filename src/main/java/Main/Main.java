@@ -2,12 +2,16 @@ package Main;
 
 import Entities.*;
 import static MongoDB.CrudOperation.*;
+import static MongoDB.UpdateEntites.*;
 import static MongoDB.Analytics.*;
 import static Neo4j.Analytics.*;
 import static Neo4j.CrudOperation.*;
 
 import org.neo4j.driver.exceptions.NoSuchRecordException;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -125,7 +129,7 @@ public class Main {
 
     }
 
-    public void init() {
+    public void init() throws IOException {
         Scanner in = new Scanner(System.in);
         boolean quit = false;
         int menuItem;
@@ -754,7 +758,9 @@ public class Main {
 
                 case 12:
                 {
-                    Analytics1();
+                    System.out.println("Insert averange volume");
+                    float v = input.nextFloat();
+                    Analytics2(v);
                     break;
                 }
 
@@ -798,57 +804,58 @@ public class Main {
 
     }
 
-    private void adminMenu() {
+    private void adminMenu() throws IOException {
 
         Scanner in = new Scanner(System.in);
         Scanner input = new Scanner(System.in);
 
         String username, symbol, start, end;
-        String title, dateReport, typeReport, analizedValues, details;
         boolean quit = false;
         int item;
 
         do {
-            /*System.out.print("\nChoose operation: \n");
+            System.out.print("\nChoose operation: \n");
             System.out.println("1. Find a user");
-            System.out.println("2. Find a professional user");
-            System.out.println("3. Read a company data");
-            System.out.println("4. Read all company history");
-            System.out.println("5. Read a company history by period");
-            System.out.println("6. Follow a new company");
-            System.out.println("7. Unfollow a company");
-            System.out.println("8. Create a new report");
-            System.out.println("9. Update a report");
-            System.out.println("10. Read all report of a company");
-            System.out.println("11. Read all report of a professional user");
-            System.out.println("12. Verify the interest of companies");
-            System.out.println("13. Most underrated companies");
-            System.out.println("14. Personal information");*/
-
-            System.out.println(". Delete user");
-            System.out.println(". Delete professional user");
-            System.out.println(". Add a new company");
-            System.out.println(". Delete a company");
-            System.out.println(". Update history");
-            System.out.println(". Update summary");
-            System.out.println(". Most profitable period");
+            System.out.println("2. Follow a new user");
+            System.out.println("3. Unfollow a user");
+            System.out.println("4. Delete user");
+            System.out.println("5. Find a professional user");
+            System.out.println("6. Delete professional user");
+            System.out.println("7. Follow a new professional user");
+            System.out.println("8. Rate a user");
+            System.out.println("9. Unfollow a professional user");
+            System.out.println("10. Read a company data");
+            System.out.println("11. Add a new company");
+            System.out.println("12. Delete a company");
+            System.out.println("13. Read all company history");
+            System.out.println("14. Read a company history by period");
+            System.out.println("15. Follow a new company");
+            System.out.println("16. Unfollow a company");
+            System.out.println("17. Read all report of a company");
+            System.out.println("18. Read all report of a professional user");
+            System.out.println("19. Most profitable period");
+            System.out.println("20. Verify the interest of companies");
+            System.out.println("21. Most underrated companies");
+            System.out.println("22. Update history");
+            System.out.println("23. Update summary");
+            System.out.println("24. Personal information");
+            System.out.println("25. Get suggests companies");
             System.out.println("0. Exit");
 
             item = in.nextInt();
 
-            /*switch (item) {
+            switch (item) {
 
                 case 1:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
 
-                    User u1 = new User();
+                    User u1;
+
                     try{
                         u1 = readUser_byUsername(username);
-                    } catch (NoSuchRecordException e) {}
-
-                    if ( u1.getUsername() == null ) {
+                    } catch (NoSuchRecordException e) {
                         System.out.println("User not find");
                         break;
                     }
@@ -869,6 +876,51 @@ public class Main {
                 }
 
                 case 2:
+                {
+                    System.out.println("Insert username of the user to follow");
+                    username = input.nextLine();
+
+                    try{
+                        addUser_toFollow(user.getUsername(), username);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("Error");
+                    }
+
+                    break;
+                }
+
+                case 3:
+                {
+                    System.out.println("Insert username of the user to unfollow");
+                    username = input.nextLine();
+
+                    try{
+                        unfollow_User(user.getUsername(), username);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("Error");
+                    }
+
+                    break;
+                }
+
+                case 4:
+                {
+                    System.out.println("Insert username");
+                    username = input.nextLine();
+
+                    try{
+                        deleteUser_byUsername(username);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("User not find");
+                    }
+
+                    break;
+                }
+
+                case 5:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -892,7 +944,74 @@ public class Main {
                     break;
                 }
 
-                case 3:
+                case 6:
+                {
+                    System.out.println("Insert username");
+                    username = input.nextLine();
+
+                    try{
+                        deleteProfessionalUser(username);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("User not find");
+                    }
+
+                    break;
+                }
+
+                case 7:
+                {
+                    System.out.println("Insert username of the professional user to follow");
+                    username = input.nextLine();
+
+                    try{
+                        followProfessionalUser_byUser(user.getUsername(), username);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("Error");
+                    }
+
+                    break;
+                }
+
+                case 8:
+                {
+                    int vote;
+                    System.out.println("Insert username of the professional user to follow");
+                    username = input.nextLine();
+
+                    do {
+                        System.out.println("Insert the vote from 1 to 5");
+                        vote = input.nextInt();
+
+                    } while(vote > 5 && vote < 1);
+
+                    try{
+                        rate_ProfessionalUser(user.getUsername(), username, vote);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("Error");
+                    }
+
+                    break;
+                }
+
+                case 9:
+                {
+                    System.out.println("Insert username of the professional user to unfollow");
+                    username = input.nextLine();
+
+                    try{
+                        unfollowProfessionalUser_byUser(user.getUsername(), username);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("Error");
+                    }
+
+                    break;
+                }
+
+                case 10:
                 {
                     System.out.println("Insert the symbol of the company");
                     symbol = input.nextLine();
@@ -906,7 +1025,67 @@ public class Main {
                     break;
                 }
 
-                case 4:
+                case 11:
+                {
+                    String name, exchange, sector, description, city, phone, state, country, address, website;
+                    int fullTimesemployees;
+
+                    System.out.print("Insert name:");
+                    name = input.nextLine();
+                    System.out.print("Insert symbol:");
+                    symbol = input.nextLine().toUpperCase();
+                    System.out.print("Insert exchange:");
+                    exchange = input.nextLine();
+                    System.out.print("Insert sector:");
+                    sector = input.nextLine();
+                    System.out.print("Insert description:");
+                    description = input.nextLine();
+                    System.out.print("Insert city:");
+                    city = input.nextLine();
+                    System.out.print("Insert phone:");
+                    phone = input.nextLine();
+                    System.out.print("Insert state:");
+                    state = input.nextLine();
+                    System.out.print("Insert country:");
+                    country = input.nextLine();
+                    System.out.print("Insert address:");
+                    address = input.nextLine();
+                    System.out.print("Insert website:");
+                    website = input.nextLine();
+                    System.out.print("Insert nuber of full time employees:");
+                    fullTimesemployees = input.nextInt();
+
+                    try{
+                        readCompanyInfo_bySymbol(symbol);
+                        System.out.println("Company already exist");
+
+                    } catch (NoSuchRecordException e) {
+                        addCompany( new Companies(symbol, name, exchange, sector, fullTimesemployees,
+                                description, city, phone, state, country, address, website));
+                        createCompany( new Companies(symbol, name, exchange, sector));
+                        System.out.println("Operation complete");
+                    }
+
+                    break;
+                }
+
+                case 12:
+                {
+                    System.out.println("Insert symbol");
+                    symbol = input.nextLine();
+
+                    try{
+                        deleteCompany_bySymbol(symbol);
+                        deleteCompany(symbol);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("User not find");
+                    }
+
+                    break;
+                }
+
+                case 13:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine();
@@ -921,7 +1100,7 @@ public class Main {
                     break;
                 }
 
-                case 5:
+                case 14:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine();
@@ -947,13 +1126,13 @@ public class Main {
                     break;
                 }
 
-                case 6:
+                case 15:
                 {
                     System.out.println("Insert the symbol of the company to follow");
                     username = input.nextLine();
 
                     try{
-                        followCompany_byProfessionalUser(user.getUsername(), username);
+                        followCompany_byUser(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Error");
@@ -962,13 +1141,13 @@ public class Main {
                     break;
                 }
 
-                case 7:
+                case 16:
                 {
                     System.out.println("Insert the symbol of the company to unfollow");
                     username = input.nextLine();
 
                     try{
-                        unfollowCompany_byProfessionalUser(user.getUsername(), username);
+                        unfollowCompany_byUser(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Error");
@@ -977,57 +1156,7 @@ public class Main {
                     break;
                 }
 
-                case 8:
-                {
-                    System.out.print("Insert title:");
-                    title = input.nextLine();
-
-                    do {
-                        System.out.print("Insert date of the report yyyy-mm-dd:");
-                        dateReport = input.nextLine();
-
-                        if(dateReport.matches("\\d{4}-\\d{2}-\\d{2}"))
-                            break;
-                        System.out.println("Error date format");
-
-                    } while(true);
-
-                    System.out.print("Insert type of report:");
-                    typeReport = input.nextLine();
-
-                    System.out.print("Insert the analized values:");
-                    analizedValues = input.next();
-
-                    System.out.print("Insert the company symbol to associate the report with:");
-                    symbol = input.nextLine();
-
-                    System.out.print("Insert the text:");
-                    details = input.nextLine();
-
-                    Report r = new Report(title, dateReport, typeReport, analizedValues, details, symbol, profUser.getUsername());
-
-                    createReport(r);
-
-                    break;
-                }
-
-                case 9:
-                {
-                    System.out.print("Insert title:");
-                    title = input.nextLine();
-
-                    System.out.print("Insert the text:");
-                    details = input.nextLine();
-
-                    if(updateReport_Text_byTitle(profUser.getUsername(),title, details) != 1)
-                        System.out.print("Error in the update");
-                    else
-                        System.out.print("Operation complete");
-
-                    break;
-                }
-
-                case 10:
+                case 17:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine();
@@ -1042,7 +1171,7 @@ public class Main {
                     break;
                 }
 
-                case 11:
+                case 18:
                 {
                     System.out.println("Insert username of a professional");
                     username = input.nextLine();
@@ -1057,13 +1186,21 @@ public class Main {
                     break;
                 }
 
-                case 12:
+                case 19:
                 {
                     Analytics1();
                     break;
                 }
 
-                case 13:
+                case 20:
+                {
+                    System.out.println("Insert averange volume");
+                    float v = input.nextFloat();
+                    Analytics2(v);
+                    break;
+                }
+
+                case 21:
                 {
                     System.out.println("Insert capitalization");
                     String s = input.nextLine();
@@ -1074,15 +1211,49 @@ public class Main {
                     break;
                 }
 
-                case 14:
+                case 22:
                 {
-                    List <Integer> l1 = professiaonalUserFollow(profUser.getUsername());
-                    System.out.println("NumberFollower: " + l1.get(0) + " NumberFollowerCompany: " + l1.get(1) + "\n");
+                    updateHistory();
+                    break;
+                }
 
-                    List <Companies> l2 = listFollowedCompany_byProfessionalUser(profUser.getUsername());
+                case 23:
+                {
+                    System.out.println("Insert filename");
+                    String s = input.nextLine();
+                    updateSummary(s);
+                    break;
+                }
+
+                case 24:
+                {
+                    List <Integer> l1 = userFollowing(user.getUsername());
+                    System.out.println("NumberFollowerUser: " + l1.get(0) + " NumberFollowerCompany: " + l1.get(1) + "\n");
+
+                    List <Companies> l2 = listFollowedCompany(user.getUsername());
                     System.out.println("\nList followed companies:\n");
                     for(Companies l: l2)
                         System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
+
+                    List <String> l3 = listFollowedUser(user.getUsername());
+                    System.out.println("\nUsername list of followed user:\n");
+                    for(String l: l3)
+                        System.out.println(l);
+
+                    List <String> l4 = listFollowedProfessionalUser(user.getUsername());
+                    System.out.println("\nUsername list of followed professional user:\n");
+                    for(String l: l4)
+                        System.out.println(l);
+
+                    break;
+                }
+
+                case 25:
+                {
+                    List <String> s1 = suggestedCompany(user.getUsername());
+                    System.out.println( s1.toString());
+                    for(String s:s1)
+                        System.out.println(s);
 
                     break;
                 }
@@ -1098,7 +1269,7 @@ public class Main {
                 default:
                     System.out.println("Invalid choice");
             }
-*/
+
         } while (!quit);
 
     }

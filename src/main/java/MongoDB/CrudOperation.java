@@ -105,7 +105,7 @@ public class CrudOperation extends MongoDatabaseAccess{
     }
 
 
-    public static long deleteCompany_bySymbol(String symbol) //OK
+    public static long deleteCompany(String symbol) //OK
     {
         DeleteResult deleteResult = collectionCompanies.deleteMany(eq("Symbol", symbol));
         return deleteResult.getDeletedCount();

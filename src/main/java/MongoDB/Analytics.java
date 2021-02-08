@@ -81,7 +81,7 @@ public class Analytics extends MongoDatabaseAccess{
 
         List<Document> results = collectionHistory.aggregate(Arrays.asList(group1, sort1, group2, sort2, addFields, sort3, group3, project1, merge1)).allowDiskUse(true).into(new ArrayList<>());
 
-        System.out.println("Most profitable");
+        System.out.println("Operation complete");
         //results.forEach(printFormattedDocuments());
     }
 
