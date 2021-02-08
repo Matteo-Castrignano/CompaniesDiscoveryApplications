@@ -1221,7 +1221,7 @@ public class Main {
 
                 case 20:
                 {
-                    System.out.println("Insert averange volume");
+                    System.out.println("Insert average volume");
                     float v = input.nextFloat();
                     Analytics2(v);
                     break;
