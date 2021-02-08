@@ -129,8 +129,12 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                         parameters("username", username, "username_pf", username_pf ));
                 return null;
             });
-            return true;
         }
+
+        if(UpdateRate_ProfessionalUser(username_pf))
+            return true;
+        else
+            return false;
     }
 
     public static boolean rate_ProfessionalUser(String username, String username_pf, int vote)//OK
@@ -265,7 +269,7 @@ public class CrudOperation extends Neo4jDatabaseAccess{
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "CREATE(c:Company{ symbol: $symbol, name: $name, exchange: $exchange, fullTimeEmployees: $fte, " +
+                tx.run( "CREATE(c:Company{ symbol: $symbol, name: $name, exchange: $exchange, fullTimesEmployees: $fte, " +
                                 "description: $description, city: $city, phone: $phone, state: $state, country: $country, " +
                                 "address: $address, website: $website, sector: $sector })",
                         parameters( "symbol", c.getSymbol(), "name", c.getName(), "exchange", c.getExchange(),

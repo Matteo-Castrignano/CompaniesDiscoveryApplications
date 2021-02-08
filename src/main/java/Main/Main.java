@@ -958,10 +958,11 @@ public class Main {
                     username = input.nextLine();
 
                     try{
+                        readProfessionalUser_byUsername(username);
                         deleteProfessionalUser(username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("User not find");
+                        System.out.println("Professional user not find");
                     }
 
                     break;
@@ -1009,7 +1010,7 @@ public class Main {
                     } catch (NoSuchRecordException e) {
                         System.out.println("Professional user don't found");
                     }
-
+                    input.nextLine();
                     break;
                 }
 
@@ -1019,10 +1020,11 @@ public class Main {
                     username = input.nextLine();
 
                     try{
+                        readProfessionalUser_byUsername(username);
                         unfollowProfessionalUser_byUser(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Error");
+                        System.out.println("Professional user don't found");
                     }
 
                     break;
@@ -1047,41 +1049,46 @@ public class Main {
                     String name, exchange, sector, description, city, phone, state, country, address, website;
                     int fullTimesemployees;
 
-                    System.out.print("Insert name:");
+                    System.out.println("Insert name:");
                     name = input.nextLine();
-                    System.out.print("Insert symbol:");
+                    System.out.println("Insert symbol:");
                     symbol = input.nextLine().toUpperCase();
-                    System.out.print("Insert exchange:");
+                    System.out.println("Insert exchange:");
                     exchange = input.nextLine();
-                    System.out.print("Insert sector:");
+                    System.out.println("Insert sector:");
                     sector = input.nextLine();
-                    System.out.print("Insert description:");
+                    System.out.println("Insert description:");
                     description = input.nextLine();
-                    System.out.print("Insert city:");
+                    System.out.println("Insert city:");
                     city = input.nextLine();
-                    System.out.print("Insert phone:");
+                    System.out.println("Insert phone:");
                     phone = input.nextLine();
-                    System.out.print("Insert state:");
+                    System.out.println("Insert state:");
                     state = input.nextLine();
-                    System.out.print("Insert country:");
+                    System.out.println("Insert country:");
                     country = input.nextLine();
-                    System.out.print("Insert address:");
+                    System.out.println("Insert address:");
                     address = input.nextLine();
-                    System.out.print("Insert website:");
+                    System.out.println("Insert website:");
                     website = input.nextLine();
-                    System.out.print("Insert nuber of full time employees:");
+                    System.out.println("Insert number of full time employees:");
                     fullTimesemployees = input.nextInt();
+                    input.nextLine();
+
+                    Companies c1 = new Companies(symbol, name, exchange, sector, fullTimesemployees, description, city, phone, state, country, address, website);
 
                     try{
                         readCompanyInfo_bySymbol(symbol);
                         System.out.println("Company already exist");
+                        break;
 
                     } catch (NoSuchRecordException e) {
-                        addCompany( new Companies(symbol, name, exchange, sector, fullTimesemployees,
-                                description, city, phone, state, country, address, website));
-                        createCompany( new Companies(symbol, name, exchange, sector));
+                        addCompany(c1);
+                        createCompany(c1);
                         System.out.println("Operation complete");
                     }
+
+
 
                     break;
                 }
@@ -1092,6 +1099,7 @@ public class Main {
                     symbol = input.nextLine();
 
                     try{
+                        readCompanyInfo_bySymbol(symbol);
                         deleteCompany_bySymbol(symbol);
                         deleteCompany(symbol);
                         System.out.println("Operation complete");
@@ -1146,10 +1154,11 @@ public class Main {
                 case 15:
                 {
                     System.out.println("Insert the symbol of the company to follow");
-                    username = input.nextLine();
+                    symbol = input.nextLine();
 
                     try{
-                        followCompany_byUser(user.getUsername(), username);
+                        readCompany_bySymbol(symbol);
+                        followCompany_byUser(user.getUsername(),symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Error");
@@ -1161,10 +1170,11 @@ public class Main {
                 case 16:
                 {
                     System.out.println("Insert the symbol of the company to unfollow");
-                    username = input.nextLine();
+                    symbol = input.nextLine();
 
                     try{
-                        unfollowCompany_byUser(user.getUsername(), username);
+                        readCompany_bySymbol(symbol);
+                        unfollowCompany_byUser(user.getUsername(),symbol);;
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Error");
