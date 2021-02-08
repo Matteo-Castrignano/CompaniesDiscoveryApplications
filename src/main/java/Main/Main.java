@@ -63,21 +63,30 @@ public class Main {
         ProfessionalUser pu;
         Scanner input = new Scanner(System.in);
 
-        System.out.print("Insert Name:");
+        System.out.println("Insert Name: ");
         name = input.nextLine();
-        System.out.print("Insert Surname:");
+        System.out.println("Insert Surname: ");
         surname = input.nextLine();
-        System.out.print("Insert date of birth:");
-        date = input.nextLine();
-        System.out.print("Insert gender M or F:");
-        gender = input.next().charAt(0);
-        System.out.print("Insert Email:");
+
+        do {
+            System.out.println("Insert date of birth yyyy-mm-dd: ");
+            date = input.nextLine();
+
+            if(date.matches("\\d{4}-\\d{2}-\\d{2}") && date.matches("\\d{4}-\\d{2}-\\d{2}"))
+                break;
+            System.out.println("Error date format ");
+
+        } while(true);
+
+        System.out.println("Insert gender M or F: ");
+        gender = input.nextLine().charAt(0);
+        System.out.println("Insert Email: ");
         email = input.nextLine();
-        System.out.print("Insert Country:");
+        System.out.println("Insert Country: ");
         country = input.nextLine();
 
         do {
-            System.out.print("Insert Username:");
+            System.out.print("Insert Username: ");
             username = input.nextLine();
 
             try{
@@ -88,21 +97,21 @@ public class Main {
                 profUser = readProfessionalUser_byUsername(username);
             } catch (NoSuchRecordException e) {}
 
-            if ( user.getUsername() == null && profUser.getUsername() == null)
+            if ( user == null && profUser == null)
                 break;
 
-            System.out.println("Username already exist");
+            System.out.println("Username already exist ");
 
         } while(true);
 
 
-        System.out.print("Insert Password:");
+        System.out.println("Insert Password: ");
         password = input.nextLine();
 
         do {
-            System.out.print("Insert type of user:");
-            System.out.print("1. Professional User");
-            System.out.print("2. User");
+            System.out.println("Insert type of user: ");
+            System.out.println("1. Professional User ");
+            System.out.println("2. User ");
             type_user = input.nextInt();
 
             if(type_user == 2 )
@@ -113,9 +122,10 @@ public class Main {
             }
             else if (type_user == 1)
             {
-                System.out.print("Insert Profession:");
+                input.nextLine();
+                System.out.println("Insert Profession: ");
                 profession = input.nextLine();
-                System.out.print("Insert specialization sector:");
+                System.out.println("Insert specialization sector:");
                 specializationSector = input.nextLine();
 
                 pu = new ProfessionalUser(username, password, name, surname, date, gender, email, country, profession, specializationSector, 0);
@@ -840,6 +850,7 @@ public class Main {
             System.out.println("23. Update summary");
             System.out.println("24. Personal information");
             System.out.println("25. Get suggests companies");
+            System.out.println("26. Add a new admin");
             System.out.println("0. Exit");
 
             item = in.nextInt();
@@ -1254,6 +1265,21 @@ public class Main {
                     System.out.println( s1.toString());
                     for(String s:s1)
                         System.out.println(s);
+
+                    break;
+                }
+
+                case 26:
+                {
+                    System.out.println("Insert username");
+                    username = input.nextLine();
+
+                    try{
+                        addAdmin(username);
+                        System.out.println("Operation complete");
+                    } catch (NoSuchRecordException e) {
+                        System.out.println("User not find");
+                    }
 
                     break;
                 }
