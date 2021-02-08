@@ -41,6 +41,10 @@ public class CrudOperation extends Neo4jDatabaseAccess{
                 User u2 = new User(v.get("username").asString(), v.get("password").asString(), v.get("name").asString(),
                         v.get("surname").asString(), v.get("birth_Date").asString(), v.get("gender").asString().charAt(0),
                         v.get("email").asString(), v.get("country").asString());
+
+               if(Integer.parseInt(v.get("type_user").asString()) == 0)
+                   u2.setType_user(0);
+
                 return u2;
             });
            //System.out.println(u.toString());

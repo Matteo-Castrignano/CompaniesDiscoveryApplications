@@ -10,8 +10,8 @@ import static Neo4j.CrudOperation.*;
 import org.neo4j.driver.exceptions.NoSuchRecordException;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -221,12 +221,11 @@ public class Main {
                     System.out.println("Insert username");
                     username = input.nextLine();
 
-                    User u1 = new User();
+                    User u1;
+
                     try{
                         u1 = readUser_byUsername(username);
-                    } catch (NoSuchRecordException e) {}
-
-                    if ( u1.getUsername() == null ) {
+                    } catch (NoSuchRecordException e) {
                         System.out.println("User not find");
                         break;
                     }
@@ -862,26 +861,24 @@ public class Main {
                     System.out.println("Insert username");
                     username = input.nextLine();
 
-                    User u1;
-
                     try{
-                        u1 = readUser_byUsername(username);
+                        User u1 = readUser_byUsername(username);
+                        System.out.println(u1.toString1()+"\n");
+
+                        List <Companies> l2 = listFollowedCompany(username);
+                        System.out.println("\nList followed companies:\n");
+                        for(Companies l: l2)
+                            System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
+
+                        List <String> l3 = listFollowedUser(username);
+                        System.out.println("\nUsername list of followed user:\n");
+                        for(String l: l3)
+                            System.out.println(l);
+
                     } catch (NoSuchRecordException e) {
                         System.out.println("User not find");
                         break;
                     }
-
-                    System.out.println(u1.toString1()+"\n");
-
-                    List <Companies> l2 = listFollowedCompany(username);
-                    System.out.println("\nList followed companies:\n");
-                    for(Companies l: l2)
-                        System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
-
-                    List <String> l3 = listFollowedUser(username);
-                    System.out.println("\nUsername list of followed user:\n");
-                    for(String l: l3)
-                        System.out.println(l);
 
                     break;
                 }
@@ -892,10 +889,11 @@ public class Main {
                     username = input.nextLine();
 
                     try{
+                        readUser_byUsername(username);
                         addUser_toFollow(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Error");
+                        System.out.println("User not found");
                     }
 
                     break;
@@ -907,10 +905,11 @@ public class Main {
                     username = input.nextLine();
 
                     try{
+                        readUser_byUsername(username);
                         unfollow_User(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Error");
+                        System.out.println("User not found");
                     }
 
                     break;
@@ -922,6 +921,7 @@ public class Main {
                     username = input.nextLine();
 
                     try{
+                        readUser_byUsername(username);
                         deleteUser_byUsername(username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
@@ -936,21 +936,18 @@ public class Main {
                     System.out.println("Insert username");
                     username = input.nextLine();
 
-                    ProfessionalUser pu = new ProfessionalUser();
                     try {
-                        pu = readProfessionalUser_byUsername(username);
+                        ProfessionalUser pu = readProfessionalUser_byUsername(username);
+                        System.out.println(pu.toString()+"\n");
+
+                        List <Companies> l2 = listFollowedCompany(username);
+                        System.out.println("\nList followed companies:\n");
+                        for(Companies l: l2)
+                            System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
+
                     } catch (NoSuchRecordException e) {
+                        System.out.println("Professional user don't found");
                     }
-
-                    if (pu.getUsername() == null)
-                        System.out.println("Professional user not find");
-
-                    System.out.println(pu.toString()+"\n");
-
-                    List <Companies> l2 = listFollowedCompany(username);
-                    System.out.println("\nList followed companies:\n");
-                    for(Companies l: l2)
-                        System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
 
                     break;
                 }
@@ -976,10 +973,11 @@ public class Main {
                     username = input.nextLine();
 
                     try{
+                        readProfessionalUser_byUsername(username);
                         followProfessionalUser_byUser(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Error");
+                        System.out.println("Professional user don't found");
                     }
 
                     break;
@@ -993,15 +991,23 @@ public class Main {
 
                     do {
                         System.out.println("Insert the vote from 1 to 5");
-                        vote = input.nextInt();
+                        try
+                        {
+                            vote = input.nextInt();
+                        }catch (InputMismatchException e)
+                        {
+                            vote = 0;
+                        }
+
 
                     } while(vote > 5 && vote < 1);
 
                     try{
+                        readProfessionalUser_byUsername(username);
                         rate_ProfessionalUser(user.getUsername(), username, vote);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Error");
+                        System.out.println("Professional user don't found");
                     }
 
                     break;
@@ -1262,7 +1268,7 @@ public class Main {
                 case 25:
                 {
                     List <String> s1 = suggestedCompany(user.getUsername());
-                    System.out.println( s1.toString());
+
                     for(String s:s1)
                         System.out.println(s);
 
@@ -1275,10 +1281,11 @@ public class Main {
                     username = input.nextLine();
 
                     try{
+                        readUser_byUsername(username);
                         addAdmin(username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("User not find");
+                        System.out.println("User not found");
                     }
 
                     break;
