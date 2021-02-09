@@ -367,7 +367,7 @@ public class Main {
                 case 9:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     List<History> h = readHistory_bySymbol(symbol);
 
@@ -408,7 +408,7 @@ public class Main {
                 case 11:
                 {
                     System.out.println("Insert the symbol of the company to follow");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     try{
                         readCompany_bySymbol(symbol);
@@ -423,11 +423,11 @@ public class Main {
                 case 12:
                 {
                     System.out.println("Insert the symbol of the company to unfollow");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     try{
                         readCompany_bySymbol(symbol);
-                        unfollowCompany_byUser(user.getUsername(),symbol);;
+                        unfollowCompany_byUser(user.getUsername(),symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Company don't found");
@@ -648,7 +648,7 @@ public class Main {
                 case 6:
                 {
                     System.out.println("Insert the symbol of the company to follow");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     try{
                         readCompany_bySymbol(symbol);
@@ -1075,7 +1075,7 @@ public class Main {
                 case 12:
                 {
                     System.out.println("Insert symbol");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     try{
                         readCompanyInfo_bySymbol(symbol);
@@ -1092,7 +1092,7 @@ public class Main {
                 case 13:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     List<History> h = readHistory_bySymbol(symbol);
 
@@ -1107,7 +1107,7 @@ public class Main {
                 case 14:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
                     do {
                         System.out.println("Insert the start date yyyy-mm-dd");
                         start = input.nextLine();
@@ -1133,7 +1133,7 @@ public class Main {
                 case 15:
                 {
                     System.out.println("Insert the symbol of the company to follow");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     try{
                         readCompany_bySymbol(symbol);
@@ -1148,11 +1148,11 @@ public class Main {
                 case 16:
                 {
                     System.out.println("Insert the symbol of the company to unfollow");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     try{
                         readCompany_bySymbol(symbol);
-                        unfollowCompany_byUser(user.getUsername(),symbol);;
+                        unfollowCompany_byUser(user.getUsername(),symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Company don't found");
