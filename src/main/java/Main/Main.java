@@ -10,6 +10,7 @@ import static Neo4j.CrudOperation.*;
 import org.neo4j.driver.exceptions.NoSuchRecordException;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -1096,7 +1097,7 @@ public class Main {
                 case 12:
                 {
                     System.out.println("Insert symbol");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
 
                     try{
                         readCompanyInfo_bySymbol(symbol);
@@ -1113,7 +1114,7 @@ public class Main {
                 case 13:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
 
                     List<History> h = readHistory_bySymbol(symbol);
 
@@ -1128,7 +1129,7 @@ public class Main {
                 case 14:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
                     do {
                         System.out.println("Insert the start date yyyy-mm-dd");
                         start = input.nextLine();
@@ -1154,7 +1155,7 @@ public class Main {
                 case 15:
                 {
                     System.out.println("Insert the symbol of the company to follow");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
 
                     try{
                         readCompany_bySymbol(symbol);
@@ -1170,7 +1171,7 @@ public class Main {
                 case 16:
                 {
                     System.out.println("Insert the symbol of the company to unfollow");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
 
                     try{
                         readCompany_bySymbol(symbol);
@@ -1186,7 +1187,7 @@ public class Main {
                 case 17:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();
 
                     List<Report> r = readReports_bySymbol(symbol);
 
@@ -1223,6 +1224,7 @@ public class Main {
                 {
                     System.out.println("Insert average volume");
                     float v = input.nextFloat();
+                    input.nextLine();
                     Analytics2(v);
                     break;
                 }
@@ -1248,7 +1250,14 @@ public class Main {
                 {
                     System.out.println("Insert filename");
                     String s = input.nextLine();
-                    updateSummary(s);
+                    try
+                    {
+                        updateSummary(s);
+                    }catch ( NoSuchFileException e)
+                    {
+                        System.out.println("Filename don't found");
+                    }
+
                     break;
                 }
 
