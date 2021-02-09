@@ -354,7 +354,7 @@ public class Main {
                 case 8:
                 {
                     System.out.println("Insert the symbol of the company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
                     try {
                         Companies c = new Companies(readCompanyInfo_bySymbol(symbol), readCompany_bySymbol(symbol));
                         System.out.println(c.toString());
@@ -382,7 +382,7 @@ public class Main {
                 case 10:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
                     do {
                         System.out.println("Insert the start date yyyy-mm-dd");
                         start = input.nextLine();
@@ -580,7 +580,7 @@ public class Main {
                         ProfessionalUser pu = readProfessionalUser_byUsername(username);
                         System.out.println(pu.toString()+"\n");
 
-                        List <Companies> l2 = listFollowedCompany(username);
+                        List <Companies> l2 = listFollowedCompany_byProfessionalUser(username);
                         System.out.println("\nList followed companies:\n");
                         for(Companies l: l2)
                             System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
@@ -594,7 +594,7 @@ public class Main {
                 case 3:
                 {
                     System.out.println("Insert the symbol of the company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();
                     try {
                         Companies c = new Companies(readCompanyInfo_bySymbol(symbol), readCompany_bySymbol(symbol));
                         System.out.println(c.toString());
@@ -607,7 +607,7 @@ public class Main {
                 case 4:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
 
                     List<History> h = readHistory_bySymbol(symbol);
 
@@ -622,7 +622,7 @@ public class Main {
                 case 5:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();;
                     do {
                         System.out.println("Insert the start date yyyy-mm-dd");
                         start = input.nextLine();
@@ -652,7 +652,7 @@ public class Main {
 
                     try{
                         readCompany_bySymbol(symbol);
-                        followCompany_byProfessionalUser(user.getUsername(),symbol);
+                        followCompany_byProfessionalUser(profUser.getUsername(),symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Company don't found");
@@ -667,7 +667,7 @@ public class Main {
 
                     try{
                         readCompany_bySymbol(symbol);
-                        unfollowCompany_byProfessionalUser(user.getUsername(), symbol);
+                        unfollowCompany_byProfessionalUser(profUser.getUsername(), symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Company don't found");
@@ -677,11 +677,11 @@ public class Main {
 
                 case 8:
                 {
-                    System.out.print("Insert title:");
+                    System.out.println("Insert title: ");
                     title = input.nextLine();
 
                     do {
-                        System.out.print("Insert date of the report yyyy-mm-dd:");
+                        System.out.println("Insert date of the report yyyy-mm-dd:");
                         dateReport = input.nextLine();
 
                         if(dateReport.matches("\\d{4}-\\d{2}-\\d{2}"))
@@ -690,16 +690,16 @@ public class Main {
 
                     } while(true);
 
-                    System.out.print("Insert type of report:");
+                    System.out.println("Insert type of report: ");
                     typeReport = input.nextLine();
 
-                    System.out.print("Insert the analized values:");
+                    System.out.println("Insert the analized values:");
                     analizedValues = input.next();
 
-                    System.out.print("Insert the company symbol to associate the report with:");
+                    System.out.println("Insert the company symbol to associate the report with:");
                     symbol = input.nextLine();
 
-                    System.out.print("Insert the text:");
+                    System.out.println("Insert the text:");
                     details = input.nextLine();
 
                     Report r = new Report(title, dateReport, typeReport, analizedValues, details, symbol, profUser.getUsername());
@@ -711,16 +711,16 @@ public class Main {
 
                 case 9:
                 {
-                    System.out.print("Insert title:");
+                    System.out.println("Insert title:");
                     title = input.nextLine();
 
-                    System.out.print("Insert the text:");
+                    System.out.println("Insert the text:");
                     details = input.nextLine();
 
                     if(updateReport_Text_byTitle(profUser.getUsername(),title, details) != 1)
-                        System.out.print("Error in the update");
+                        System.out.println("Error in the update");
                     else
-                        System.out.print("Operation complete");
+                        System.out.println("Operation complete");
 
                     break;
                 }
@@ -728,7 +728,7 @@ public class Main {
                 case 10:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();
 
                     List<Report> r = readReports_bySymbol(symbol);
 
@@ -743,7 +743,7 @@ public class Main {
                 case 11:
                 {
                     System.out.println("Insert username of a professional");
-                    username = input.nextLine();
+                    username = input.nextLine().toUpperCase();
 
                     List<Report> r = readReports_byUsername(username);
 
