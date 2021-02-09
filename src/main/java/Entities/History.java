@@ -1,7 +1,5 @@
 package Entities;
 
-import java.util.Date;
-
 public class History {
     private String symbol;
     private String dateHistory;

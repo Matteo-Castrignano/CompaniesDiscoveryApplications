@@ -6,7 +6,6 @@ import org.bson.json.JsonWriterSettings;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.function.Consumer;
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.lt;
@@ -15,25 +14,6 @@ import static com.mongodb.client.model.Sorts.*;
 
 
 public class Analytics extends MongoDatabaseAccess{
-
-    public static void main(String[] args) {
-        /*openConnection();
-
-        System.out.println("Insert cap");
-        Scanner input = new Scanner(System.in);
-        String s = input.nextLine();
-        System.out.println("Ho letto: " + s);
-        long i = Long.valueOf(s).longValue();
-        System.out.println("Numero: " + i);
-
-        Analytics1();
-
-        Analytics2(100);
-
-        Analytics3(i);
-
-        closeConnection();*/
-    }
 
     private static Consumer<Document> printDocuments() {
         return doc -> System.out.println(doc.toJson());

@@ -10,7 +10,6 @@ import static org.neo4j.driver.Values.parameters;
 
 public class Analytics extends Neo4jDatabaseAccess{
 
-
     //Analytics1
     public static List<Integer> userFollowing(String username)//OK
     {
@@ -175,21 +174,5 @@ public class Analytics extends Neo4jDatabaseAccess{
             });
             return  user_list;
         }
-    }
-
-
-    public static void main(String[] args) throws Exception
-    {
-        /*
-        initDriver();
-        //System.out.println(userFollowing("cristina23").toString());
-        //System.out.println(suggestedCompany("aylin32").toString());
-        //System.out.println(listFollowedUser("cristina23").toString());
-        List<Companies> c = listFollowedCompany("cristina23");
-        for(Companies c1 : c)
-             System.out.println( c1.toString2());
-        //System.out.println(listFollowedProfessionalUser("cristina23").toString());
-        close();
-       */
     }
 }

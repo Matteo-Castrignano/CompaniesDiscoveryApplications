@@ -1,8 +1,5 @@
 package Entities;
 
-import java.util.Date;
-import java.util.List;
-
 public class ProfessionalUser extends User {
 
     private String profession;

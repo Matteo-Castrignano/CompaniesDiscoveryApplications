@@ -4,7 +4,6 @@ import Entities.Companies;
 import Entities.ProfessionalUser;
 import Entities.User;
 import org.neo4j.driver.*;
-import org.neo4j.driver.exceptions.NoSuchRecordException;
 
 import static org.neo4j.driver.Values.parameters;
 
@@ -325,58 +324,6 @@ public class CrudOperation extends Neo4jDatabaseAccess{
             });
             return true;
         }
-    }
-
-
-    public static void main(String[] args) throws Exception
-    {
-        initDriver();
-        /*User u1 = new User();
-        try{
-            //User u = new User( "prova", "prova", "prova", "prova","prova", 'M', "prova", "prova");
-            //addUser(u);
-            //Thread.sleep(800);
-            u1 = readUser_byUsername("franco");
-            //System.out.println(u1.toString());
-            //System.out.println(" Delete user esito: " + deleteUser_byUsername("prova"));
-            //System.out.println(readCompany_bySymbol("AAPL").toString());
-
-
-        } catch (NoSuchRecordException e) {
-            System.out.println("utente non trovato");
-            close();
-            e.printStackTrace();
-        }
-        if ( u1.getPassword() == null )
-            System.out.println("ciao");
-        System.out.println("fatto");*/
-
-        //ProfessionalUser p = new ProfessionalUser("Giancarlo","Giancarlo","Giancarlo","Giancarlo","Giancarlo", 'M',"Giancarlo","Giancarlo","Giancarlo","Giancarlo",0);
-        //addProfessionlUser(p);
-        //addUser_toFollow("prova", "cum3");
-        //followCompany_byUser("prova","AAPL");
-        //followProfessionalUser_byUser("jordy39","Giancarlo");
-        //rate_ProfessionalUser("cristina23", "Giancarlo", 4);
-        //rate_ProfessionalUser("prova", "Giancarlo", 2);
-        //unfollow_User("prova","cum3");
-        //unfollowCompany_byUser("prova","AAPL");
-        //unfollowProfessionalUser_byUser("jordy39","Giancarlo");
-
-
-
-        //readProfessionalUser_byUsername("Giancarlo");
-        //followCompany_byProfessionalUser("Giancarlo","AAPL");
-        //unfollowCompany_byProfessionalUser("Giancarlo","AAPL");
-        //deleteProfessionalUser("Giancarlo");
-
-        //Companies c = new Companies("PROVA","Pippo","NYS","info", 2, "livorno", "123", "ita", "toscana", "ar", "afsasf", "www", null);
-        //addCompany(c);
-        //readCompany_bySymbol("AAPL");
-        //deleteCompany_bySymbol("PROVA");
-
-        //addAdmin("prova");
-        close();
-
     }
 }
 

@@ -39,7 +39,6 @@ public class UpdateEntites extends MongoDatabaseAccess{
 
             UpdateResult updateResult1 = collectionCompanies.updateOne(eq("Symbol", symbol),
                     Updates.push("Summary", summary));
-
         }
 
         System.out.println("Operation complete");
