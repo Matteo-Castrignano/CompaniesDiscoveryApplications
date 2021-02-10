@@ -471,7 +471,7 @@ public class Main {
                 case 16:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();
 
                     List<Report> r = readReports_bySymbol(symbol);
 
@@ -673,7 +673,7 @@ public class Main {
                 case 7:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
 
                     List<History> h = readHistory_bySymbol(symbol);
 
@@ -688,7 +688,7 @@ public class Main {
                 case 8:
                 {
                     System.out.println("Insert the symbol of a company");
-                    symbol = input.nextLine().toUpperCase();;
+                    symbol = input.nextLine().toUpperCase();
                     do {
                         System.out.println("Insert the start date yyyy-mm-dd");
                         start = input.nextLine();
@@ -1112,7 +1112,7 @@ public class Main {
                 case 13:
                 {
                     System.out.println("Insert the symbol of the company");
-                    symbol = input.nextLine();
+                    symbol = input.nextLine().toUpperCase();
                     try {
                         Companies c = new Companies(readCompanyInfo_bySymbol(symbol), readCompany_bySymbol(symbol));
                         System.out.println(c.toString());
