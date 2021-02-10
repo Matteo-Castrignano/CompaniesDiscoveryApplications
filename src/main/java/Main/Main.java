@@ -80,7 +80,7 @@ public class Main {
         } while(true);
 
         System.out.println("Insert gender M or F: ");
-        gender = input.nextLine().charAt(0);
+        gender = input.nextLine().toUpperCase().charAt(0);
         System.out.println("Insert Email: ");
         email = input.nextLine();
         System.out.println("Insert Country: ");
@@ -196,22 +196,25 @@ public class Main {
 
         do {
             System.out.print("\nChoose operation: \n");
-            System.out.println("1. Find a user");
-            System.out.println("2. Follow a new user");
-            System.out.println("3. Unfollow a user");
-            System.out.println("4. Find a professional user");
-            System.out.println("5. Follow a new professional user");
-            System.out.println("6. Rate a user");
-            System.out.println("7. Unfollow a professional user");
-            System.out.println("8. Read a company data");
-            System.out.println("9. Read all company history");
-            System.out.println("10. Read a company history by period");
-            System.out.println("11. Follow a new company");
-            System.out.println("12. Unfollow a company");
-            System.out.println("13. Read all report of a company");
-            System.out.println("14. Read all report of a professional user");
-            System.out.println("15. Personal information");
-            System.out.println("16. Get suggests companies");
+            System.out.println("1. User list");
+            System.out.println("2. Find a user");
+            System.out.println("3. Follow a new user");
+            System.out.println("4. Unfollow a user");
+            System.out.println("5. Professional user list");
+            System.out.println("6. Find a professional user");
+            System.out.println("7. Follow a new professional user");
+            System.out.println("8. Rate a user");
+            System.out.println("9. Unfollow a professional user");
+            System.out.println("10. Company list");
+            System.out.println("11. Read a company data");
+            System.out.println("12. Read all company history");
+            System.out.println("13. Read a company history by period");
+            System.out.println("14. Follow a new company");
+            System.out.println("15. Unfollow a company");
+            System.out.println("16. Read all report of a company");
+            System.out.println("17. Read all report of a professional user");
+            System.out.println("18. Personal information");
+            System.out.println("19. Get suggests companies");
             System.out.println("0. Logout");
 
             item = in.nextInt();
@@ -219,6 +222,15 @@ public class Main {
             switch (item) {
 
                 case 1:
+                {
+                    List<String> ls = listAllUser();
+
+                    for( String s: ls)
+                        System.out.println(s);
+                    break;
+                }
+
+                case 2:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -243,7 +255,7 @@ public class Main {
                     break;
                 }
 
-                case 2:
+                case 3:
                 {
                     System.out.println("Insert username of the user to follow");
                     username = input.nextLine();
@@ -258,7 +270,7 @@ public class Main {
                     break;
                 }
 
-                case 3:
+                case 4:
                 {
                     System.out.println("Insert username of the user to unfollow");
                     username = input.nextLine();
@@ -273,7 +285,16 @@ public class Main {
                     break;
                 }
 
-                case 4:
+                case 5:
+                {
+                    List<String> ls = listAllProfessionalUser();
+
+                    for( String s: ls)
+                        System.out.println(s);
+                    break;
+                }
+
+                case 6:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -293,7 +314,7 @@ public class Main {
                     break;
                 }
 
-                case 5:
+                case 7:
                 {
                     System.out.println("Insert username of the professional user to follow");
                     username = input.nextLine();
@@ -308,7 +329,7 @@ public class Main {
                     break;
                 }
 
-                case 6:
+                case 8:
                 {
                     int vote;
                     System.out.println("Insert username of the professional user to follow");
@@ -336,7 +357,7 @@ public class Main {
                     break;
                 }
 
-                case 7:
+                case 9:
                 {
                     System.out.println("Insert username of the professional user to unfollow");
                     username = input.nextLine();
@@ -351,7 +372,19 @@ public class Main {
                     break;
                 }
 
-                case 8:
+                case 10:
+                {
+                    System.out.println("Insert a letter: ");
+                    char car = input.nextLine().toUpperCase().charAt(0);
+                    List<String> ls = listAllCompanies(car);
+
+                    for( String s: ls)
+                        System.out.println(s);
+
+                    break;
+                }
+
+                case 11:
                 {
                     System.out.println("Insert the symbol of the company");
                     symbol = input.nextLine().toUpperCase();;
@@ -364,7 +397,7 @@ public class Main {
                     break;
                 }
 
-                case 9:
+                case 12:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine().toUpperCase();
@@ -379,7 +412,7 @@ public class Main {
                     break;
                 }
 
-                case 10:
+                case 13:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine().toUpperCase();;
@@ -405,7 +438,7 @@ public class Main {
                     break;
                 }
 
-                case 11:
+                case 14:
                 {
                     System.out.println("Insert the symbol of the company to follow");
                     symbol = input.nextLine().toUpperCase();
@@ -420,7 +453,7 @@ public class Main {
                     break;
                 }
 
-                case 12:
+                case 15:
                 {
                     System.out.println("Insert the symbol of the company to unfollow");
                     symbol = input.nextLine().toUpperCase();
@@ -435,7 +468,7 @@ public class Main {
                     break;
                 }
 
-                case 13:
+                case 16:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine();
@@ -450,7 +483,7 @@ public class Main {
                     break;
                 }
 
-                case 14:
+                case 17:
                 {
                     System.out.println("Insert username of a professional");
                     username = input.nextLine();
@@ -465,7 +498,7 @@ public class Main {
                     break;
                 }
 
-                case 15:
+                case 18:
                 {
                     List <Integer> l1 = userFollowing(user.getUsername());
                     System.out.println("NumberFollowerUser: " + l1.get(0) + " NumberFollowerCompany: " + l1.get(1) + "\n");
@@ -488,7 +521,7 @@ public class Main {
                     break;
                 }
 
-                case 16:
+                case 19:
                 {
                     List <String> s1 = suggestedCompany(user.getUsername());
 
@@ -526,20 +559,23 @@ public class Main {
 
         do {
             System.out.print("\nChoose operation: \n");
-            System.out.println("1. Find a user");
-            System.out.println("2. Find a professional user");
-            System.out.println("3. Read a company data");
-            System.out.println("4. Read all company history");
-            System.out.println("5. Read a company history by period");
-            System.out.println("6. Follow a new company");
-            System.out.println("7. Unfollow a company");
-            System.out.println("8. Create a new report");
-            System.out.println("9. Update a report");
-            System.out.println("10. Read all report of a company");
-            System.out.println("11. Read all report of a professional user");
-            System.out.println("12. Verify the interest of companies");
-            System.out.println("13. Most underrated companies");
-            System.out.println("14. Personal information");
+            System.out.println("1. User list");
+            System.out.println("2. Find a user");
+            System.out.println("3. Professional user list");
+            System.out.println("4. Find a professional user");
+            System.out.println("5. Company list");
+            System.out.println("6. Read a company data");
+            System.out.println("7. Read all company history");
+            System.out.println("8. Read a company history by period");
+            System.out.println("9. Follow a new company");
+            System.out.println("10. Unfollow a company");
+            System.out.println("11. Create a new report");
+            System.out.println("12. Update a report");
+            System.out.println("13. Read all report of a company");
+            System.out.println("14. Read all report of a professional user");
+            System.out.println("15. Verify the interest of companies");
+            System.out.println("16. Most underrated companies");
+            System.out.println("17. Personal information");
             System.out.println("0. Logout");
 
             item = in.nextInt();
@@ -547,6 +583,15 @@ public class Main {
             switch (item) {
 
                 case 1:
+                {
+                    List<String> ls = listAllUser();
+
+                    for( String s: ls)
+                        System.out.println(s);
+                    break;
+                }
+
+                case 2:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -571,7 +616,16 @@ public class Main {
                     break;
                 }
 
-                case 2:
+                case 3:
+                {
+                    List<String> ls = listAllProfessionalUser();
+
+                    for( String s: ls)
+                        System.out.println(s);
+                    break;
+                }
+
+                case 4:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -591,7 +645,19 @@ public class Main {
                     break;
                 }
 
-                case 3:
+                case 5:
+                {
+                    System.out.println("Insert a letter: ");
+                    char car = input.nextLine().toUpperCase().charAt(0);
+                    List<String> ls = listAllCompanies(car);
+
+                    for( String s: ls)
+                        System.out.println(s);
+
+                    break;
+                }
+
+                case 6:
                 {
                     System.out.println("Insert the symbol of the company");
                     symbol = input.nextLine().toUpperCase();
@@ -604,7 +670,7 @@ public class Main {
                     break;
                 }
 
-                case 4:
+                case 7:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine().toUpperCase();;
@@ -619,7 +685,7 @@ public class Main {
                     break;
                 }
 
-                case 5:
+                case 8:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine().toUpperCase();;
@@ -645,7 +711,7 @@ public class Main {
                     break;
                 }
 
-                case 6:
+                case 9:
                 {
                     System.out.println("Insert the symbol of the company to follow");
                     symbol = input.nextLine().toUpperCase();
@@ -660,7 +726,7 @@ public class Main {
                     break;
                 }
 
-                case 7:
+                case 10:
                 {
                     System.out.println("Insert the symbol of the company to unfollow");
                     symbol = input.nextLine();
@@ -675,7 +741,7 @@ public class Main {
                     break;
                 }
 
-                case 8:
+                case 11:
                 {
                     System.out.println("Insert title: ");
                     title = input.nextLine();
@@ -709,7 +775,7 @@ public class Main {
                     break;
                 }
 
-                case 9:
+                case 12:
                 {
                     System.out.println("Insert title:");
                     title = input.nextLine();
@@ -725,7 +791,7 @@ public class Main {
                     break;
                 }
 
-                case 10:
+                case 13:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine().toUpperCase();
@@ -740,7 +806,7 @@ public class Main {
                     break;
                 }
 
-                case 11:
+                case 14:
                 {
                     System.out.println("Insert username of a professional");
                     username = input.nextLine().toUpperCase();
@@ -755,7 +821,7 @@ public class Main {
                     break;
                 }
 
-                case 12:
+                case 15:
                 {
                     System.out.println("Insert average volume");
                     float v = input.nextFloat();
@@ -764,7 +830,7 @@ public class Main {
                     break;
                 }
 
-                case 13:
+                case 16:
                 {
                     System.out.println("Insert capitalization");
                     String s = input.nextLine();
@@ -773,7 +839,7 @@ public class Main {
                     break;
                 }
 
-                case 14:
+                case 17:
                 {
                     List <Integer> l1 = professiaonalUserFollow(profUser.getUsername());
                     System.out.println("NumberFollower: " + l1.get(0) + " NumberFollowerCompany: " + l1.get(1) + "\n");
@@ -813,32 +879,35 @@ public class Main {
 
         do {
             System.out.print("\nChoose operation: \n");
-            System.out.println("1. Find a user");
-            System.out.println("2. Follow a new user");
-            System.out.println("3. Unfollow a user");
-            System.out.println("4. Delete user");
-            System.out.println("5. Find a professional user");
-            System.out.println("6. Delete professional user");
-            System.out.println("7. Follow a new professional user");
-            System.out.println("8. Rate a user");
-            System.out.println("9. Unfollow a professional user");
-            System.out.println("10. Read a company data");
-            System.out.println("11. Add a new company");
-            System.out.println("12. Delete a company");
-            System.out.println("13. Read all company history");
-            System.out.println("14. Read a company history by period");
-            System.out.println("15. Follow a new company");
-            System.out.println("16. Unfollow a company");
-            System.out.println("17. Read all report of a company");
-            System.out.println("18. Read all report of a professional user");
-            System.out.println("19. Most profitable period");
-            System.out.println("20. Verify the interest of companies");
-            System.out.println("21. Most underrated companies");
-            System.out.println("22. Update history");
-            System.out.println("23. Update summary");
-            System.out.println("24. Personal information");
-            System.out.println("25. Get suggests companies");
-            System.out.println("26. Add a new admin");
+            System.out.println("1. User list");
+            System.out.println("2. Find a user");
+            System.out.println("3. Follow a new user");
+            System.out.println("4. Unfollow a user");
+            System.out.println("5. Delete user");
+            System.out.println("6. Professional user list");
+            System.out.println("7. Find a professional user");
+            System.out.println("8. Delete professional user");
+            System.out.println("9. Follow a new professional user");
+            System.out.println("10. Rate a user");
+            System.out.println("11. Unfollow a professional user");
+            System.out.println("12. Company list");
+            System.out.println("13. Read a company data");
+            System.out.println("14. Add a new company");
+            System.out.println("15. Delete a company");
+            System.out.println("16. Read all company history");
+            System.out.println("17. Read a company history by period");
+            System.out.println("18. Follow a new company");
+            System.out.println("19. Unfollow a company");
+            System.out.println("20. Read all report of a company");
+            System.out.println("21. Read all report of a professional user");
+            System.out.println("22. Most profitable period");
+            System.out.println("23. Verify the interest of companies");
+            System.out.println("24. Most underrated companies");
+            System.out.println("25. Update history");
+            System.out.println("26. Update summary");
+            System.out.println("27. Personal information");
+            System.out.println("28. Get suggests companies");
+            System.out.println("29. Add a new admin");
             System.out.println("0. Logout");
 
             item = in.nextInt();
@@ -846,6 +915,15 @@ public class Main {
             switch (item) {
 
                 case 1:
+                {
+                    List<String> ls = listAllUser();
+
+                    for( String s: ls)
+                        System.out.println(s);
+                    break;
+                }
+
+                case 2:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -870,7 +948,7 @@ public class Main {
                     break;
                 }
 
-                case 2:
+                case 3:
                 {
                     System.out.println("Insert username of the user to follow");
                     username = input.nextLine();
@@ -885,7 +963,7 @@ public class Main {
                     break;
                 }
 
-                case 3:
+                case 4:
                 {
                     System.out.println("Insert username of the user to unfollow");
                     username = input.nextLine();
@@ -900,7 +978,7 @@ public class Main {
                     break;
                 }
 
-                case 4:
+                case 5:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -916,7 +994,16 @@ public class Main {
                     break;
                 }
 
-                case 5:
+                case 6:
+                {
+                    List<String> ls = listAllProfessionalUser();
+
+                    for( String s: ls)
+                        System.out.println(s);
+                    break;
+                }
+
+                case 7:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -936,7 +1023,7 @@ public class Main {
                     break;
                 }
 
-                case 6:
+                case 8:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();
@@ -952,7 +1039,7 @@ public class Main {
                     break;
                 }
 
-                case 7:
+                case 9:
                 {
                     System.out.println("Insert username of the professional user to follow");
                     username = input.nextLine();
@@ -967,7 +1054,7 @@ public class Main {
                     break;
                 }
 
-                case 8:
+                case 10:
                 {
                     int vote;
                     System.out.println("Insert username of the professional user to follow");
@@ -995,7 +1082,7 @@ public class Main {
                     break;
                 }
 
-                case 9:
+                case 11:
                 {
                     System.out.println("Insert username of the professional user to unfollow");
                     username = input.nextLine();
@@ -1010,7 +1097,19 @@ public class Main {
                     break;
                 }
 
-                case 10:
+                case 12:
+                {
+                    System.out.println("Insert a letter: ");
+                    char car = input.nextLine().toUpperCase().charAt(0);
+                    List<String> ls = listAllCompanies(car);
+
+                    for( String s: ls)
+                        System.out.println(s);
+
+                    break;
+                }
+
+                case 13:
                 {
                     System.out.println("Insert the symbol of the company");
                     symbol = input.nextLine();
@@ -1023,7 +1122,7 @@ public class Main {
                     break;
                 }
 
-                case 11:
+                case 14:
                 {
                     String name, exchange, sector, description, city, phone, state, country, address, website;
                     int fullTimesemployees;
@@ -1072,7 +1171,7 @@ public class Main {
                     break;
                 }
 
-                case 12:
+                case 15:
                 {
                     System.out.println("Insert symbol");
                     symbol = input.nextLine().toUpperCase();
@@ -1089,7 +1188,7 @@ public class Main {
                     break;
                 }
 
-                case 13:
+                case 16:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine().toUpperCase();
@@ -1104,7 +1203,7 @@ public class Main {
                     break;
                 }
 
-                case 14:
+                case 17:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine().toUpperCase();
@@ -1130,7 +1229,7 @@ public class Main {
                     break;
                 }
 
-                case 15:
+                case 18:
                 {
                     System.out.println("Insert the symbol of the company to follow");
                     symbol = input.nextLine().toUpperCase();
@@ -1145,7 +1244,7 @@ public class Main {
                     break;
                 }
 
-                case 16:
+                case 19:
                 {
                     System.out.println("Insert the symbol of the company to unfollow");
                     symbol = input.nextLine().toUpperCase();
@@ -1160,7 +1259,7 @@ public class Main {
                     break;
                 }
 
-                case 17:
+                case 20:
                 {
                     System.out.println("Insert the symbol of a company");
                     symbol = input.nextLine().toUpperCase();
@@ -1175,7 +1274,7 @@ public class Main {
                     break;
                 }
 
-                case 18:
+                case 21:
                 {
                     System.out.println("Insert username of a professional");
                     username = input.nextLine();
@@ -1190,13 +1289,13 @@ public class Main {
                     break;
                 }
 
-                case 19:
+                case 22:
                 {
                     Analytics1();
                     break;
                 }
 
-                case 20:
+                case 23:
                 {
                     System.out.println("Insert average volume");
                     float v = input.nextFloat();
@@ -1205,7 +1304,7 @@ public class Main {
                     break;
                 }
 
-                case 21:
+                case 24:
                 {
                     System.out.println("Insert capitalization");
                     String s = input.nextLine();
@@ -1214,13 +1313,13 @@ public class Main {
                     break;
                 }
 
-                case 22:
+                case 25:
                 {
                     updateHistory();
                     break;
                 }
 
-                case 23:
+                case 26:
                 {
                     System.out.println("Insert filename");
                     String s = input.nextLine();
@@ -1235,7 +1334,7 @@ public class Main {
                     break;
                 }
 
-                case 24:
+                case 27:
                 {
                     List <Integer> l1 = userFollowing(user.getUsername());
                     System.out.println("NumberFollowerUser: " + l1.get(0) + " NumberFollowerCompany: " + l1.get(1) + "\n");
@@ -1258,7 +1357,7 @@ public class Main {
                     break;
                 }
 
-                case 25:
+                case 28:
                 {
                     List <String> s1 = suggestedCompany(user.getUsername());
 
@@ -1268,7 +1367,7 @@ public class Main {
                     break;
                 }
 
-                case 26:
+                case 29:
                 {
                     System.out.println("Insert username");
                     username = input.nextLine();

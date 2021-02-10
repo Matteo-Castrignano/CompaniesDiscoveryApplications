@@ -175,4 +175,61 @@ public class Analytics extends Neo4jDatabaseAccess{
             return  user_list;
         }
     }
+
+    public static List<String> listAllUser()
+    {
+        try ( Session session = driver.session() )
+        {
+            List<String> user_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (n:User) RETURN n ORDER BY n.username");
+
+                ArrayList<String> user = new ArrayList<>();
+                while(result.hasNext()){
+                    Record r = result.next();
+                    Value v = r.get(0);
+                    user.add("Username: " + v.get("username").asString() + ", Name: " + v.get("name").asString() + ", Surname: " + v.get("surname").asString());
+                }
+                return user;
+            });
+            return  user_list;
+        }
+    }
+
+    public static List<String> listAllProfessionalUser() {
+        try (Session session = driver.session()) {
+            List<String> profuser_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run("MATCH (n:Professional_User) RETURN n ORDER BY n.username");
+
+                ArrayList<String> profuser = new ArrayList<>();
+                while (result.hasNext()) {
+                    Record r = result.next();
+                    Value v = r.get(0);
+                    profuser.add("Username: " + v.get("username").asString() + ", Name: " + v.get("name").asString() + ", Surname: " + v.get("surname").asString());
+                }
+                return profuser;
+            });
+            return profuser_list;
+        }
+    }
+
+    public static List<String> listAllCompanies(char car)
+    {
+        try ( Session session = driver.session() )
+        {
+            List<String> company_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (n:Company) WHERE n.symbol STARTS WITH $car RETURN n ORDER BY n.symbol",
+                        parameters( "car", car ) );
+
+                ArrayList<String> company = new ArrayList<>();
+                while(result.hasNext()){
+                    Record r = result.next();
+                    Value v = r.get(0);
+                    company.add("Symbol: " + v.get("symbol").asString() + ", Name: " + v.get("name").asString());
+                }
+
+                return company;
+            });
+            return  company_list;
+        }
+    }
 }
