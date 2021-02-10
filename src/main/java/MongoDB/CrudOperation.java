@@ -254,9 +254,11 @@ public class CrudOperation extends MongoDatabaseAccess{
 
     }
 
-    public static long deleteRepert_byTitle(String title)//OK
+    public static long deleteReport_bySymbol(String symbol)//OK
     {
-        DeleteResult deleteResult = collectionReport.deleteMany(eq("Title", title));
+        DeleteResult deleteResult = collectionReport.deleteMany(eq("Symbol", symbol));
         return deleteResult.getDeletedCount();
     }
+
+
 }

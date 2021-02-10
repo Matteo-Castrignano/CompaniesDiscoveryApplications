@@ -1180,6 +1180,8 @@ public class Main {
                         readCompanyInfo_bySymbol(symbol);
                         deleteCompany_bySymbol(symbol);
                         deleteCompany(symbol);
+                        deleteHistory_bySymbol(symbol);
+                        deleteReport_bySymbol(symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("User not find");
