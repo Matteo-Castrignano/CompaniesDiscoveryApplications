@@ -1031,6 +1031,7 @@ public class Main {
                     try{
                         readProfessionalUser_byUsername(username);
                         deleteProfessionalUser(username);
+                        deleteReport_byUsername(username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
                         System.out.println("Professional user not find");

@@ -260,5 +260,10 @@ public class CrudOperation extends MongoDatabaseAccess{
         return deleteResult.getDeletedCount();
     }
 
+    public static long deleteReport_byUsername(String username)//OK
+    {
+        DeleteResult deleteResult = collectionReport.deleteMany(eq("Username", username));
+        return deleteResult.getDeletedCount();
+    }
 
 }
