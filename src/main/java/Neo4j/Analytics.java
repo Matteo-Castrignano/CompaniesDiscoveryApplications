@@ -33,6 +33,7 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
+    //Analytics2
     public static List<Integer> professiaonalUserFollow(String username)//OK
     {
         try ( Session session = driver.session() )
@@ -56,7 +57,7 @@ public class Analytics extends Neo4jDatabaseAccess{
     }
 
 
-    //Analytics2
+    //Analytics3
     public static List<String> suggestedCompany(String username)//OK
     {
         try ( Session session = driver.session() )
@@ -79,7 +80,7 @@ public class Analytics extends Neo4jDatabaseAccess{
     }
 
 
-    //Analytics3
+    //Analytics4
     public static List<Companies> listFollowedCompany(String username)//OK
     {
         try ( Session session = driver.session() )
@@ -107,6 +108,7 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
+    //Analytics5
     public static List<Companies> listFollowedCompany_byProfessionalUser(String username)//OK
     {
         try ( Session session = driver.session() )
@@ -135,7 +137,7 @@ public class Analytics extends Neo4jDatabaseAccess{
     }
 
 
-    //Analytics4
+    //Analytics6
     public static List<String> listFollowedUser(String username)//OK
     {
         try ( Session session = driver.session() )
@@ -156,6 +158,7 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
+    //Analytics7
     public static List<String> listFollowedProfessionalUser(String username)//OK
     {
         try ( Session session = driver.session() )
@@ -176,6 +179,7 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
+    //Analytics8
     public static List<String> listAllUser()
     {
         try ( Session session = driver.session() )
@@ -195,6 +199,7 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
+    //Analytics9
     public static List<String> listAllProfessionalUser() {
         try (Session session = driver.session()) {
             List<String> profuser_list = session.readTransaction((TransactionWork<List<String>>) tx -> {
@@ -212,6 +217,7 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
+    //Analytics10
     public static List<String> listAllCompanies(char car)
     {
         try ( Session session = driver.session() )
