@@ -7,6 +7,7 @@ import static MongoDB.Analytics.*;
 import static Neo4j.Analytics.*;
 import static Neo4j.CrudOperation.*;
 
+import com.mongodb.MongoTimeoutException;
 import org.neo4j.driver.exceptions.NoSuchRecordException;
 
 import java.io.IOException;
@@ -375,7 +376,7 @@ public class Main {
                 case 10:
                 {
                     System.out.println("Insert a letter: ");
-                    char car = input.nextLine().toUpperCase().charAt(0);
+                    String car = input.nextLine().toUpperCase();
                     List<String> ls = listAllCompanies(car);
 
                     for( String s: ls)
@@ -648,7 +649,7 @@ public class Main {
                 case 5:
                 {
                     System.out.println("Insert a letter: ");
-                    char car = input.nextLine().toUpperCase().charAt(0);
+                    String car = input.nextLine().toUpperCase();
                     List<String> ls = listAllCompanies(car);
 
                     for( String s: ls)
@@ -1101,7 +1102,7 @@ public class Main {
                 case 12:
                 {
                     System.out.println("Insert a letter: ");
-                    char car = input.nextLine().toUpperCase().charAt(0);
+                    String car = input.nextLine().toUpperCase();
                     List<String> ls = listAllCompanies(car);
 
                     for( String s: ls)
@@ -1118,12 +1119,12 @@ public class Main {
                         Companies c = new Companies(readCompanyInfo_bySymbol(symbol), readCompany_bySymbol(symbol));
                         System.out.println(c.toString());
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Company don't find");
+                        System.out.println("Company not found");
                     }
                     break;
                 }
 
-                case 14:
+                case 14: //insert in a function
                 {
                     String name, exchange, sector, description, city, phone, state, country, address, website;
                     int fullTimesemployees;
@@ -1151,8 +1152,14 @@ public class Main {
                     System.out.println("Insert website:");
                     website = input.nextLine();
                     System.out.println("Insert number of full time employees:");
-                    fullTimesemployees = input.nextInt();
-                    input.nextLine();
+                    String numberEmpl = input.nextLine();
+                    if(numberEmpl.length() > 9){
+                        System.out.println("Number troppo grande! try again");
+                        numberEmpl = input.nextLine();
+                    }
+                    fullTimesemployees = Integer.valueOf(numberEmpl);
+
+                    //input.nextLine();
 
                     Companies c1 = new Companies(symbol, name, exchange, sector, fullTimesemployees, description, city, phone, state, country, address, website);
 
@@ -1162,9 +1169,43 @@ public class Main {
                         break;
 
                     } catch (NoSuchRecordException e) {
-                        addCompany(c1);
-                        createCompany(c1);
-                        System.out.println("Operation complete");
+                        boolean addNeo4j = addCompany(c1);
+                        if(addNeo4j){
+                            try {
+                               boolean addMongo = createCompany(c1);
+                               if(!addMongo){
+
+                                       boolean removeNeo4j = deleteCompany_bySymbol(symbol);
+                                       if (!removeNeo4j) {
+                                           System.out.println("Operation was not performed! Database not consistency! \n"); //andrebbe inserita in un file di log per l'admin
+                                       } else {
+                                           System.out.println("Operation was not performed! Try Again");
+                                       }
+
+                               }else{
+                                   System.out.println("Operation complete");
+                               }
+                            }catch(MongoTimeoutException emdb){
+                                System.out.println("Mongo is not available");
+                                boolean removeNeo4j = deleteCompany_bySymbol(symbol);
+                                if (!removeNeo4j) {
+                                    System.out.println("Operation was not performed! Database not consistency! \n"); //andrebbe inserita in un file di log per l'admin
+                                } else {
+                                    System.out.println("Operation was not performed! Try Again");
+                                }
+                            }
+                        }else{
+                            System.out.println("Operation was not performed! Try Again");
+                        }
+
+
+                        /**
+                         *
+                         * inserire codice di consistenza
+                         *
+                         * */
+
+                        //System.out.println("Operation complete");
                     }
 
 
@@ -1172,20 +1213,62 @@ public class Main {
                     break;
                 }
 
-                case 15:
+                case 15: //insert in a function
                 {
                     System.out.println("Insert symbol");
                     symbol = input.nextLine().toUpperCase();
-
+                    Companies companyToDelete = null;
                     try{
-                        readCompanyInfo_bySymbol(symbol);
-                        deleteCompany_bySymbol(symbol);
-                        deleteCompany(symbol);
-                        deleteHistory_bySymbol(symbol);
-                        deleteReport_bySymbol(symbol);
-                        System.out.println("Operation complete");
+                        companyToDelete = readCompanyInfo_bySymbol(symbol);
+
+                        boolean deleteFromNeo4j = deleteCompany_bySymbol(symbol);
+                        if(deleteFromNeo4j){
+                            long deleteFromMongo = deleteCompany(symbol);
+                            if(deleteFromMongo <= 0){
+                                boolean addNeo4j = addCompany(companyToDelete);
+                                if(!addNeo4j){
+                                    System.out.println("Operation was not performed! Database not consistency! \n"); //andrebbe inserita in un file di log per l'admin
+                                }else{
+                                    System.out.println("Operation was not performed! Try Again");
+                                }
+                            }else{
+                               //
+                               long deleteHistory = deleteHistory_bySymbol(symbol);
+                               //Company history is in the db
+                               if(deleteHistory < 0)
+                                   System.out.println("The company's history data is still in the MongoDB! Try to delete this data");
+
+                               long deleteReport = deleteReport_bySymbol(symbol);
+
+                                if(deleteReport < 0)
+                                    System.out.println("The company's report data is still in the MongoDB! Try to delete this data");
+
+
+                                if(deleteReport >= 0 && deleteHistory >= 0)
+                                    System.out.println("Operation complete");
+                            }
+                        }else{
+                            System.out.println("Operation was not performed! Try Again");
+                        }
+                        //deleteCompany(symbol);
+                        //deleteHistory_bySymbol(symbol);
+                        //deleteReport_bySymbol(symbol);
+                        /**
+                         *
+                         * Consistency of db
+                         *
+                         * */
+                        //System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("User not find");
+                        System.out.println("Company not found");
+                    } catch(MongoTimeoutException emdb){
+                        System.out.println("Mongo is not available");
+                        boolean addNeo4j = addCompany(companyToDelete);
+                        if(!addNeo4j){
+                            System.out.println("Operation was not performed! Database not consistency! \n"); //andrebbe inserita in un file di log per l'admin
+                        }else{
+                            System.out.println("Operation was not performed! Try Again");
+                        }
                     }
 
                     break;

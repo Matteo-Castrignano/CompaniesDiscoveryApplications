@@ -217,8 +217,8 @@ public class Analytics extends Neo4jDatabaseAccess{
         }
     }
 
-    //Analytics10
-    public static List<String> listAllCompanies(char car)
+    //Analytics10 match (n:Company) where n.symbol =~ 'AB.*' return n.symbol, n.name;
+    public static List<String> listAllCompanies(String car) //modifica con una stringa
     {
         try ( Session session = driver.session() )
         {
