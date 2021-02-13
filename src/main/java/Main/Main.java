@@ -21,6 +21,137 @@ public class Main {
     private static User user;
     private static ProfessionalUser profUser;
 
+    private void addCompanyConsistency(){
+        String name, exchange, sector, description, city, phone, state, country, address, website, symbol;
+        Scanner input = new Scanner(System.in);
+        int fullTimesemployees;
+
+        System.out.println("Insert name:");
+        name = input.nextLine();
+        System.out.println("Insert symbol:");
+        symbol = input.nextLine().toUpperCase();
+        System.out.println("Insert exchange:");
+        exchange = input.nextLine();
+        System.out.println("Insert sector:");
+        sector = input.nextLine();
+        System.out.println("Insert description:");
+        description = input.nextLine();
+        System.out.println("Insert city:");
+        city = input.nextLine();
+        System.out.println("Insert phone:");
+        phone = input.nextLine();
+        System.out.println("Insert state:");
+        state = input.nextLine();
+        System.out.println("Insert country:");
+        country = input.nextLine();
+        System.out.println("Insert address:");
+        address = input.nextLine();
+        System.out.println("Insert website:");
+        website = input.nextLine();
+        System.out.println("Insert number of full time employees:");
+        String numberEmpl = input.nextLine();
+        if(numberEmpl.length() > 9){
+            System.out.println("Number troppo grande! try again");
+            numberEmpl = input.nextLine();
+        }
+        fullTimesemployees = Integer.valueOf(numberEmpl);
+
+
+
+        Companies c1 = new Companies(symbol, name, exchange, sector, fullTimesemployees, description, city, phone, state, country, address, website);
+
+        try{
+            readCompanyInfo_bySymbol(symbol);
+            System.out.println("Company already exist");
+
+
+        } catch (NoSuchRecordException e) {
+            boolean addNeo4j = addCompany(c1);
+            if(addNeo4j){
+                try {
+                    boolean addMongo = createCompany(c1);
+                    if(!addMongo){
+
+                        boolean removeNeo4j = deleteCompany_bySymbol(symbol);
+                        if (!removeNeo4j) {
+                            System.out.println("Operation was not performed! Database not consistency! \n");
+                        } else {
+                            System.out.println("Operation was not performed! Try Again");
+                        }
+
+                    }else{
+                        System.out.println("Operation complete");
+                    }
+                }catch(MongoTimeoutException emdb){
+                    System.out.println("Mongo is not available");
+                    boolean removeNeo4j = deleteCompany_bySymbol(symbol);
+                    if (!removeNeo4j) {
+                        System.out.println("Operation was not performed! Database not consistency! \n");
+                    } else {
+                        System.out.println("Operation was not performed! Try Again");
+                    }
+                }
+            }else{
+                System.out.println("Operation was not performed! Try Again");
+            }
+
+        }
+
+    }
+
+    private void deleteCompanyConsistency(){
+        String symbol;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Insert symbol");
+        symbol = input.nextLine().toUpperCase();
+        Companies companyToDelete = null;
+        try{
+            companyToDelete = readCompanyInfo_bySymbol(symbol);
+
+            boolean deleteFromNeo4j = deleteCompany_bySymbol(symbol);
+            if(deleteFromNeo4j){
+                long deleteFromMongo = deleteCompany(symbol);
+                if(deleteFromMongo <= 0){
+                    boolean addNeo4j = addCompany(companyToDelete);
+                    if(!addNeo4j){
+                        System.out.println("Operation was not performed! Database not consistency! \n");
+                    }else{
+                        System.out.println("Operation was not performed! Try Again");
+                    }
+                }else{
+                    //
+                    long deleteHistory = deleteHistory_bySymbol(symbol);
+                    //Company history is in the db
+                    if(deleteHistory < 0)
+                        System.out.println("The company's history data is still in the MongoDB! Try to delete this data");
+
+                    long deleteReport = deleteReport_bySymbol(symbol);
+
+                    if(deleteReport < 0)
+                        System.out.println("The company's report data is still in the MongoDB! Try to delete this data");
+
+
+                    if(deleteReport >= 0 && deleteHistory >= 0)
+                        System.out.println("Operation complete");
+                }
+            }else{
+                System.out.println("Operation was not performed! Try Again");
+            }
+
+        } catch (NoSuchRecordException e) {
+            System.out.println("Company not found");
+        } catch(MongoTimeoutException emdb){
+            System.out.println("Mongo is not available");
+            boolean addNeo4j = addCompany(companyToDelete);
+            if(!addNeo4j){
+                System.out.println("Operation was not performed! Database not consistency! \n");
+            }else{
+                System.out.println("Operation was not performed! Try Again");
+            }
+        }
+
+    }
+
     private void login()
     {
         Scanner input = new Scanner(System.in);
@@ -50,7 +181,7 @@ public class Main {
                     return;
 
             if (user  == null && profUser == null)
-                System.out.println("User not find");
+                System.out.println("User not found");
             else
                 System.out.println("Wrong password");
         }
@@ -194,33 +325,48 @@ public class Main {
         String username, symbol, start, end;
         boolean quit = false;
         int item;
-
+        boolean firstTime = false;
         do {
-            System.out.print("\nChoose operation: \n");
-            System.out.println("1. User list");
-            System.out.println("2. Find a user");
-            System.out.println("3. Follow a new user");
-            System.out.println("4. Unfollow a user");
-            System.out.println("5. Professional user list");
-            System.out.println("6. Find a professional user");
-            System.out.println("7. Follow a new professional user");
-            System.out.println("8. Rate a user");
-            System.out.println("9. Unfollow a professional user");
-            System.out.println("10. Company list");
-            System.out.println("11. Read a company data");
-            System.out.println("12. Read all company history");
-            System.out.println("13. Read a company history by period");
-            System.out.println("14. Follow a new company");
-            System.out.println("15. Unfollow a company");
-            System.out.println("16. Read all report of a company");
-            System.out.println("17. Read all report of a professional user");
-            System.out.println("18. Personal information");
-            System.out.println("19. Get suggests companies");
-            System.out.println("0. Logout");
-
+            if(!firstTime) {
+                System.out.print("\nChoose operation: \n");
+                System.out.println("-1. Show commands");
+                System.out.println("0. Logout");
+                firstTime = true;
+            }
             item = in.nextInt();
 
             switch (item) {
+                case -1:{
+                    System.out.print("\nChoose operation: \n");
+                    System.out.println("------------- OPERATION ON USER -------------");
+                    System.out.println("1. User list");
+                    System.out.println("2. Find a user");
+                    System.out.println("3. Follow a new user");
+                    System.out.println("4. Unfollow a user");
+                    System.out.println("------------- OPERATION ON PROFESSIONAL USER -------------");
+                    System.out.println("5. Professional user list");
+                    System.out.println("6. Find a professional user");
+                    System.out.println("7. Follow a new professional user");
+                    System.out.println("8. Rate a user");
+                    System.out.println("9. Unfollow a professional user");
+                    System.out.println("------------- OPERATION ON COMPANY -------------");
+                    System.out.println("10. Company list");
+                    System.out.println("11. Read a company data");
+                    System.out.println("12. Read all company history");
+                    System.out.println("13. Read a company history by period");
+                    System.out.println("14. Follow a new company");
+                    System.out.println("15. Unfollow a company");
+                    System.out.println("------------- OPERATION ON REPORT -------------");
+                    System.out.println("16. Read all report of a company");
+                    System.out.println("17. Read all report of a professional user");
+                    System.out.println("------------- PERSONAL INFO & SUGGESTED COMPANIES -------------");
+                    System.out.println("18. Personal information");
+                    System.out.println("19. Get suggests companies");
+                    System.out.println("--------------------------");
+                    System.out.println("-1. Show commands");
+                    System.out.println("0. Logout");
+                    break;
+                }
 
                 case 1:
                 {
@@ -251,7 +397,7 @@ public class Main {
                             System.out.println(l);
 
                     } catch (NoSuchRecordException e) {
-                        System.out.println("User don't found");
+                        System.out.println("User not found");
                     }
                     break;
                 }
@@ -310,7 +456,7 @@ public class Main {
                             System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
 
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     break;
                 }
@@ -325,7 +471,7 @@ public class Main {
                         followProfessionalUser_byUser(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     break;
                 }
@@ -352,7 +498,7 @@ public class Main {
                         rate_ProfessionalUser(user.getUsername(), username, vote);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     input.nextLine();
                     break;
@@ -368,7 +514,7 @@ public class Main {
                         unfollowProfessionalUser_byUser(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     break;
                 }
@@ -393,7 +539,7 @@ public class Main {
                         Companies c = new Companies(readCompanyInfo_bySymbol(symbol), readCompany_bySymbol(symbol));
                         System.out.println(c.toString());
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     }
                     break;
                 }
@@ -406,7 +552,7 @@ public class Main {
                     List<History> h = readHistory_bySymbol(symbol);
 
                     if(h.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(h.toString());
 
@@ -432,7 +578,7 @@ public class Main {
                     List<History> h = readHistory_byPeriod(start, end, symbol);
 
                     if(h.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(h.toString());
 
@@ -464,7 +610,7 @@ public class Main {
                         unfollowCompany_byUser(user.getUsername(),symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     }
                     break;
                 }
@@ -477,7 +623,7 @@ public class Main {
                     List<Report> r = readReports_bySymbol(symbol);
 
                     if(r.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(r.toString());
 
@@ -492,7 +638,7 @@ public class Main {
                     List<Report> r = readReports_byUsername(username);
 
                     if(r.isEmpty())
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     else
                         System.out.println(r.toString());
 
@@ -557,32 +703,46 @@ public class Main {
         String title, dateReport, typeReport, analizedValues, details;
         boolean quit = false;
         int item;
-
+        boolean firstTime = false;
         do {
-            System.out.print("\nChoose operation: \n");
-            System.out.println("1. User list");
-            System.out.println("2. Find a user");
-            System.out.println("3. Professional user list");
-            System.out.println("4. Find a professional user");
-            System.out.println("5. Company list");
-            System.out.println("6. Read a company data");
-            System.out.println("7. Read all company history");
-            System.out.println("8. Read a company history by period");
-            System.out.println("9. Follow a new company");
-            System.out.println("10. Unfollow a company");
-            System.out.println("11. Create a new report");
-            System.out.println("12. Update a report");
-            System.out.println("13. Read all report of a company");
-            System.out.println("14. Read all report of a professional user");
-            System.out.println("15. Verify the interest of companies");
-            System.out.println("16. Most underrated companies");
-            System.out.println("17. Personal information");
-            System.out.println("0. Logout");
-
+            if(!firstTime) {
+                System.out.print("\nChoose operation: \n");
+                System.out.println("-1. Show commands");
+                System.out.println("0. Logout");
+                firstTime = true;
+            }
             item = in.nextInt();
 
             switch (item) {
-
+                case -1:{
+                    System.out.print("\nChoose operation: \n");
+                    System.out.println("------------- OPERATION ON USER -------------");
+                    System.out.println("1. User list");
+                    System.out.println("2. Find a user");
+                    System.out.println("------------- OPERATION ON PROFESSIONAL USER -------------");
+                    System.out.println("3. Professional user list");
+                    System.out.println("4. Find a professional user");
+                    System.out.println("------------- OPERATION ON COMPANY -------------");
+                    System.out.println("5. Company list");
+                    System.out.println("6. Read a company data");
+                    System.out.println("7. Read all company history");
+                    System.out.println("8. Read a company history by period");
+                    System.out.println("9. Follow a new company");
+                    System.out.println("10. Unfollow a company");
+                    System.out.println("------------- OPERATION ON REPORT -------------");
+                    System.out.println("11. Create a new report");
+                    System.out.println("12. Update a report");
+                    System.out.println("13. Read all report of a company");
+                    System.out.println("14. Read all report of a professional user");
+                    System.out.println("------------- ANALYTICS & PERSONAL INFO -------------");
+                    System.out.println("15. Verify the interest of companies");
+                    System.out.println("16. Most underrated companies");
+                    System.out.println("17. Personal information");
+                    System.out.println("--------------------------");
+                    System.out.println("-1. Show commands");
+                    System.out.println("0. Logout");
+                    break;
+                }
                 case 1:
                 {
                     List<String> ls = listAllUser();
@@ -612,7 +772,7 @@ public class Main {
                             System.out.println(l);
 
                     } catch (NoSuchRecordException e) {
-                        System.out.println("User don't found");
+                        System.out.println("User not found");
                     }
                     break;
                 }
@@ -641,7 +801,7 @@ public class Main {
                             System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
 
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     break;
                 }
@@ -666,7 +826,7 @@ public class Main {
                         Companies c = new Companies(readCompanyInfo_bySymbol(symbol), readCompany_bySymbol(symbol));
                         System.out.println(c.toString());
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     }
                     break;
                 }
@@ -679,7 +839,7 @@ public class Main {
                     List<History> h = readHistory_bySymbol(symbol);
 
                     if(h.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(h.toString());
 
@@ -705,7 +865,7 @@ public class Main {
                     List<History> h = readHistory_byPeriod(start, end, symbol);
 
                     if(h.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(h.toString());
 
@@ -722,7 +882,7 @@ public class Main {
                         followCompany_byProfessionalUser(profUser.getUsername(),symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     }
                     break;
                 }
@@ -737,7 +897,7 @@ public class Main {
                         unfollowCompany_byProfessionalUser(profUser.getUsername(), symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     }
                     break;
                 }
@@ -800,7 +960,7 @@ public class Main {
                     List<Report> r = readReports_bySymbol(symbol);
 
                     if(r.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(r.toString());
 
@@ -815,7 +975,7 @@ public class Main {
                     List<Report> r = readReports_byUsername(username);
 
                     if(r.isEmpty())
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     else
                         System.out.println(r.toString());
 
@@ -843,7 +1003,7 @@ public class Main {
                 case 17:
                 {
                     List <Integer> l1 = professiaonalUserFollow(profUser.getUsername());
-                    System.out.println("NumberFollower: " + l1.get(0) + " NumberFollowerCompany: " + l1.get(1) + "\n");
+                    System.out.println("NumberFollower: " + l1.get(0) + " | NumberFollowerCompany: " + l1.get(1) +  " | Average Rating: "+profUser.getAverageRating() + "\n");
 
                     List <Companies> l2 = listFollowedCompany_byProfessionalUser(profUser.getUsername());
                     System.out.println("\nList followed companies:\n");
@@ -877,43 +1037,59 @@ public class Main {
         String username, symbol, start, end;
         boolean quit = false;
         int item;
+        boolean oneChoise = false;
 
         do {
-            System.out.print("\nChoose operation: \n");
-            System.out.println("1. User list");
-            System.out.println("2. Find a user");
-            System.out.println("3. Follow a new user");
-            System.out.println("4. Unfollow a user");
-            System.out.println("5. Delete user");
-            System.out.println("6. Professional user list");
-            System.out.println("7. Find a professional user");
-            System.out.println("8. Delete professional user");
-            System.out.println("9. Follow a new professional user");
-            System.out.println("10. Rate a user");
-            System.out.println("11. Unfollow a professional user");
-            System.out.println("12. Company list");
-            System.out.println("13. Read a company data");
-            System.out.println("14. Add a new company");
-            System.out.println("15. Delete a company");
-            System.out.println("16. Read all company history");
-            System.out.println("17. Read a company history by period");
-            System.out.println("18. Follow a new company");
-            System.out.println("19. Unfollow a company");
-            System.out.println("20. Read all report of a company");
-            System.out.println("21. Read all report of a professional user");
-            System.out.println("22. Most profitable period");
-            System.out.println("23. Verify the interest of companies");
-            System.out.println("24. Most underrated companies");
-            System.out.println("25. Update history");
-            System.out.println("26. Update summary");
-            System.out.println("27. Personal information");
-            System.out.println("28. Get suggests companies");
-            System.out.println("29. Add a new admin");
-            System.out.println("0. Logout");
-
+            if(!oneChoise) {
+                System.out.print("\nChoose operation: \n");
+                System.out.println("-1. Show Comands");
+                System.out.println("0. Logout");
+                oneChoise = true;
+            }
             item = in.nextInt();
 
             switch (item) {
+                case -1:{
+                    System.out.print("\nChoose operation: \n");
+                    System.out.println("------------- OPERATION ON USER -------------");
+                    System.out.println("1. User list");
+                    System.out.println("2. Find a user");
+                    System.out.println("3. Follow a new user");
+                    System.out.println("4. Unfollow a user");
+                    System.out.println("5. Delete user");
+                    System.out.println("------------- OPERATION ON PROFESSIONAL USER -------------");
+                    System.out.println("6. Professional user list");
+                    System.out.println("7. Find a professional user");
+                    System.out.println("8. Delete professional user");
+                    System.out.println("9. Follow a new professional user");
+                    System.out.println("10. Rate a  professional user");
+                    System.out.println("11. Unfollow a professional user");
+                    System.out.println("------------- OPERATION ON COMPANY -------------");
+                    System.out.println("12. Company list");
+                    System.out.println("13. Read a company data");
+                    System.out.println("14. Add a new company");
+                    System.out.println("15. Delete a company");
+                    System.out.println("16. Read all company history");
+                    System.out.println("17. Read a company history by period");
+                    System.out.println("18. Follow a new company");
+                    System.out.println("19. Unfollow a company");
+                    System.out.println("------------- OPERATION ON REPORT -------------");
+                    System.out.println("20. Read all report of a company");
+                    System.out.println("21. Read all report of a professional user");
+                    System.out.println("------------- ANALYTICS & UPDATE DATA -------------");
+                    System.out.println("22. Most profitable period");
+                    System.out.println("23. Verify the interest of companies");
+                    System.out.println("24. Most underrated companies");
+                    System.out.println("25. Update history");
+                    System.out.println("26. Update summary");
+                    System.out.println("27. Personal information");
+                    System.out.println("28. Get suggests companies");
+                    System.out.println("29. Add a new admin");
+                    System.out.println("-----------------------------");
+                    System.out.println("-1. Show Comands");
+                    System.out.println("0. Logout");
+                    break;
+                }
 
                 case 1:
                 {
@@ -944,7 +1120,7 @@ public class Main {
                             System.out.println(l);
 
                     } catch (NoSuchRecordException e) {
-                        System.out.println("User not find");
+                        System.out.println("User not found");
                     }
                     break;
                 }
@@ -989,7 +1165,7 @@ public class Main {
                         deleteUser_byUsername(username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("User not find");
+                        System.out.println("User not found");
                     }
 
                     break;
@@ -1019,7 +1195,7 @@ public class Main {
                             System.out.println("Name: " + l.getName() +" Symbol: "+l.getSymbol());
 
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     break;
                 }
@@ -1035,7 +1211,7 @@ public class Main {
                         deleteReport_byUsername(username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user not find");
+                        System.out.println("Professional user not found");
                     }
 
                     break;
@@ -1051,7 +1227,7 @@ public class Main {
                         followProfessionalUser_byUser(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     break;
                 }
@@ -1078,7 +1254,7 @@ public class Main {
                         rate_ProfessionalUser(user.getUsername(), username, vote);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     input.nextLine();
                     break;
@@ -1094,7 +1270,7 @@ public class Main {
                         unfollowProfessionalUser_byUser(user.getUsername(), username);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     }
                     break;
                 }
@@ -1126,151 +1302,13 @@ public class Main {
 
                 case 14: //insert in a function
                 {
-                    String name, exchange, sector, description, city, phone, state, country, address, website;
-                    int fullTimesemployees;
-
-                    System.out.println("Insert name:");
-                    name = input.nextLine();
-                    System.out.println("Insert symbol:");
-                    symbol = input.nextLine().toUpperCase();
-                    System.out.println("Insert exchange:");
-                    exchange = input.nextLine();
-                    System.out.println("Insert sector:");
-                    sector = input.nextLine();
-                    System.out.println("Insert description:");
-                    description = input.nextLine();
-                    System.out.println("Insert city:");
-                    city = input.nextLine();
-                    System.out.println("Insert phone:");
-                    phone = input.nextLine();
-                    System.out.println("Insert state:");
-                    state = input.nextLine();
-                    System.out.println("Insert country:");
-                    country = input.nextLine();
-                    System.out.println("Insert address:");
-                    address = input.nextLine();
-                    System.out.println("Insert website:");
-                    website = input.nextLine();
-                    System.out.println("Insert number of full time employees:");
-                    String numberEmpl = input.nextLine();
-                    if(numberEmpl.length() > 9){
-                        System.out.println("Number troppo grande! try again");
-                        numberEmpl = input.nextLine();
-                    }
-                    fullTimesemployees = Integer.valueOf(numberEmpl);
-
-                    //input.nextLine();
-
-                    Companies c1 = new Companies(symbol, name, exchange, sector, fullTimesemployees, description, city, phone, state, country, address, website);
-
-                    try{
-                        readCompanyInfo_bySymbol(symbol);
-                        System.out.println("Company already exist");
-                        break;
-
-                    } catch (NoSuchRecordException e) {
-                        boolean addNeo4j = addCompany(c1);
-                        if(addNeo4j){
-                            try {
-                               boolean addMongo = createCompany(c1);
-                               if(!addMongo){
-
-                                       boolean removeNeo4j = deleteCompany_bySymbol(symbol);
-                                       if (!removeNeo4j) {
-                                           System.out.println("Operation was not performed! Database not consistency! \n"); //andrebbe inserita in un file di log per l'admin
-                                       } else {
-                                           System.out.println("Operation was not performed! Try Again");
-                                       }
-
-                               }else{
-                                   System.out.println("Operation complete");
-                               }
-                            }catch(MongoTimeoutException emdb){
-                                System.out.println("Mongo is not available");
-                                boolean removeNeo4j = deleteCompany_bySymbol(symbol);
-                                if (!removeNeo4j) {
-                                    System.out.println("Operation was not performed! Database not consistency! \n"); //andrebbe inserita in un file di log per l'admin
-                                } else {
-                                    System.out.println("Operation was not performed! Try Again");
-                                }
-                            }
-                        }else{
-                            System.out.println("Operation was not performed! Try Again");
-                        }
-
-
-                        /**
-                         *
-                         * inserire codice di consistenza
-                         *
-                         * */
-
-                        //System.out.println("Operation complete");
-                    }
-
-
-
+                    addCompanyConsistency();
                     break;
                 }
 
                 case 15: //insert in a function
                 {
-                    System.out.println("Insert symbol");
-                    symbol = input.nextLine().toUpperCase();
-                    Companies companyToDelete = null;
-                    try{
-                        companyToDelete = readCompanyInfo_bySymbol(symbol);
-
-                        boolean deleteFromNeo4j = deleteCompany_bySymbol(symbol);
-                        if(deleteFromNeo4j){
-                            long deleteFromMongo = deleteCompany(symbol);
-                            if(deleteFromMongo <= 0){
-                                boolean addNeo4j = addCompany(companyToDelete);
-                                if(!addNeo4j){
-                                    System.out.println("Operation was not performed! Database not consistency! \n"); //andrebbe inserita in un file di log per l'admin
-                                }else{
-                                    System.out.println("Operation was not performed! Try Again");
-                                }
-                            }else{
-                               //
-                               long deleteHistory = deleteHistory_bySymbol(symbol);
-                               //Company history is in the db
-                               if(deleteHistory < 0)
-                                   System.out.println("The company's history data is still in the MongoDB! Try to delete this data");
-
-                               long deleteReport = deleteReport_bySymbol(symbol);
-
-                                if(deleteReport < 0)
-                                    System.out.println("The company's report data is still in the MongoDB! Try to delete this data");
-
-
-                                if(deleteReport >= 0 && deleteHistory >= 0)
-                                    System.out.println("Operation complete");
-                            }
-                        }else{
-                            System.out.println("Operation was not performed! Try Again");
-                        }
-                        //deleteCompany(symbol);
-                        //deleteHistory_bySymbol(symbol);
-                        //deleteReport_bySymbol(symbol);
-                        /**
-                         *
-                         * Consistency of db
-                         *
-                         * */
-                        //System.out.println("Operation complete");
-                    } catch (NoSuchRecordException e) {
-                        System.out.println("Company not found");
-                    } catch(MongoTimeoutException emdb){
-                        System.out.println("Mongo is not available");
-                        boolean addNeo4j = addCompany(companyToDelete);
-                        if(!addNeo4j){
-                            System.out.println("Operation was not performed! Database not consistency! \n"); //andrebbe inserita in un file di log per l'admin
-                        }else{
-                            System.out.println("Operation was not performed! Try Again");
-                        }
-                    }
-
+                    deleteCompanyConsistency();
                     break;
                 }
 
@@ -1282,7 +1320,7 @@ public class Main {
                     List<History> h = readHistory_bySymbol(symbol);
 
                     if(h.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(h.toString());
 
@@ -1308,7 +1346,7 @@ public class Main {
                     List<History> h = readHistory_byPeriod(start, end, symbol);
 
                     if(h.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(h.toString());
 
@@ -1340,7 +1378,7 @@ public class Main {
                         unfollowCompany_byUser(user.getUsername(),symbol);
                         System.out.println("Operation complete");
                     } catch (NoSuchRecordException e) {
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     }
                     break;
                 }
@@ -1353,7 +1391,7 @@ public class Main {
                     List<Report> r = readReports_bySymbol(symbol);
 
                     if(r.isEmpty())
-                        System.out.println("Company don't found");
+                        System.out.println("Company not found");
                     else
                         System.out.println(r.toString());
 
@@ -1368,7 +1406,7 @@ public class Main {
                     List<Report> r = readReports_byUsername(username);
 
                     if(r.isEmpty())
-                        System.out.println("Professional user don't found");
+                        System.out.println("Professional user not found");
                     else
                         System.out.println(r.toString());
 
@@ -1414,7 +1452,7 @@ public class Main {
                         updateSummary(s);
                     }catch ( NoSuchFileException e)
                     {
-                        System.out.println("Filename don't found");
+                        System.out.println("Filename not found");
                     }
 
                     break;
