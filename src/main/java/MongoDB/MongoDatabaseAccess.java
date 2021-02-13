@@ -1,5 +1,6 @@
 package MongoDB;
 
+import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -17,13 +18,13 @@ public class MongoDatabaseAccess {
     public static void openConnection()
     {
         mongoClient = MongoClients.create("mongodb://172.16.3.150:27020,172.16.3.121:27020,172.16.3.119:27020/"
-                + "?retryWrites=true&w=majority&readPreference=secondary&wtimeout=10000");
+                + "?retryWrites=true&readPreference=secondary&wtimeout=10000");
 
         database = mongoClient.getDatabase("CompaniesApplication");
 
-        collectionHistory = database.getCollection("history");
-        collectionCompanies = database.getCollection("companies");
-        collectionReport = database.getCollection("report");
+        collectionHistory = database.getCollection("history").withWriteConcern(WriteConcern.MAJORITY);
+        collectionCompanies = database.getCollection("companies").withWriteConcern(WriteConcern.W3);
+        collectionReport = database.getCollection("report").withWriteConcern(WriteConcern.MAJORITY);
     }
 
     public static void closeConnection(){
