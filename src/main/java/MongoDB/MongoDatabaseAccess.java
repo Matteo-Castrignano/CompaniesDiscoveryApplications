@@ -1,5 +1,6 @@
 package MongoDB;
 
+import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -18,9 +19,9 @@ public class MongoDatabaseAccess {
     public static void openConnection()
     {
         mongoClient = MongoClients.create("mongodb://172.16.3.150:27020,172.16.3.121:27020,172.16.3.119:27020/"
-                + "?retryWrites=true&readPreference=secondary&wtimeout=10000");
+                + "?retryWrites=true&wtimeout=10000");
 
-        database = mongoClient.getDatabase("CompaniesApplication");
+        database = mongoClient.getDatabase("CompaniesApplication").withReadPreference(ReadPreference.secondaryPreferred());
 
         collectionHistory = database.getCollection("history").withWriteConcern(WriteConcern.MAJORITY);
         collectionCompanies = database.getCollection("companies").withWriteConcern(WriteConcern.MAJORITY);
