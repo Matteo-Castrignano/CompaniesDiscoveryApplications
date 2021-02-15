@@ -24,7 +24,7 @@ public class MongoDatabaseAccess {
         database = mongoClient.getDatabase("CompaniesApplication").withReadPreference(ReadPreference.secondaryPreferred());
 
         collectionHistory = database.getCollection("history").withWriteConcern(WriteConcern.MAJORITY);
-        collectionCompanies = database.getCollection("companies").withWriteConcern(WriteConcern.MAJORITY);
+        collectionCompanies = database.getCollection("companies").withWriteConcern(WriteConcern.W3);
         collectionReport = database.getCollection("report").withWriteConcern(WriteConcern.MAJORITY);
     }
 
