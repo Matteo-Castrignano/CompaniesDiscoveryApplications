@@ -51,10 +51,10 @@ public class CrudOperation extends MongoDatabaseAccess{
                 {
                     JSONArray a = new JSONArray(json.getJSONArray("Summary"));
 
-                    Summary s = new Summary();
-
                     for (int j = 0; j < a.length(); j++)
                     {
+                        Summary s = new Summary();
+
                         s.setDate(a.getJSONObject(j).getString("Date"));
                         s.setClose(a.getJSONObject(j).getFloat("Close"));
                         s.setOpen(a.getJSONObject(j).getFloat("Open"));
